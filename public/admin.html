@@ -256,20 +256,20 @@
         <div class="modal-content">
             <h2 id="modal-titulo-elegante" style="color: var(--color-acento);">Mensaje</h2>
             <p id="modal-texto-elegante" style="color: #666; margin-bottom: 25px;">Detalle del mensaje aquí.</p>
-            <button onclick="cerrarModal()" class="btn-cerrar-modal" style="width: auto; padding: 10px 30px;">Aceptar</button>
+            <button onclick="cerrarModal()" class="btn-cerrar-modal" style="width: auto; padding: 10px 30px;" data-i18n="modalOk">Aceptar</button>
         </div>
     </div>
 
     <div id="modal-editar-rsvp" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="max-width: 500px;">
-            <h2 style="color: var(--color-acento); margin-bottom: 5px;">Editar Menú</h2>
+            <h2 style="color: var(--color-acento); margin-bottom: 5px;" data-i18n="editMenuTitle">Editar Menú</h2>
             <p id="edit-rsvp-email" style="color: #666; font-size: 0.85em; margin-top: 0;"></p>
             
             <div id="edit-rsvp-container" style="text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 10px;"></div>
             
             <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button onclick="document.getElementById('modal-editar-rsvp').style.display='none'" class="btn-outline-admin" style="width: 100%; margin:0; padding: 12px;">Cancelar</button>
-                <button onclick="adminGuardarRSVP()" style="width: 100%; margin:0; padding: 12px;">Guardar Menú</button>
+                <button onclick="document.getElementById('modal-editar-rsvp').style.display='none'" class="btn-outline-admin" style="width: 100%; margin:0; padding: 12px;" data-i18n="btnCancel">Cancelar</button>
+                <button onclick="adminGuardarRSVP()" style="width: 100%; margin:0; padding: 12px;" data-i18n="btnSaveMenu">Guardar Menú</button>
             </div>
         </div>
     </div>
@@ -312,7 +312,7 @@
                     <input type="text" id="admin-grupo-nombre" placeholder="Nombre de la Invitación (Ej: Familia Pérez)">
                     <div id="admin-miembros-container"></div>
                     <button type="button" class="btn-outline-admin" onclick="adminAgregarMiembro()" data-i18n="btnAddMember">+ Añadir Persona</button>
-                    <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación en Base de Datos</button>
+                    <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación</button>
                 </div>
 
                 <table id="tabla-maestra">
@@ -392,7 +392,7 @@
         let idEditando = null;
         let emailEditando = null;
 
-        // --- SISTEMA BILINGÜE ---
+        // --- SISTEMA BILINGÜE TOTALMENTE COMPLETO ---
         window.currentLang = 'en';
         const dict = {
             en: {
@@ -401,7 +401,12 @@
                 engTitle: "💍 RSVP - Engagement Party", wedTitle: "🕊️ RSVP - Formal Wedding", giftsTitle: "🌍 Honeymoon Gifts", totalGifts: "Total Raised:", thGuest: "Guest", thEmail: "Email", thResponse: "Response", thActions: "Actions", thGiftDetail: "Gift Detail", thAmount: "Amount",
                 deniedTitle: "⛔ Access Denied", deniedDesc: "Unauthorized account.", btnUnderstand: "Understood", delConfirmTitle: "⚠️ Confirm Deletion", delConfirmDesc: "Delete response from", delWarning: "Action cannot be undone.", btnCancel: "Cancel", btnYesDelete: "Yes, delete",
                 dynYesAttend: "✅ Attending", dynNoAttend: "❌ Not attending", dynNoEmail: "No email", dynDiet: "Diet:", dynMenu: "Menu:", dynNoMenu: "No menu details.", dynBtnDelete: "Delete", loginErr: "Login error: ",
-                btnShow: "Show", btnHide: "Hide"
+                btnShow: "Show", btnHide: "Hide",
+                phInvName: "Invitation Name (e.g., Smith Family)", phFullName: "Full name", optAdult: "Adult", optChild: "Child", btnUpdateInv: "Update Invitation", 
+                errMissingData: "Missing data", errMissingDataDesc: "Please fill in the group name and add members.", successTitle: "Success!", successInvUpdated: "Invitation updated successfully.", 
+                successInvSaved: "Invitation saved successfully.", errSave: "Error", errSaveDesc: "There was a problem saving. Check permissions.", editMenuTitle: "Edit Menu", btnSaveMenu: "Save Menu",
+                errEditRsvp: "This RSVP cannot be edited.", optNoDiet: "No Restrictions", optKidsMenu: "Kids Menu (Auto)", successRsvpUpdated: "RSVP updated successfully.", errRsvpUpdate: "There was a problem updating the RSVP.",
+                modalOk: "OK", btnEdit: "Edit"
             },
             es: {
                 pageTitle: "Panel", loginTitle: "Acceso Privado", loginSub: "Panel de administración.", btnGoogle: "Entrar con Google", logout: "Cerrar Sesión", panelTitle: "Panel de Novios", sessionActive: "Sesión activa:",
@@ -409,7 +414,12 @@
                 engTitle: "💍 RSVP - Compromiso", wedTitle: "🕊️ RSVP - Boda Formal", giftsTitle: "🌍 Regalos - Luna de Miel", totalGifts: "Total Recaudado:", thGuest: "Invitado", thEmail: "Correo", thResponse: "Respuesta", thActions: "Acciones", thGiftDetail: "Detalle", thAmount: "Monto",
                 deniedTitle: "⛔ Acceso Denegado", deniedDesc: "Cuenta no autorizada.", btnUnderstand: "Entendido", delConfirmTitle: "⚠️ Confirmar Borrado", delConfirmDesc: "¿Eliminar respuesta de", delWarning: "Esta acción no se puede deshacer.", btnCancel: "Cancelar", btnYesDelete: "Sí, eliminar",
                 dynYesAttend: "✅ Sí asistirá", dynNoAttend: "❌ No asistirá", dynNoEmail: "Sin correo", dynDiet: "Dieta:", dynMenu: "Menú:", dynNoMenu: "Sin detalles.", dynBtnDelete: "Borrar", loginErr: "Error: ",
-                btnShow: "Mostrar", btnHide: "Ocultar"
+                btnShow: "Mostrar", btnHide: "Ocultar",
+                phInvName: "Nombre de la Invitación (Ej: Familia Pérez)", phFullName: "Nombre completo", optAdult: "Adulto", optChild: "Niño", btnUpdateInv: "Actualizar Invitación", 
+                errMissingData: "Faltan datos", errMissingDataDesc: "Por favor completa el nombre y añade miembros.", successTitle: "¡Éxito!", successInvUpdated: "Invitación actualizada correctamente.", 
+                successInvSaved: "Invitación guardada en la base de datos.", errSave: "Error", errSaveDesc: "Hubo un problema al guardar. Revisa los permisos.", editMenuTitle: "Editar Menú", btnSaveMenu: "Guardar Menú",
+                errEditRsvp: "No se puede editar este RSVP.", optNoDiet: "Sin Restricciones", optKidsMenu: "Menú Infantil (Auto)", successRsvpUpdated: "El RSVP se ha actualizado correctamente.", errRsvpUpdate: "Hubo un problema al actualizar el RSVP.",
+                modalOk: "Aceptar", btnEdit: "Editar"
             }
         };
 
@@ -419,6 +429,15 @@
                 const key = el.getAttribute('data-i18n');
                 if (dict[lang][key]) el.innerHTML = dict[lang][key];
             });
+            
+            // Actualizar placeholders dinámicos
+            const adminGrupoNombre = document.getElementById('admin-grupo-nombre');
+            if(adminGrupoNombre) adminGrupoNombre.placeholder = dict[lang].phInvName;
+            
+            document.querySelectorAll('.m-nombre').forEach(el => el.placeholder = dict[lang].phFullName);
+            document.querySelectorAll('.m-tipo option[value="adulto"]').forEach(el => el.innerText = dict[lang].optAdult);
+            document.querySelectorAll('.m-tipo option[value="niño"]').forEach(el => el.innerText = dict[lang].optChild);
+
             renderizarTablas();
             
             const btnToggle = document.getElementById('btn-toggle-master');
@@ -480,19 +499,18 @@
             const tbodyInv = document.querySelector('#tabla-maestra tbody');
             tbodyInv.innerHTML = "";
             window.datosMemoria.invitaciones.forEach(data => {
-                let lista = data.invitados.map(i => `• ${i.nombre} (${i.tipo})`).join('<br>');
+                let lista = data.invitados.map(i => `• ${i.nombre} (${i.tipo === 'adulto' ? d.optAdult : d.optChild})`).join('<br>');
                 tbodyInv.innerHTML += `<tr>
                     <td><strong>${data.nombre_invitacion}</strong></td>
                     <td>${lista}</td>
                     <td>${data.email_vinculado || '---'}</td>
                     <td style="text-align:center;">
-                        <button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarInvitacion('${data.id}')">Editar</button>
+                        <button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarInvitacion('${data.id}')">${d.btnEdit}</button>
                         <button class="btn-borrar" style="width:100%;" onclick="confirmarBorrado('invitaciones', '${data.id}', '${data.nombre_invitacion}')">${d.dynBtnDelete}</button>
                     </td>
                 </tr>`;
             });
 
-            // Tabla RSVP Compromiso (Actualizada con botón Editar)
             const tbodyComp = document.querySelector('#tabla-compromiso tbody');
             tbodyComp.innerHTML = "";
             window.datosMemoria.compromiso.forEach(data => {
@@ -501,7 +519,7 @@
                     resHTML = `<ul style="margin: 0; padding-left: 15px; font-size: 0.9em;">`;
                     data.invitados.forEach(i => {
                         if (i.asistencia === 'si') {
-                            resHTML += `<li><strong style="color:#2e7d32;">✅ ${i.nombre}</strong> <br><span style="color:#666; font-size:0.85em;">Dieta: ${i.dieta} | ${i.starter} / ${i.entree}</span></li>`;
+                            resHTML += `<li><strong style="color:#2e7d32;">✅ ${i.nombre}</strong> <br><span style="color:#666; font-size:0.85em;">${d.dynDiet} ${i.dieta} | ${i.starter} / ${i.entree}</span></li>`;
                         } else {
                             resHTML += `<li><strong style="color:#d9534f;">❌ ${i.nombre}</strong> <span style="color:#666; font-size:0.85em;">(${d.dynNoAttend})</span></li>`;
                         }
@@ -516,7 +534,7 @@
                     <td>${data.email}</td>
                     <td>${resHTML}</td>
                     <td style="text-align:center;">
-                        ${data.asistencia === 'si' ? `<button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarRSVP('${data.id}')">Editar Menú</button>` : ''}
+                        ${data.asistencia === 'si' ? `<button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarRSVP('${data.id}')">${d.editMenuTitle}</button>` : ''}
                         <button class="btn-borrar" style="width:100%;" onclick="confirmarBorrado('rsvps_compromiso', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button>
                     </td>
                 </tr>`;
@@ -541,16 +559,18 @@
 
         // --- GESTOR INVITACIONES ---
         window.adminAgregarMiembro = function() {
+            const dLang = dict[window.currentLang];
             const container = document.getElementById('admin-miembros-container');
-            container.insertAdjacentHTML('beforeend', `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;"><input type="text" class="m-nombre" placeholder="Nombre completo" style="flex:2;"><select class="m-tipo" style="flex:1;"><option value="adulto">Adulto</option><option value="niño">Niño</option></select><button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button></div>`);
+            container.insertAdjacentHTML('beforeend', `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;"><input type="text" class="m-nombre" placeholder="${dLang.phFullName}" style="flex:2;"><select class="m-tipo" style="flex:1;"><option value="adulto">${dLang.optAdult}</option><option value="niño">${dLang.optChild}</option></select><button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button></div>`);
         }
 
         window.adminEditarInvitacion = function(id) {
+            const dLang = dict[window.currentLang];
             const inv = window.datosMemoria.invitaciones.find(i => i.id === id);
             if (!inv) return;
 
             idEditando = id;
-            emailEditando = inv.email_vinculado; // Guardamos el email para buscar su RSVP
+            emailEditando = inv.email_vinculado; 
             
             document.getElementById('admin-grupo-nombre').value = inv.nombre_invitacion;
             const container = document.getElementById('admin-miembros-container');
@@ -558,10 +578,10 @@
 
             inv.invitados.forEach(miembro => {
                 const html = `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" class="m-nombre" value="${miembro.nombre}" placeholder="Nombre completo" style="flex:2;">
+                    <input type="text" class="m-nombre" value="${miembro.nombre}" placeholder="${dLang.phFullName}" style="flex:2;">
                     <select class="m-tipo" style="flex:1;">
-                        <option value="adulto" ${miembro.tipo === 'adulto' ? 'selected' : ''}>Adulto</option>
-                        <option value="niño" ${miembro.tipo === 'niño' ? 'selected' : ''}>Niño</option>
+                        <option value="adulto" ${miembro.tipo === 'adulto' ? 'selected' : ''}>${dLang.optAdult}</option>
+                        <option value="niño" ${miembro.tipo === 'niño' ? 'selected' : ''}>${dLang.optChild}</option>
                     </select>
                     <button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button>
                 </div>`;
@@ -569,14 +589,15 @@
             });
             
             const btnSave = document.querySelector('.btn-save-inv');
-            if(btnSave) btnSave.innerText = window.currentLang === 'en' ? "Update Invitation" : "Actualizar Invitación";
+            if(btnSave) btnSave.innerText = dLang.btnUpdateInv;
             window.scrollTo({ top: document.getElementById('admin-grupo-nombre').offsetTop - 100, behavior: 'smooth' });
         }
 
         window.adminGuardarGrupo = async function() {
+            const dLang = dict[window.currentLang];
             const nGrupo = document.getElementById('admin-grupo-nombre').value;
             const filas = document.querySelectorAll('.miembro-row');
-            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre y añade miembros.");
+            if(!nGrupo || filas.length === 0) return mostrarModal(dLang.errMissingData, dLang.errMissingDataDesc);
             
             let arrMaestro = [];
             filas.forEach(f => {
@@ -587,13 +608,11 @@
 
             try {
                 if (idEditando) {
-                    // 1. Actualizamos la Lista Maestra
                     await updateDoc(doc(db, "invitaciones", idEditando), {
                         nombre_invitacion: nGrupo,
                         invitados: arrMaestro
                     });
 
-                    // 2. SINCRONIZACIÓN INTELIGENTE CON RSVP
                     if (emailEditando) {
                         const rsvpRef = doc(db, "rsvps_compromiso", emailEditando.toLowerCase().trim());
                         const rsvpSnap = await getDoc(rsvpRef);
@@ -603,59 +622,42 @@
                             let rsvpActualizado = [];
 
                             arrMaestro.forEach(invMaster => {
-                                // Buscamos si esta persona ya existía en el RSVP viejo
                                 let invViejo = rsvpData.invitados ? rsvpData.invitados.find(r => r.nombre.toLowerCase().trim() === invMaster.nombre.toLowerCase().trim()) : null;
                                 
                                 if (invViejo) {
-                                    // Si le cambiaste la edad de adulto a niño (o viceversa), reseteamos solo su comida
                                     if (invViejo.tipo !== invMaster.tipo) {
                                         invViejo.tipo = invMaster.tipo;
                                         invViejo.starter = invMaster.tipo === 'niño' ? 'Sin entrada (Niño)' : '';
                                         invViejo.entree = '';
                                     }
-                                    rsvpActualizado.push(invViejo); // Conserva su asistencia y comida si no cambió de edad
+                                    rsvpActualizado.push(invViejo); 
                                 } else {
-                                    // Si agregaste a alguien nuevo, lo metemos en blanco
                                     rsvpActualizado.push({
-                                        nombre: invMaster.nombre,
-                                        tipo: invMaster.tipo,
-                                        asistencia: "no", 
-                                        dieta: "None",
-                                        starter: invMaster.starter,
-                                        entree: invMaster.entree
+                                        nombre: invMaster.nombre, tipo: invMaster.tipo, asistencia: "no", dieta: "None", starter: invMaster.starter, entree: invMaster.entree
                                     });
                                 }
                             });
-                            
-                            // Guardamos el RSVP parchado en la base de datos
                             await updateDoc(rsvpRef, { invitados: rsvpActualizado });
                         }
                     }
-
-                    mostrarModal("¡Éxito!", "Invitación actualizada y sincronizada correctamente.");
+                    mostrarModal(dLang.successTitle, dLang.successInvUpdated);
                 } else {
-                    // Creación de grupo nuevo
                     await addDoc(collection(db, "invitaciones"), {
-                        nombre_invitacion: nGrupo,
-                        email_vinculado: "",
-                        invitados: arrMaestro
+                        nombre_invitacion: nGrupo, email_vinculado: "", invitados: arrMaestro
                     });
-                    mostrarModal("¡Éxito!", "Invitación guardada en la base de datos.");
+                    mostrarModal(dLang.successTitle, dLang.successInvSaved);
                 }
                 
-                // Limpieza del formulario
-                idEditando = null;
-                emailEditando = null;
+                idEditando = null; emailEditando = null;
                 const btnSave = document.querySelector('.btn-save-inv');
-                if(btnSave) btnSave.innerText = dict[window.currentLang].btnSaveInv;
+                if(btnSave) btnSave.innerText = dLang.btnSaveInv;
                 
                 document.getElementById('admin-grupo-nombre').value = "";
                 document.getElementById('admin-miembros-container').innerHTML = "";
                 cargarDatosDesdeFirebase();
                 adminAgregarMiembro();
             } catch (e) { 
-                console.error(e);
-                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos de Firebase."); 
+                mostrarModal(dLang.errSave, dLang.errSaveDesc); 
             }
         }
 
@@ -663,8 +665,9 @@
         let idRSVPEditando = null;
 
         window.adminEditarRSVP = function(id) {
+            const dLang = dict[window.currentLang];
             const rsvp = window.datosMemoria.compromiso.find(r => r.id === id);
-            if (!rsvp || !rsvp.invitados) return mostrarModal("Error", "No se puede editar este RSVP.");
+            if (!rsvp || !rsvp.invitados) return mostrarModal(dLang.errSave, dLang.errEditRsvp);
             
             idRSVPEditando = id;
             document.getElementById('edit-rsvp-email').innerText = rsvp.email;
@@ -672,18 +675,18 @@
             container.innerHTML = "";
 
             rsvp.invitados.forEach(inv => {
-                if (inv.asistencia === 'no') return; // No editamos comida de quien no va
+                if (inv.asistencia === 'no') return; 
 
                 let isNino = inv.tipo === 'niño';
                 let html = `
                 <div class="edit-rsvp-block" style="background: #fdfbf7; padding: 15px; border: 1px dashed #ccc; border-radius: 8px; margin-bottom: 15px;">
-                    <h4 style="margin-top:0; margin-bottom:10px; color: var(--color-vino);">${inv.nombre} ${isNino ? '(Niño)' : ''}</h4>
+                    <h4 style="margin-top:0; margin-bottom:10px; color: var(--color-vino);">${inv.nombre} ${isNino ? `(${dLang.optChild})` : ''}</h4>
                     <input type="hidden" class="e-nombre" value="${inv.nombre}">
                     <input type="hidden" class="e-tipo" value="${inv.tipo}">
                     <input type="hidden" class="e-asistencia" value="${inv.asistencia}">
                     
                     <select class="e-dieta" style="margin-bottom: 10px; padding: 8px;">
-                        <option value="None" ${inv.dieta === 'None' ? 'selected' : ''}>Sin Restricciones</option>
+                        <option value="None" ${inv.dieta === 'None' ? 'selected' : ''}>${dLang.optNoDiet}</option>
                         <option value="Gluten free" ${inv.dieta === 'Gluten free' ? 'selected' : ''}>Gluten free</option>
                         <option value="Vegetarian" ${inv.dieta === 'Vegetarian' ? 'selected' : ''}>Vegetarian</option>
                         <option value="Vegan" ${inv.dieta === 'Vegan' ? 'selected' : ''}>Vegan</option>
@@ -695,7 +698,7 @@
                     <select class="e-entree" style="padding: 8px;">
                         <option value="Chicken Tenders con Papas" ${inv.entree.includes('Chicken') ? 'selected' : ''}>Chicken Tenders</option>
                         <option value="Mac and Cheese" ${inv.entree.includes('Mac') ? 'selected' : ''}>Mac & Cheese</option>
-                        <option value="Menú Infantil" ${inv.entree.includes('Infantil') ? 'selected' : ''}>Menú Infantil (Auto)</option>
+                        <option value="Menú Infantil" ${inv.entree.includes('Infantil') ? 'selected' : ''}>${dLang.optKidsMenu}</option>
                     </select>
                     <input type="hidden" class="e-starter" value="Sin entrada (Niño)">
                     `;
@@ -719,6 +722,7 @@
         }
 
         window.adminGuardarRSVP = async function() {
+            const dLang = dict[window.currentLang];
             if (!idRSVPEditando) return;
             
             const rsvpViejo = window.datosMemoria.compromiso.find(r => r.id === idRSVPEditando);
@@ -726,12 +730,10 @@
             
             let nuevosInvitados = [];
             
-            // Rescatamos a los que no asistían para no borrarlos del registro
             rsvpViejo.invitados.forEach(invViejo => {
                 if (invViejo.asistencia === 'no') nuevosInvitados.push(invViejo);
             });
 
-            // Guardamos las nuevas decisiones
             bloques.forEach(b => {
                 nuevosInvitados.push({
                     nombre: b.querySelector('.e-nombre').value,
@@ -746,10 +748,10 @@
             try {
                 await updateDoc(doc(db, "rsvps_compromiso", idRSVPEditando), { invitados: nuevosInvitados });
                 document.getElementById('modal-editar-rsvp').style.display = 'none';
-                mostrarModal("¡Éxito!", "El RSVP se ha actualizado correctamente.");
+                mostrarModal(dLang.successTitle, dLang.successRsvpUpdated);
                 cargarDatosDesdeFirebase();
             } catch (e) {
-                mostrarModal("Error", "Hubo un problema al actualizar el RSVP.");
+                mostrarModal(dLang.errSave, dLang.errRsvpUpdate);
             }
         }
 
