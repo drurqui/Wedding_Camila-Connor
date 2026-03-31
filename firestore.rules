@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Reglas para la fiesta de compromiso
+    match /rsvps_compromiso/{document=**} {
+      allow create: if true; // Cualquiera puede enviar su confirmación
+      allow read, update, delete: if false; // Nadie público puede leer o borrar la lista
+    }
+
+    // Reglas para la boda
+    match /rsvps_boda/{document=**} {
+      allow create: if true; 
+      allow read, update, delete: if false; 
+    }
+  }
+}

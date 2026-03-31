@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "boda-shields-urquilla",
+  "private_key_id": "ed9c1a4198f913ab34ddbbd6024960f9cca41394",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDppzNbWbvAuTX3\nSWfnz87P32g9yJv5KKMQlrJoJHm0El/Y/k0GcPWZsl8nGb4Te3vyb8IrTwFBJpTI\njWGtPMjuyo2oolIZ5yzUo4AQziySnAF2ec2NyejpEunfCOsRJk4E+z0haHiCCKHT\nciWDxuB02mSVepXgd2DbhuoYzZ64fa4juXNU+35zDIZEfyPjelA0iYyoxdwJqsSb\nC+CeYomPrJRbVmR0zNa7YZDY2gGcgrBvTCg3iTnWikmmPFKwNKlXkFhXBl3i5Uje\nCkY0e2khu9BelHCIGs02INrGAAkd4eFXJDVC1CoAFaj2HlCjKs6oZNB/jyxn2hx0\nl/eWLKVPAgMBAAECggEAPiLhZP9Bj3iRsfAbCko4yQ40Bg418HZOmyhATLK6jNlA\nFRBXwolCvztw05CkfEDgDvKKlALgJgfRFF6I5c2e7+X88yYrqEjSor/SXGW/88M6\nHlw4/mZ+IpGNkWspPDfQEsIPmTVTqt0J0BXwhRFb+qdjjV76waVtpCPGWI9CEPSV\nSGxlHVPSc9RGXFt7JfPILDlFKvZO63I13eYLbUR4KdaJ2HpCJdVGef+UiXrjIIO2\nd2pMZB98iZTOpOMrFraFiYWaHFDlXXgGNUH2qbm1jzMVbalOdagCCXMQXpI6zeG1\nErKiPCziJpFR4FcLUOij1FqXDG//WsFpiw8jsZiL4QKBgQD08gcoTfO9zuJDPsL+\nf/Nf5A4ltKl41IuDvDFn0ynlqnxwY0Zt29zrdHClpvs5UckZb8MWa4aQ5udH2R/B\n4FtYzLX09kF2IqmhTdcfiKdmspJLxMDMwMjHIRuc4gWaGBvqYHhb56aalWLl/xXe\ntjwyKUZmITdiSsIZaj7hrLqVbwKBgQD0MrUVVmECy+MUAJbDdgGhcaZS5JP71TYH\n4nIxW9E0R4/XXidh44qoo2mIlQTxF0QPNSq6Qu5UG8c5zHBMXWayJ51tujFzhan2\nlW8LgHvpGQa2JFJqR9p0sfOrZjhxgNdodrGm6xoyJR5v5C5tarQnk1TcNGRDXx10\n+u38xrm+IQKBgBK+XovYAznYFfpdWCCPe/kvg2GhRIKpiQ+InCM8xmz7sdAL2LzZ\nYTtnSqNydrD5MDFRGxWhHsgB01rtI3/7giH2cEoRegrnNiHQyhBwrZavPYCsyrAg\nZHzQbMOBjDoxdBloTm2B+X7Exa+h6HOFcG/KNsfj7NAJtnapaaxtQk3jAoGAcu2a\nhBxPM/25NaTBT+SuB8lxOfoSG6fQ8g0FKW3JHA3CCN5rMorgq1WdSYa4+K62fWHM\nZjUx7avVK8Kn54jd2GMEmKvUskXqI/9Yb9Vce+wnWHnnv9VpXxqRT82gKus0dhnG\nqoRjo84McSS3JQ/fEfEpMyoFNiABwRiIATuWF4ECgYAm21KVQ01T7s4S7UDJq7Sn\n7eKsU4D1MgHrJIpXTrMTxOOCfzFusBm1UJ5kGE8+GgI2tNzEEYB9L5qla8wu6/hl\noRF+QCyEBaqIo2mQ6KmUJeXGFPMN15fEz/mVPwKsmnUWFNKmgBY4TdcL4iFW8pG5\nsOh6fUEK3YLOA4GncxmanA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@boda-shields-urquilla.iam.gserviceaccount.com",
+  "client_id": "101143675200198880800",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40boda-shields-urquilla.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
