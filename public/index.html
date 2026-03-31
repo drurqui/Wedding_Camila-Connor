@@ -255,17 +255,13 @@
             </div>
             
             <div class="section-card" style="border: 2px solid var(--color-vino);">
-                <h2 style="color: var(--color-vino);">RSVP</h2>
+                <h2>RSVP</h2>
                 <p class="subtitle" style="font-weight: 500; color: var(--color-vino);" data-i18n="rsvpDeadline">Please RSVP by October 30th</p>
                 
                 <div style="max-width: 500px; margin: 0 auto;">
-                    <label style="font-weight: 500;" data-i18n="whoJoining">Who will be joining?</label>
-                    <select id="asistencia-compromiso" onchange="toggleGuestList()">
-                        <option value="si" data-i18n="optYes">Yes, we will attend</option>
-                        <option value="no" data-i18n="optNo">Unable to attend</option>
-                    </select>
-
-                    <div id="dynamic-guests-container" style="margin-top: 20px;">
+                    <label style="font-weight: 500; display: block; margin-bottom: 15px;" data-i18n="whoJoining">Who will be joining?</label>
+                    
+                    <div id="dynamic-guests-container">
                         <div id="guests-wrapper"></div>
                     </div>
 
@@ -344,8 +340,8 @@
                 attireLabel: "Semi-Formal Attire",
                 rsvpDeadline: "Please RSVP by October 30th",
                 whoJoining: "Who will be joining?",
-                optYes: "Yes, we will attend",
-                optNo: "Unable to attend",
+                optYes: "Yes, attending",
+                optNo: "Not attending",
                 btnAddGuest: "+ Add Guest",
                 btnContinue: "Continue",
                 accTitle: "Accommodations",
@@ -366,13 +362,14 @@
                 errMissingData: "Missing data",
                 errMissingDataDesc: "Please fill both fields to continue.",
                 errMissingSelections: "Missing Selections",
-                errMissingSelectionsDesc: "Please make sure to select the starter and entree for all guests.",
+                errMissingSelectionsDesc: "Please make sure to select the starter and entree for all attending guests.",
                 successTitle: "Thank you!",
                 successDesc: "Your RSVP has been successfully saved. See you soon!",
                 errorTitle: "Oops...",
                 errorDesc: "There was a problem saving your RSVP. Please try again.",
                 notFoundTitle: "Invitation not found",
-                notFoundDesc: "We couldn't find you on the list. Try using your full name."
+                notFoundDesc: "We couldn't find you on the list. Try using your full name.",
+                dynAttending: "Will you attend?"
             },
             es: {
                 heroSub: "Celebración de Compromiso",
@@ -391,8 +388,8 @@
                 attireLabel: "Vestimenta Semi-Formal",
                 rsvpDeadline: "Por favor confirma antes del 30 de Octubre",
                 whoJoining: "¿Quiénes asistirán?",
-                optYes: "Sí, asistiremos",
-                optNo: "No podremos asistir",
+                optYes: "Sí asistirá",
+                optNo: "No asistirá",
                 btnAddGuest: "+ Añadir Acompañante",
                 btnContinue: "Continuar",
                 accTitle: "Hospedaje",
@@ -413,13 +410,14 @@
                 errMissingData: "Faltan datos",
                 errMissingDataDesc: "Por favor llena ambos campos para continuar.",
                 errMissingSelections: "Faltan Selecciones",
-                errMissingSelectionsDesc: "Por favor asegúrate de seleccionar la entrada y el plato fuerte para todos los invitados.",
+                errMissingSelectionsDesc: "Por favor asegúrate de seleccionar la entrada y el plato fuerte para los asistentes.",
                 successTitle: "¡Gracias!",
                 successDesc: "Tu confirmación se ha guardado exitosamente. ¡Nos vemos pronto!",
                 errorTitle: "Ups...",
                 errorDesc: "Hubo un pequeño problema al guardar. Por favor intenta de nuevo.",
                 notFoundTitle: "Invitación no encontrada",
-                notFoundDesc: "No pudimos encontrarte en la lista. Intenta escribiendo solo tu primer nombre y primer apellido."
+                notFoundDesc: "No pudimos encontrarte en la lista. Intenta escribiendo solo tu primer nombre y primer apellido.",
+                dynAttending: "¿Asistirá?"
             }
         };
 
@@ -445,9 +443,11 @@
                 document.querySelectorAll('.guest-form-block').forEach(b => {
                     tempInfo.push({
                         nombre: b.querySelector('.i-nombre').value,
+                        asistencia: b.querySelector('.i-asistencia').value,
                         dieta: b.querySelector('.i-dieta').value,
                         starter: b.querySelector('.i-starter').value,
-                        entree: b.querySelector('.i-entree').value
+                        entree: b.querySelector('.i-entree').value,
+                        tipo: b.querySelector('.i-tipo').value
                     });
                 });
                 document.getElementById('guests-wrapper').innerHTML = '';
@@ -463,7 +463,7 @@
             applyLanguage(newLang);
         }
 
-        // --- LÓGICA DE INVITACIÓN (MODIFICADA CON BÚSQUEDA DIFUSA E ID MAESTRO) ---
+        // --- LÓGICA DE INVITACIÓN CON ASISTENCIA POR PERSONA ---
         function normalizar(t) {
             return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
         }
@@ -480,10 +480,13 @@
 
         let guestCount = 0;
 
-        window.toggleGuestList = function() {
-            const asistencia = document.getElementById('asistencia-compromiso').value;
-            const container = document.getElementById('dynamic-guests-container');
-            container.style.display = (asistencia === 'si') ? 'block' : 'none';
+        window.toggleMenuForGuest = function(selectElement, id) {
+            const foodMenu = document.getElementById(`food-menu-${id}`);
+            if (selectElement.value === 'si') {
+                foodMenu.style.display = 'block';
+            } else {
+                foodMenu.style.display = 'none';
+            }
         }
 
         window.agregarAcompanante = function(datos = {}) {
@@ -493,6 +496,7 @@
             
             const nombre = datos.nombre || "";
             const tipo = datos.tipo || "adulto"; 
+            const asistencia = datos.asistencia || "si";
             const dieta = datos.dieta || "None";
             const starter = datos.starter || (tipo === 'niño' ? 'Sin entrada (Niño)' : '');
             const entree = datos.entree || '';
@@ -505,7 +509,7 @@
                 <div class="platillos-container" style="margin-top: 10px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">Plato Principal (Menú Infantil)</label>
-                        <select class="i-entree" style="width: 100%;" required>
+                        <select class="i-entree" style="width: 100%;">
                             <option value="" disabled ${entree === '' ? 'selected' : ''}>-- Selecciona un plato --</option>
                             <option value="Chicken Tenders con Papas" ${entree.includes('Chicken') ? 'selected' : ''}>Chicken Tenders con Papas Fritas</option>
                             <option value="Mac and Cheese" ${entree.includes('Mac') ? 'selected' : ''}>Macaroni and Cheese</option>
@@ -518,7 +522,7 @@
                 <div class="platillos-container" style="margin-top: 10px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynStarters}</label>
-                        <select class="i-starter" style="width: 100%;" required>
+                        <select class="i-starter" style="width: 100%;">
                             <option value="" disabled ${starter === '' ? 'selected' : ''}>-- Selecciona una entrada --</option>
                             <option value="Caesar Salad" ${starter.includes('Caesar') ? 'selected' : ''}>"Prince of Wales" Caesar Salad</option>
                             <option value="Tomato Soup" ${starter.includes('Tomato') ? 'selected' : ''}>Tomato Soup</option>
@@ -526,7 +530,7 @@
                     </div>
                     <div style="flex: 1;">
                         <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynEntrees}</label>
-                        <select class="i-entree" style="width: 100%;" required>
+                        <select class="i-entree" style="width: 100%;">
                             <option value="" disabled ${entree === '' ? 'selected' : ''}>-- Selecciona un plato --</option>
                             <option value="Grilled Chicken Breast" ${entree.includes('Chicken') ? 'selected' : ''}>Grilled Chicken Breast</option>
                             <option value="Three Cheese Tortellini" ${entree.includes('Tortellini') ? 'selected' : ''}>Three Cheese Tortellini</option>
@@ -538,19 +542,27 @@
             const html = `
             <div class="guest-form-block" id="guest-block-${guestCount}" style="background: #fdfbf7; padding: 20px 25px 20px 20px; border-radius: 8px; border: 1px dashed var(--color-vino); margin-bottom: 20px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--color-vino);">${dLang.dynGuestDetails} ${guestCount} ${etiquetaTipo}</h3>
+                    <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--color-vino);">${nombre || dLang.dynGuestDetails + " " + guestCount} ${etiquetaTipo}</h3>
                 </div>
                 <input type="hidden" class="i-tipo" value="${tipo}">
-                <label style="font-size: 0.85em; font-weight: 500;">${dLang.dynName}</label>
-                <input type="text" class="i-nombre" value="${nombre}" placeholder="${dLang.dynNamePh}" required style="width: 100%;" ${nombre ? 'readonly style="background-color: #eee;"' : ''}>
-                <label style="font-size: 0.85em; font-weight: 500; margin-top: 10px; display: block;">${dLang.dynDiet}</label>
-                <select class="i-dieta" style="width: 100%;">
-                    <option value="None" ${dieta === 'None' ? 'selected' : ''}>${dLang.dynNone}</option>
-                    <option value="Gluten free" ${dieta === 'Gluten free' ? 'selected' : ''}>Gluten free</option>
-                    <option value="Vegetarian" ${dieta === 'Vegetarian' ? 'selected' : ''}>Vegetarian</option>
-                    <option value="Vegan" ${dieta === 'Vegan' ? 'selected' : ''}>Vegan</option>
+                <input type="hidden" class="i-nombre" value="${nombre}">
+                
+                <label style="font-size: 0.85em; font-weight: 500;">${dLang.dynAttending}</label>
+                <select class="i-asistencia" onchange="toggleMenuForGuest(this, ${guestCount})" style="width: 100%;">
+                    <option value="si" ${asistencia === 'si' ? 'selected' : ''}>${dLang.optYes}</option>
+                    <option value="no" ${asistencia === 'no' ? 'selected' : ''}>${dLang.optNo}</option>
                 </select>
-                ${menuHTML}
+
+                <div id="food-menu-${guestCount}" style="display: ${asistencia === 'si' ? 'block' : 'none'};">
+                    <label style="font-size: 0.85em; font-weight: 500; margin-top: 10px; display: block;">${dLang.dynDiet}</label>
+                    <select class="i-dieta" style="width: 100%;">
+                        <option value="None" ${dieta === 'None' ? 'selected' : ''}>${dLang.dynNone}</option>
+                        <option value="Gluten free" ${dieta === 'Gluten free' ? 'selected' : ''}>Gluten free</option>
+                        <option value="Vegetarian" ${dieta === 'Vegetarian' ? 'selected' : ''}>Vegetarian</option>
+                        <option value="Vegan" ${dieta === 'Vegan' ? 'selected' : ''}>Vegan</option>
+                    </select>
+                    ${menuHTML}
+                </div>
             </div>`;
             wrapper.insertAdjacentHTML('beforeend', html);
         }
@@ -626,23 +638,38 @@
 
         window.enviarRSVPCompromiso = async function() {
             const email = localStorage.getItem('invInvitadoEmail');
-            const asistencia = document.getElementById('asistencia-compromiso').value;
             const dLang = dict[window.currentLang];
             let arrayInvitados = [];
+            let algunAsistente = false;
 
-            if (asistencia === 'si') {
-                const bloques = document.querySelectorAll('.guest-form-block');
-                for (let block of bloques) {
-                    const n = block.querySelector('.i-nombre').value;
+            const bloques = document.querySelectorAll('.guest-form-block');
+            for (let block of bloques) {
+                const n = block.querySelector('.i-nombre').value;
+                const asis = block.querySelector('.i-asistencia').value;
+                const tipo = block.querySelector('.i-tipo').value;
+
+                if (asis === 'si') {
+                    algunAsistente = true;
                     const s = block.querySelector('.i-starter').value;
                     const e = block.querySelector('.i-entree').value;
-                    if(!n || !s || !e) { mostrarModal(dLang.errMissingSelections, dLang.errMissingSelectionsDesc); return; }
-                    arrayInvitados.push({ nombre: n, dieta: block.querySelector('.i-dieta').value, starter: s, entree: e, tipo: block.querySelector('.i-tipo').value });
+                    const d = block.querySelector('.i-dieta').value;
+                    if(!s || !e) { mostrarModal(dLang.errMissingSelections, dLang.errMissingSelectionsDesc); return; }
+                    arrayInvitados.push({ nombre: n, asistencia: asis, dieta: d, starter: s, entree: e, tipo: tipo });
+                } else {
+                    arrayInvitados.push({ nombre: n, asistencia: asis, dieta: "None", starter: "", entree: "", tipo: tipo });
                 }
             }
+            
+            // La asistencia general para la base de datos será "si" si al menos uno asiste.
+            const asistenciaGeneral = algunAsistente ? 'si' : 'no';
+
             try {
                 await setDoc(doc(db, "rsvps_compromiso", email.toLowerCase()), { 
-                    nombre: localStorage.getItem('invInvitadoNombre'), email, asistencia, invitados: arrayInvitados, fecha: serverTimestamp() 
+                    nombre: localStorage.getItem('invInvitadoNombre'), 
+                    email: email, 
+                    asistencia: asistenciaGeneral, 
+                    invitados: arrayInvitados, 
+                    fecha: serverTimestamp() 
                 }, { merge: true });
                 mostrarModal(dLang.successTitle, dLang.successDesc);
             } catch(e) { mostrarModal(dLang.errorTitle, dLang.errorDesc); }

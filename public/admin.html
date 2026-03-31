@@ -287,24 +287,30 @@
         </div>
 
         <div class="section-card">
-            <h2 data-i18n="masterTitle">📋 Gestor de Invitaciones (Lista Maestra)</h2>
-            <div style="background: #fdfbf7; padding: 20px; border: 1px dashed var(--color-acento); border-radius: 8px; margin-bottom: 30px;">
-                <h3 style="margin-top:0; color: var(--color-acento);" data-i18n="addGroupTitle">Agregar Grupo de Invitación</h3>
-                <input type="text" id="admin-grupo-nombre" placeholder="Nombre de la Invitación (Ej: Familia Pérez)">
-                <div id="admin-miembros-container"></div>
-                <button type="button" class="btn-outline-admin" onclick="adminAgregarMiembro()" data-i18n="btnAddMember">+ Añadir Persona</button>
-                <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación en Base de Datos</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 40px; margin-bottom: 25px;">
+                <h2 style="border: none; padding: 0; margin: 0;" data-i18n="masterTitle">📋 Gestor de Invitaciones (Lista Maestra)</h2>
+                <button onclick="toggleMasterList()" id="btn-toggle-master" class="btn-outline-admin" style="margin: 0; border: 1px solid var(--color-acento);" data-i18n="btnHide">Ocultar</button>
             </div>
+            
+            <div id="admin-master-content">
+                <div style="background: #fdfbf7; padding: 20px; border: 1px dashed var(--color-acento); border-radius: 8px; margin-bottom: 30px;">
+                    <h3 style="margin-top:0; color: var(--color-acento);" data-i18n="addGroupTitle">Agregar Grupo de Invitación</h3>
+                    <input type="text" id="admin-grupo-nombre" placeholder="Nombre de la Invitación (Ej: Familia Pérez)">
+                    <div id="admin-miembros-container"></div>
+                    <button type="button" class="btn-outline-admin" onclick="adminAgregarMiembro()" data-i18n="btnAddMember">+ Añadir Persona</button>
+                    <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación en Base de Datos</button>
+                </div>
 
-            <table id="tabla-maestra">
-                <thead><tr>
-                    <th data-i18n="thInvName">Nombre de Invitación</th>
-                    <th data-i18n="thMembers">Integrantes</th>
-                    <th data-i18n="thLinkedEmail">Email Vinculado</th>
-                    <th style="text-align: center;" data-i18n="thActions">Acciones</th>
-                </tr></thead>
-                <tbody></tbody>
-            </table>
+                <table id="tabla-maestra">
+                    <thead><tr>
+                        <th style="width: 30%;" data-i18n="thInvName">Nombre de Invitación</th>
+                        <th style="width: 40%;" data-i18n="thMembers">Integrantes</th>
+                        <th style="width: 20%;" data-i18n="thLinkedEmail">Email Vinculado</th>
+                        <th style="width: 10%; text-align: center;" data-i18n="thActions">Acciones</th>
+                    </tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="section-card">
@@ -376,17 +382,19 @@
         const dict = {
             en: {
                 pageTitle: "Dashboard", loginTitle: "Private Access", loginSub: "Wedding administration panel.", btnGoogle: "Sign in with Google", logout: "Log Out", panelTitle: "Couple's Dashboard", sessionActive: "Active session:",
-                masterTitle: "📋 Invitation Manager (Master List)", addGroupTitle: "Add Invitation Group", btnAddMember: "+ Add Member", btnSaveInv: "Save Invitation", thInvName: "Inv. Name", thMembers: "Members", thLinkedEmail: "Linked Email",
+                masterTitle: "📋 Invitation Manager", addGroupTitle: "Add Invitation Group", btnAddMember: "+ Add Member", btnSaveInv: "Save Invitation", thInvName: "Inv. Name", thMembers: "Members", thLinkedEmail: "Linked Email",
                 engTitle: "💍 RSVP - Engagement Party", wedTitle: "🕊️ RSVP - Formal Wedding", giftsTitle: "🌍 Honeymoon Gifts", totalGifts: "Total Raised:", thGuest: "Guest", thEmail: "Email", thResponse: "Response", thActions: "Actions", thGiftDetail: "Gift Detail", thAmount: "Amount",
                 deniedTitle: "⛔ Access Denied", deniedDesc: "Unauthorized account.", btnUnderstand: "Understood", delConfirmTitle: "⚠️ Confirm Deletion", delConfirmDesc: "Delete response from", delWarning: "Action cannot be undone.", btnCancel: "Cancel", btnYesDelete: "Yes, delete",
-                dynYesAttend: "✅ Attending", dynNoAttend: "❌ Not attending", dynNoEmail: "No email", dynDiet: "Diet:", dynMenu: "Menu:", dynNoMenu: "No menu details.", dynBtnDelete: "Delete", loginErr: "Login error: "
+                dynYesAttend: "✅ Attending", dynNoAttend: "❌ Not attending", dynNoEmail: "No email", dynDiet: "Diet:", dynMenu: "Menu:", dynNoMenu: "No menu details.", dynBtnDelete: "Delete", loginErr: "Login error: ",
+                btnShow: "Show", btnHide: "Hide"
             },
             es: {
                 pageTitle: "Panel", loginTitle: "Acceso Privado", loginSub: "Panel de administración.", btnGoogle: "Entrar con Google", logout: "Cerrar Sesión", panelTitle: "Panel de Novios", sessionActive: "Sesión activa:",
-                masterTitle: "📋 Gestor de Invitaciones (Lista Maestra)", addGroupTitle: "Agregar Grupo", btnAddMember: "+ Añadir Persona", btnSaveInv: "Guardar Invitación en Base de Datos", thInvName: "Nombre Inv.", thMembers: "Miembros", thLinkedEmail: "Email Vinculado",
+                masterTitle: "📋 Gestor de Invitaciones", addGroupTitle: "Agregar Grupo", btnAddMember: "+ Añadir Persona", btnSaveInv: "Guardar Invitación", thInvName: "Nombre Inv.", thMembers: "Miembros", thLinkedEmail: "Email Vinculado",
                 engTitle: "💍 RSVP - Compromiso", wedTitle: "🕊️ RSVP - Boda Formal", giftsTitle: "🌍 Regalos - Luna de Miel", totalGifts: "Total Recaudado:", thGuest: "Invitado", thEmail: "Correo", thResponse: "Respuesta", thActions: "Acciones", thGiftDetail: "Detalle", thAmount: "Monto",
                 deniedTitle: "⛔ Acceso Denegado", deniedDesc: "Cuenta no autorizada.", btnUnderstand: "Entendido", delConfirmTitle: "⚠️ Confirmar Borrado", delConfirmDesc: "¿Eliminar respuesta de", delWarning: "Esta acción no se puede deshacer.", btnCancel: "Cancelar", btnYesDelete: "Sí, eliminar",
-                dynYesAttend: "✅ Sí asistirá", dynNoAttend: "❌ No asistirá", dynNoEmail: "Sin correo", dynDiet: "Dieta:", dynMenu: "Menú:", dynNoMenu: "Sin detalles.", dynBtnDelete: "Borrar", loginErr: "Error: "
+                dynYesAttend: "✅ Sí asistirá", dynNoAttend: "❌ No asistirá", dynNoEmail: "Sin correo", dynDiet: "Dieta:", dynMenu: "Menú:", dynNoMenu: "Sin detalles.", dynBtnDelete: "Borrar", loginErr: "Error: ",
+                btnShow: "Mostrar", btnHide: "Ocultar"
             }
         };
 
@@ -397,11 +405,43 @@
                 if (dict[lang][key]) el.innerHTML = dict[lang][key];
             });
             renderizarTablas();
+            
+            const btnToggle = document.getElementById('btn-toggle-master');
+            if (btnToggle) {
+                const isHidden = document.getElementById('admin-master-content').style.display === 'none';
+                btnToggle.innerText = isHidden ? dict[lang].btnShow : dict[lang].btnHide;
+            }
         }
 
         window.toggleLanguage = function() {
             const newLang = window.currentLang === 'en' ? 'es' : 'en';
             applyLanguage(newLang);
+        }
+
+        // --- FUNCIONES DEL MODAL ELEGANTE ---
+        window.mostrarModal = function(titulo, texto) {
+            document.getElementById('modal-titulo-elegante').innerText = titulo;
+            document.getElementById('modal-texto-elegante').innerText = texto;
+            document.getElementById('modal-elegante').style.display = 'flex';
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById('modal-elegante').style.display = 'none';
+        }
+
+        // --- TOGGLE LISTA MAESTRA ---
+        window.toggleMasterList = function() {
+            const content = document.getElementById('admin-master-content');
+            const btn = document.getElementById('btn-toggle-master');
+            const d = dict[window.currentLang];
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                btn.innerText = d.btnHide;
+            } else {
+                content.style.display = 'none';
+                btn.innerText = d.btnShow;
+            }
         }
 
         // --- LÓGICA DE DATOS ---
@@ -437,10 +477,26 @@
                 </tr>`;
             });
 
+            // LÓGICA PER-GUEST PARA COMPROMISO
             const tbodyComp = document.querySelector('#tabla-compromiso tbody');
             tbodyComp.innerHTML = "";
             window.datosMemoria.compromiso.forEach(data => {
-                let resHTML = data.asistencia === 'no' ? d.dynNoAttend : `<strong>${d.dynYesAttend}</strong><br>` + (data.invitados ? data.invitados.map(i => `• ${i.nombre}: ${i.starter} / ${i.entree}`).join('<br>') : d.dynNoMenu);
+                let resHTML = "";
+                if (data.invitados && data.invitados.length > 0) {
+                    resHTML = `<ul style="margin: 0; padding-left: 15px; font-size: 0.9em;">`;
+                    data.invitados.forEach(i => {
+                        if (i.asistencia === 'si') {
+                            resHTML += `<li><strong style="color:#2e7d32;">✅ ${i.nombre}</strong> <br><span style="color:#666; font-size:0.85em;">Dieta: ${i.dieta} | ${i.starter} / ${i.entree}</span></li>`;
+                        } else {
+                            resHTML += `<li><strong style="color:#d9534f;">❌ ${i.nombre}</strong> <span style="color:#666; font-size:0.85em;">(${d.dynNoAttend})</span></li>`;
+                        }
+                    });
+                    resHTML += `</ul>`;
+                } else {
+                    // Fallback a lógica anterior si no había formato por persona
+                    resHTML = data.asistencia === 'no' ? d.dynNoAttend : `<strong>${d.dynYesAttend}</strong><br>${d.dynNoMenu}`;
+                }
+                
                 tbodyComp.innerHTML += `<tr><td><strong>${data.nombre}</strong></td><td>${data.email}</td><td>${resHTML}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('rsvps_compromiso', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button></td></tr>`;
             });
 
@@ -462,16 +518,6 @@
         }
 
         // --- GESTOR INVITACIONES ---
-        window.mostrarModal = function(titulo, texto) {
-            document.getElementById('modal-titulo-elegante').innerText = titulo;
-            document.getElementById('modal-texto-elegante').innerText = texto;
-            document.getElementById('modal-elegante').style.display = 'flex';
-        }
-
-        window.cerrarModal = function() {
-            document.getElementById('modal-elegante').style.display = 'none';
-        }
-
         window.adminAgregarMiembro = function() {
             const container = document.getElementById('admin-miembros-container');
             container.insertAdjacentHTML('beforeend', `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;"><input type="text" class="m-nombre" placeholder="Nombre completo" style="flex:2;"><select class="m-tipo" style="flex:1;"><option value="adulto">Adulto</option><option value="niño">Niño</option></select><button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button></div>`);
@@ -499,14 +545,14 @@
             });
             
             const btnSave = document.querySelector('.btn-save-inv');
-            if(btnSave) btnSave.innerText = "Actualizar Invitación";
+            if(btnSave) btnSave.innerText = window.currentLang === 'en' ? "Update Invitation" : "Actualizar Invitación";
             window.scrollTo({ top: document.getElementById('admin-grupo-nombre').offsetTop - 100, behavior: 'smooth' });
         }
 
         window.adminGuardarGrupo = async function() {
             const nGrupo = document.getElementById('admin-grupo-nombre').value;
             const filas = document.querySelectorAll('.miembro-row');
-            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre y añade miembros.");
+            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre del grupo y añade al menos un miembro.");
             
             let arr = [];
             filas.forEach(f => {
@@ -540,7 +586,7 @@
                 cargarDatosDesdeFirebase();
                 adminAgregarMiembro();
             } catch (e) { 
-                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos."); 
+                mostrarModal("Error", "Hubo un problema al guardar la invitación."); 
             }
         }
 
