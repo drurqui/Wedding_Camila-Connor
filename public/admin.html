@@ -260,6 +260,20 @@
         </div>
     </div>
 
+    <div id="modal-editar-rsvp" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2 style="color: var(--color-acento); margin-bottom: 5px;">Editar Menú</h2>
+            <p id="edit-rsvp-email" style="color: #666; font-size: 0.85em; margin-top: 0;"></p>
+            
+            <div id="edit-rsvp-container" style="text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 10px;"></div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button onclick="document.getElementById('modal-editar-rsvp').style.display='none'" class="btn-outline-admin" style="width: 100%; margin:0; padding: 12px;">Cancelar</button>
+                <button onclick="adminGuardarRSVP()" style="width: 100%; margin:0; padding: 12px;">Guardar Menú</button>
+            </div>
+        </div>
+    </div>
+
     <div id="login-section" class="container">
         <div class="section-card">
             <h1 data-i18n="loginTitle">Acceso Privado</h1>
@@ -478,7 +492,7 @@
                 </tr>`;
             });
 
-            // LÓGICA PER-GUEST PARA COMPROMISO
+            // Tabla RSVP Compromiso (Actualizada con botón Editar)
             const tbodyComp = document.querySelector('#tabla-compromiso tbody');
             tbodyComp.innerHTML = "";
             window.datosMemoria.compromiso.forEach(data => {
@@ -494,11 +508,18 @@
                     });
                     resHTML += `</ul>`;
                 } else {
-                    // Fallback a lógica anterior si no había formato por persona
                     resHTML = data.asistencia === 'no' ? d.dynNoAttend : `<strong>${d.dynYesAttend}</strong><br>${d.dynNoMenu}`;
                 }
                 
-                tbodyComp.innerHTML += `<tr><td><strong>${data.nombre}</strong></td><td>${data.email}</td><td>${resHTML}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('rsvps_compromiso', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button></td></tr>`;
+                tbodyComp.innerHTML += `<tr>
+                    <td><strong>${data.nombre}</strong></td>
+                    <td>${data.email}</td>
+                    <td>${resHTML}</td>
+                    <td style="text-align:center;">
+                        ${data.asistencia === 'si' ? `<button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarRSVP('${data.id}')">Editar Menú</button>` : ''}
+                        <button class="btn-borrar" style="width:100%;" onclick="confirmarBorrado('rsvps_compromiso', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button>
+                    </td>
+                </tr>`;
             });
 
             const tbodyBoda = document.querySelector('#tabla-boda tbody');
@@ -600,6 +621,100 @@
                 adminAgregarMiembro();
             } catch (e) { 
                 mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos."); 
+            }
+        }
+
+        // --- EDICIÓN DIRECTA DE RSVPs ---
+        let idRSVPEditando = null;
+
+        window.adminEditarRSVP = function(id) {
+            const rsvp = window.datosMemoria.compromiso.find(r => r.id === id);
+            if (!rsvp || !rsvp.invitados) return mostrarModal("Error", "No se puede editar este RSVP.");
+            
+            idRSVPEditando = id;
+            document.getElementById('edit-rsvp-email').innerText = rsvp.email;
+            const container = document.getElementById('edit-rsvp-container');
+            container.innerHTML = "";
+
+            rsvp.invitados.forEach(inv => {
+                if (inv.asistencia === 'no') return; // No editamos comida de quien no va
+
+                let isNino = inv.tipo === 'niño';
+                let html = `
+                <div class="edit-rsvp-block" style="background: #fdfbf7; padding: 15px; border: 1px dashed #ccc; border-radius: 8px; margin-bottom: 15px;">
+                    <h4 style="margin-top:0; margin-bottom:10px; color: var(--color-vino);">${inv.nombre} ${isNino ? '(Niño)' : ''}</h4>
+                    <input type="hidden" class="e-nombre" value="${inv.nombre}">
+                    <input type="hidden" class="e-tipo" value="${inv.tipo}">
+                    <input type="hidden" class="e-asistencia" value="${inv.asistencia}">
+                    
+                    <select class="e-dieta" style="margin-bottom: 10px; padding: 8px;">
+                        <option value="None" ${inv.dieta === 'None' ? 'selected' : ''}>Sin Restricciones</option>
+                        <option value="Gluten free" ${inv.dieta === 'Gluten free' ? 'selected' : ''}>Gluten free</option>
+                        <option value="Vegetarian" ${inv.dieta === 'Vegetarian' ? 'selected' : ''}>Vegetarian</option>
+                        <option value="Vegan" ${inv.dieta === 'Vegan' ? 'selected' : ''}>Vegan</option>
+                    </select>
+                `;
+
+                if (isNino) {
+                    html += `
+                    <select class="e-entree" style="padding: 8px;">
+                        <option value="Chicken Tenders con Papas" ${inv.entree.includes('Chicken') ? 'selected' : ''}>Chicken Tenders</option>
+                        <option value="Mac and Cheese" ${inv.entree.includes('Mac') ? 'selected' : ''}>Mac & Cheese</option>
+                        <option value="Menú Infantil" ${inv.entree.includes('Infantil') ? 'selected' : ''}>Menú Infantil (Auto)</option>
+                    </select>
+                    <input type="hidden" class="e-starter" value="Sin entrada (Niño)">
+                    `;
+                } else {
+                    html += `
+                    <select class="e-starter" style="margin-bottom: 10px; padding: 8px;">
+                        <option value="Caesar Salad" ${inv.starter.includes('Caesar') ? 'selected' : ''}>Caesar Salad</option>
+                        <option value="Tomato Soup" ${inv.starter.includes('Tomato') ? 'selected' : ''}>Tomato Soup</option>
+                    </select>
+                    <select class="e-entree" style="padding: 8px;">
+                        <option value="Grilled Chicken Breast" ${inv.entree.includes('Chicken') ? 'selected' : ''}>Grilled Chicken</option>
+                        <option value="Three Cheese Tortellini" ${inv.entree.includes('Tortellini') ? 'selected' : ''}>Tortellini</option>
+                    </select>
+                    `;
+                }
+                html += `</div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            document.getElementById('modal-editar-rsvp').style.display = 'flex';
+        }
+
+        window.adminGuardarRSVP = async function() {
+            if (!idRSVPEditando) return;
+            
+            const rsvpViejo = window.datosMemoria.compromiso.find(r => r.id === idRSVPEditando);
+            const bloques = document.querySelectorAll('.edit-rsvp-block');
+            
+            let nuevosInvitados = [];
+            
+            // Rescatamos a los que no asistían para no borrarlos del registro
+            rsvpViejo.invitados.forEach(invViejo => {
+                if (invViejo.asistencia === 'no') nuevosInvitados.push(invViejo);
+            });
+
+            // Guardamos las nuevas decisiones
+            bloques.forEach(b => {
+                nuevosInvitados.push({
+                    nombre: b.querySelector('.e-nombre').value,
+                    tipo: b.querySelector('.e-tipo').value,
+                    asistencia: b.querySelector('.e-asistencia').value,
+                    dieta: b.querySelector('.e-dieta').value,
+                    starter: b.querySelector('.e-starter').value,
+                    entree: b.querySelector('.e-entree').value
+                });
+            });
+
+            try {
+                await updateDoc(doc(db, "rsvps_compromiso", idRSVPEditando), { invitados: nuevosInvitados });
+                document.getElementById('modal-editar-rsvp').style.display = 'none';
+                mostrarModal("¡Éxito!", "El RSVP se ha actualizado correctamente.");
+                cargarDatosDesdeFirebase();
+            } catch (e) {
+                mostrarModal("Error", "Hubo un problema al actualizar el RSVP.");
             }
         }
 
