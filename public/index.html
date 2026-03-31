@@ -272,7 +272,6 @@
 
                     <div id="dynamic-guests-container" style="margin-top: 20px;">
                         <div id="guests-wrapper"></div>
-                        <button type="button" class="btn-outline" onclick="agregarAcompanante()" data-i18n="btnAddGuest">+ Add Guest</button>
                     </div>
 
                     <button onclick="enviarRSVPCompromiso()" style="margin-top: 30px;" data-i18n="btnContinue">Continue</button>
@@ -315,7 +314,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDvpD3Z1RruzhI8bGyIKZIHA1s0Cs_5oig",
@@ -329,7 +328,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- SISTEMA DE TRADUCCIÓN ---
+        // --- SISTEMA DE TRADUCCIÓN COMPLETO ---
         window.currentLang = 'en';
 
         const dict = {
@@ -356,7 +355,6 @@
                 btnContinue: "Continue",
                 accTitle: "Accommodations",
                 accDesc1: "For your convenience, a block of rooms has been reserved at the <strong>Prince of Wales Hotel</strong> for the night of Sunday, November 15, 2026.",
-                // 👇 AQUI SE ACTUALIZÓ PARA INGLÉS 👇
                 accDesc2: "To secure your room at a discounted group rate, please make your reservation online through the hotel website and enter the Group ID: <strong style='color: #711c2e;'>4088251</strong>",
                 accDesc3: "* The discounted rate of $200 is available for a traditional room of 1 queen, 1 king, or 2 doubles | 4 guests | 320 sq ft.",
                 btnReserve: "Visit Website - Reserve Room",
@@ -372,12 +370,14 @@
                 modalOk: "OK",
                 errMissingData: "Missing data",
                 errMissingDataDesc: "Please fill both fields to continue.",
-                errMissingNames: "Missing Names",
-                errMissingNamesDesc: "Make sure to add all guest names.",
+                errMissingSelections: "Missing Selections",
+                errMissingSelectionsDesc: "Please make sure to select the starter and entree for all guests.",
                 successTitle: "Thank you!",
                 successDesc: "Your RSVP has been successfully saved. See you soon!",
                 errorTitle: "Oops...",
-                errorDesc: "There was a problem saving your RSVP. Please try again."
+                errorDesc: "There was a problem saving your RSVP. Please try again.",
+                notFoundTitle: "Invitation not found",
+                notFoundDesc: "No pudimos encontrarte en la lista. Intenta escribiendo solo tu primer nombre y primer apellido."
             },
             es: {
                 heroSub: "Celebración de Compromiso",
@@ -402,7 +402,6 @@
                 btnContinue: "Continuar",
                 accTitle: "Hospedaje",
                 accDesc1: "Para su comodidad, hemos reservado un bloque de habitaciones en el <strong>Prince of Wales Hotel</strong> para la noche del domingo 15 de noviembre de 2026.",
-                // 👇 AQUI SE ACTUALIZÓ PARA ESPAÑOL 👇
                 accDesc2: "Para asegurar su habitación con tarifa especial de grupo, por favor haga su reserva en la web del hotel usando el Group ID: <strong style='color: #711c2e;'>4088251</strong>",
                 accDesc3: "* La tarifa de descuento de $200 aplica para habitaciones tradicionales de 1 cama Queen, 1 King, o 2 Dobles | 4 personas | 320 sq ft.",
                 btnReserve: "Visitar Sitio Web - Reservar",
@@ -418,47 +417,29 @@
                 modalOk: "ACEPTAR",
                 errMissingData: "Faltan datos",
                 errMissingDataDesc: "Por favor llena ambos campos para continuar.",
-                errMissingNames: "Faltan Nombres",
-                errMissingNamesDesc: "Asegúrate de escribir el nombre de todos los acompañantes.",
+                errMissingSelections: "Faltan Selecciones",
+                errMissingSelectionsDesc: "Por favor asegúrate de seleccionar la entrada y el plato fuerte para todos los invitados.",
                 successTitle: "¡Gracias!",
                 successDesc: "Tu confirmación se ha guardado exitosamente. ¡Nos vemos pronto!",
                 errorTitle: "Ups...",
-                errorDesc: "Hubo un pequeño problema al guardar. Por favor intenta de nuevo."
+                errorDesc: "Hubo un pequeño problema al guardar. Por favor intenta de nuevo.",
+                notFoundTitle: "Invitación no encontrada",
+                notFoundDesc: "No pudimos encontrarte en la lista. Intenta escribiendo solo tu primer nombre y primer apellido."
             }
         };
 
         window.applyLanguage = function(lang) {
             window.currentLang = lang;
-            
             document.title = lang === 'en' ? 'Shields-Urquilla Wedding' : 'Boda Shields-Urquilla';
-            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[lang][key]) el.innerHTML = dict[lang][key];
             });
-
             document.getElementById('guest-nombre').placeholder = dict[lang].namePh;
             document.getElementById('guest-email').placeholder = dict[lang].emailPh;
             document.getElementById('modal-btn').innerText = dict[lang].modalOk;
-
             document.getElementById('lang-en').className = lang === 'en' ? 'active' : '';
             document.getElementById('lang-es').className = lang === 'es' ? 'active' : '';
-
-            if(guestCount > 0) {
-                let tempInfo = [];
-                document.querySelectorAll('.guest-form-block').forEach(b => {
-                    tempInfo.push({
-                        nombre: b.querySelector('.i-nombre').value,
-                        dieta: b.querySelector('.i-dieta').value,
-                        starter: b.querySelector('.i-starter').value,
-                        entree: b.querySelector('.i-entree').value
-                    });
-                });
-                document.getElementById('guests-wrapper').innerHTML = '';
-                let tempCount = guestCount;
-                guestCount = 0;
-                tempInfo.forEach(info => agregarAcompanante(info));
-            }
         }
 
         window.toggleLanguage = function() {
@@ -467,7 +448,11 @@
             applyLanguage(newLang);
         }
 
-        // --- LÓGICA DE INVITACIÓN ---
+        // --- LÓGICA DE INVITACIÓN (MODIFICADA CON BÚSQUEDA DIFUSA) ---
+        function normalizar(t) {
+            return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+        }
+
         window.mostrarModal = function(titulo, texto) {
             document.getElementById('modal-titulo').innerText = titulo;
             document.getElementById('modal-texto').innerText = texto;
@@ -492,20 +477,57 @@
             const dLang = dict[window.currentLang]; 
             
             const nombre = datos.nombre || "";
+            const tipo = datos.tipo || "adulto"; 
             const dieta = datos.dieta || "None";
-            const starter = datos.starter || "Caesar Salad";
-            const entree = datos.entree || "Grilled Chicken Breast";
+            const starter = datos.starter || (tipo === 'niño' ? 'Sin entrada (Niño)' : '');
+            const entree = datos.entree || '';
+            
+            const etiquetaTipo = tipo === 'niño' ? '<span style="background: #e0f7fa; color: #006064; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-left: 10px;">Niño/a</span>' : '';
+
+            let menuHTML = '';
+            if (tipo === 'niño') {
+                menuHTML = `
+                <div class="platillos-container" style="margin-top: 10px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">Plato Principal (Menú Infantil)</label>
+                        <select class="i-entree" style="width: 100%;" required>
+                            <option value="" disabled ${entree === '' ? 'selected' : ''}>-- Selecciona un plato --</option>
+                            <option value="Chicken Tenders con Papas" ${entree.includes('Chicken') ? 'selected' : ''}>Chicken Tenders con Papas Fritas</option>
+                            <option value="Mac and Cheese" ${entree.includes('Mac') ? 'selected' : ''}>Macaroni and Cheese</option>
+                        </select>
+                        <input type="hidden" class="i-starter" value="Sin entrada (Niño)">
+                    </div>
+                </div>`;
+            } else {
+                menuHTML = `
+                <div class="platillos-container" style="margin-top: 10px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynStarters}</label>
+                        <select class="i-starter" style="width: 100%;" required>
+                            <option value="" disabled ${starter === '' ? 'selected' : ''}>-- Selecciona una entrada --</option>
+                            <option value="Caesar Salad" ${starter.includes('Caesar') ? 'selected' : ''}>"Prince of Wales" Caesar Salad</option>
+                            <option value="Tomato Soup" ${starter.includes('Tomato') ? 'selected' : ''}>Tomato Soup</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynEntrees}</label>
+                        <select class="i-entree" style="width: 100%;" required>
+                            <option value="" disabled ${entree === '' ? 'selected' : ''}>-- Selecciona un plato --</option>
+                            <option value="Grilled Chicken Breast" ${entree.includes('Chicken') ? 'selected' : ''}>Grilled Chicken Breast</option>
+                            <option value="Three Cheese Tortellini" ${entree.includes('Tortellini') ? 'selected' : ''}>Three Cheese Tortellini</option>
+                        </select>
+                    </div>
+                </div>`;
+            }
             
             const html = `
             <div class="guest-form-block" id="guest-block-${guestCount}" style="background: #fdfbf7; padding: 20px 25px 20px 20px; border-radius: 8px; border: 1px dashed var(--color-vino); margin-bottom: 20px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--color-vino);">${dLang.dynGuestDetails} ${guestCount}</h3>
-                    ${guestCount > 1 ? `<button type="button" onclick="document.getElementById('guest-block-${guestCount}').remove()" style="width: auto; padding: 5px 15px; margin: 0; background: #ccc; color: #333; font-size: 0.8rem;">${dLang.dynRemove}</button>` : ''}
+                    <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--color-vino);">${dLang.dynGuestDetails} ${guestCount} ${etiquetaTipo}</h3>
                 </div>
-                
+                <input type="hidden" class="i-tipo" value="${tipo}">
                 <label style="font-size: 0.85em; font-weight: 500;">${dLang.dynName}</label>
-                <input type="text" class="i-nombre" value="${nombre}" placeholder="${dLang.dynNamePh}" required style="width: 100%;">
-                
+                <input type="text" class="i-nombre" value="${nombre}" placeholder="${dLang.dynNamePh}" required style="width: 100%;" ${nombre ? 'readonly style="background-color: #eee;"' : ''}>
                 <label style="font-size: 0.85em; font-weight: 500; margin-top: 10px; display: block;">${dLang.dynDiet}</label>
                 <select class="i-dieta" style="width: 100%;">
                     <option value="None" ${dieta === 'None' ? 'selected' : ''}>${dLang.dynNone}</option>
@@ -513,151 +535,94 @@
                     <option value="Vegetarian" ${dieta === 'Vegetarian' ? 'selected' : ''}>Vegetarian</option>
                     <option value="Vegan" ${dieta === 'Vegan' ? 'selected' : ''}>Vegan</option>
                 </select>
-
-                <div class="platillos-container" style="margin-top: 10px;">
-                    <div style="flex: 1;">
-                        <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynStarters}</label>
-                        <select class="i-starter" style="width: 100%;">
-                            <option value="Caesar Salad" ${starter === 'Caesar Salad' ? 'selected' : ''}>"Prince of Wales" Caesar Salad</option>
-                            <option value="Tomato Soup" ${starter === 'Tomato Soup' ? 'selected' : ''}>Tomato Soup</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">${dLang.dynEntrees}</label>
-                        <select class="i-entree" style="width: 100%;">
-                            <option value="Grilled Chicken Breast" ${entree === 'Grilled Chicken Breast' ? 'selected' : ''}>Grilled Chicken Breast</option>
-                            <option value="Three Cheese Tortellini" ${entree === 'Three Cheese Tortellini' ? 'selected' : ''}>Three Cheese Tortellini</option>
-                        </select>
-                    </div>
-                </div>
+                ${menuHTML}
             </div>`;
-            
             wrapper.insertAdjacentHTML('beforeend', html);
         }
 
-        window.cargarDatosRSVP = async function(email) {
-            try {
-                const emailID = email.toLowerCase().trim();
-                const rsvpRef = doc(db, "rsvps_compromiso", emailID);
-                const rsvpSnap = await getDoc(rsvpRef);
-                
-                document.getElementById('guests-wrapper').innerHTML = ''; 
-                guestCount = 0; 
-                
-                if (rsvpSnap.exists()) {
-                    const data = rsvpSnap.data();
-                    document.getElementById('asistencia-compromiso').value = data.asistencia;
-                    toggleGuestList();
-                    
-                    if (data.asistencia === 'si' && data.invitados && data.invitados.length > 0) {
-                        data.invitados.forEach(inv => agregarAcompanante(inv));
-                    } else if (data.asistencia === 'si') {
-                        agregarAcompanante({ nombre: localStorage.getItem('invInvitadoNombre') });
-                    }
-                } else {
-                    document.getElementById('asistencia-compromiso').value = 'si';
-                    toggleGuestList();
-                    agregarAcompanante({ nombre: localStorage.getItem('invInvitadoNombre') });
-                }
-            } catch (error) {
-                if(document.getElementById('guests-wrapper').innerHTML === "") {
-                     agregarAcompanante({ nombre: localStorage.getItem('invInvitadoNombre') });
-                }
-            }
-        }
-
-        window.registrarInvitado = function() {
-            const nombre = document.getElementById('guest-nombre').value;
-            const email = document.getElementById('guest-email').value;
+        window.registrarInvitado = async function() {
+            const nombreIngresado = document.getElementById('guest-nombre').value;
+            const emailIngresado = document.getElementById('guest-email').value;
             const dLang = dict[window.currentLang];
-
-            if(!nombre || !email) { mostrarModal(dLang.errMissingData, dLang.errMissingDataDesc); return; }
+            if(!nombreIngresado || !emailIngresado) { mostrarModal(dLang.errMissingData, dLang.errMissingDataDesc); return; }
             
-            localStorage.setItem('invInvitadoNombre', nombre);
-            localStorage.setItem('invInvitadoEmail', email);
-            
-            document.getElementById('display-nombre-invitado').innerText = nombre;
-            document.getElementById('seccion-registro').style.display = 'none';
-            document.getElementById('contenido-principal').style.display = 'block';
+            try {
+                const snap = await getDocs(collection(db, "invitaciones"));
+                let match = null;
+                let matchId = null;
+                const buscado = normalizar(nombreIngresado);
 
-            cargarDatosRSVP(email);
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const enLista = data.invitados.some(i => normalizar(i.nombre).includes(buscado));
+                    if(data.email_vinculado === emailIngresado || normalizar(data.nombre_invitacion).includes(buscado) || enLista) {
+                        match = data; matchId = doc.id;
+                    }
+                });
+
+                if (match) {
+                    if (!match.email_vinculado) await setDoc(doc(db, "invitaciones", matchId), { email_vinculado: emailIngresado }, { merge: true });
+                    localStorage.setItem('invInvitadoNombre', match.nombre_invitacion);
+                    localStorage.setItem('invInvitadoEmail', emailIngresado);
+                    document.getElementById('display-nombre-invitado').innerText = match.nombre_invitacion;
+                    document.getElementById('seccion-registro').style.display = 'none';
+                    document.getElementById('contenido-principal').style.display = 'block';
+                    document.getElementById('guests-wrapper').innerHTML = '';
+                    guestCount = 0;
+                    match.invitados.forEach(i => agregarAcompanante(i));
+                } else {
+                    mostrarModal(dLang.notFoundTitle, dLang.notFoundDesc);
+                }
+            } catch(e) { console.error(e); }
         }
 
-        window.onload = function() {
+        window.onload = async function() {
             const savedLang = localStorage.getItem('prefLang');
             const browserLang = navigator.language.toLowerCase();
-            
-            if (savedLang) {
-                applyLanguage(savedLang);
-            } else if (browserLang.startsWith('es')) {
-                applyLanguage('es'); 
-            } else {
-                applyLanguage('en'); 
-            }
+            applyLanguage(savedLang || (browserLang.startsWith('es') ? 'es' : 'en'));
 
-            const nombreGuardado = localStorage.getItem('invInvitadoNombre');
-            const emailGuardado = localStorage.getItem('invInvitadoEmail');
-            
-            if(nombreGuardado && emailGuardado) {
-                document.getElementById('display-nombre-invitado').innerText = nombreGuardado;
+            const nombreG = localStorage.getItem('invInvitadoNombre');
+            const emailG = localStorage.getItem('invInvitadoEmail');
+            if(nombreG && emailG) {
+                document.getElementById('display-nombre-invitado').innerText = nombreG;
                 document.getElementById('seccion-registro').style.display = 'none';
                 document.getElementById('contenido-principal').style.display = 'block';
-                
-                cargarDatosRSVP(emailGuardado);
+                // Recargar grupo si refrescan
+                const snap = await getDocs(collection(db, "invitaciones"));
+                snap.forEach(doc => { if(doc.data().email_vinculado === emailG) { 
+                    document.getElementById('guests-wrapper').innerHTML = ''; guestCount = 0;
+                    doc.data().invitados.forEach(i => agregarAcompanante(i));
+                }});
             }
         }
 
         window.cambiarInvitado = function() {
-            localStorage.removeItem('invInvitadoNombre');
-            localStorage.removeItem('invInvitadoEmail');
-            document.getElementById('guest-nombre').value = '';
-            document.getElementById('guest-email').value = '';
-            document.getElementById('guests-wrapper').innerHTML = ''; 
-            guestCount = 0; 
-            
-            document.getElementById('contenido-principal').style.display = 'none';
-            document.getElementById('seccion-registro').style.display = 'block';
+            localStorage.removeItem('invInvitadoNombre'); localStorage.removeItem('invInvitadoEmail');
+            location.reload();
         }
 
         window.enviarRSVPCompromiso = async function() {
-            const nombrePrincipal = localStorage.getItem('invInvitadoNombre');
             const email = localStorage.getItem('invInvitadoEmail');
             const asistencia = document.getElementById('asistencia-compromiso').value;
             const dLang = dict[window.currentLang];
-            
             let arrayInvitados = [];
 
             if (asistencia === 'si') {
                 const bloques = document.querySelectorAll('.guest-form-block');
                 for (let block of bloques) {
                     const n = block.querySelector('.i-nombre').value;
-                    const d = block.querySelector('.i-dieta').value;
                     const s = block.querySelector('.i-starter').value;
                     const e = block.querySelector('.i-entree').value;
-                    
-                    if(!n) { mostrarModal(dLang.errMissingNames, dLang.errMissingNamesDesc); return; }
-                    
-                    arrayInvitados.push({ nombre: n, dieta: d, starter: s, entree: e });
+                    if(!n || !s || !e) { mostrarModal(dLang.errMissingSelections, dLang.errMissingSelectionsDesc); return; }
+                    arrayInvitados.push({ nombre: n, dieta: block.querySelector('.i-dieta').value, starter: s, entree: e, tipo: block.querySelector('.i-tipo').value });
                 }
             }
-            
             try {
-                const emailID = email.toLowerCase().trim();
-                const rsvpRef = doc(db, "rsvps_compromiso", emailID);
-                
-                await setDoc(rsvpRef, { 
-                    nombre: nombrePrincipal, 
-                    email: email, 
-                    asistencia: asistencia,
-                    invitados: arrayInvitados, 
-                    fecha: serverTimestamp()
+                await setDoc(doc(db, "rsvps_compromiso", email.toLowerCase()), { 
+                    nombre: localStorage.getItem('invInvitadoNombre'), email, asistencia, invitados: arrayInvitados, fecha: serverTimestamp() 
                 }, { merge: true });
-                
                 mostrarModal(dLang.successTitle, dLang.successDesc);
-                
-            } catch(e) { 
-                mostrarModal(dLang.errorTitle, dLang.errorDesc);
-            }
+            } catch(e) { mostrarModal(dLang.errorTitle, dLang.errorDesc); }
         }
     </script>
 </body>
