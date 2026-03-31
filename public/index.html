@@ -509,7 +509,7 @@
                 <div class="platillos-container" style="margin-top: 10px;">
                     <div style="flex: 1;">
                         <label style="font-size: 0.85em; font-weight: 500; display: block; margin-top: 10px;">Plato Principal (Menú Infantil)</label>
-                        <select class="i-entree" style="width: 100%;">
+                        <select class="i-entree" style="width: 100%;" required>
                             <option value="" disabled ${entree === '' ? 'selected' : ''}>-- Selecciona un plato --</option>
                             <option value="Chicken Tenders con Papas" ${entree.includes('Chicken') ? 'selected' : ''}>Chicken Tenders con Papas Fritas</option>
                             <option value="Mac and Cheese" ${entree.includes('Mac') ? 'selected' : ''}>Macaroni and Cheese</option>
