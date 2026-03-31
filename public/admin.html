@@ -293,15 +293,15 @@
                 <input type="text" id="admin-grupo-nombre" placeholder="Nombre de la Invitación (Ej: Familia Pérez)">
                 <div id="admin-miembros-container"></div>
                 <button type="button" class="btn-outline-admin" onclick="adminAgregarMiembro()" data-i18n="btnAddMember">+ Añadir Persona</button>
-                <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación</button>
+                <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación en Base de Datos</button>
             </div>
 
             <table id="tabla-maestra">
                 <thead><tr>
-                    <th style="width: 30%;" data-i18n="thInvName">Nombre de Invitación</th>
-                    <th style="width: 40%;" data-i18n="thMembers">Integrantes</th>
-                    <th style="width: 20%;" data-i18n="thLinkedEmail">Email Vinculado</th>
-                    <th style="width: 10%; text-align: center;" data-i18n="thActions">Acciones</th>
+                    <th data-i18n="thInvName">Nombre de Invitación</th>
+                    <th data-i18n="thMembers">Integrantes</th>
+                    <th data-i18n="thLinkedEmail">Email Vinculado</th>
+                    <th style="text-align: center;" data-i18n="thActions">Acciones</th>
                 </tr></thead>
                 <tbody></tbody>
             </table>
@@ -349,7 +349,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -368,6 +368,8 @@
 
         const correosAutorizados = ["david.ricardo@urquilla.com", "davidurquilla@gmail.com", "camilasofia@urquilla.com", "shields@urquilla.com"];
         window.datosMemoria = { compromiso: [], boda: [], regalos: [], invitaciones: [] };
+        
+        let idEditando = null;
 
         // --- SISTEMA BILINGÜE ---
         window.currentLang = 'en';
@@ -381,7 +383,7 @@
             },
             es: {
                 pageTitle: "Panel", loginTitle: "Acceso Privado", loginSub: "Panel de administración.", btnGoogle: "Entrar con Google", logout: "Cerrar Sesión", panelTitle: "Panel de Novios", sessionActive: "Sesión activa:",
-                masterTitle: "📋 Gestor de Invitaciones (Lista Maestra)", addGroupTitle: "Agregar Grupo", btnAddMember: "+ Añadir Persona", btnSaveInv: "Guardar Invitación", thInvName: "Nombre Inv.", thMembers: "Miembros", thLinkedEmail: "Email Vinculado",
+                masterTitle: "📋 Gestor de Invitaciones (Lista Maestra)", addGroupTitle: "Agregar Grupo", btnAddMember: "+ Añadir Persona", btnSaveInv: "Guardar Invitación en Base de Datos", thInvName: "Nombre Inv.", thMembers: "Miembros", thLinkedEmail: "Email Vinculado",
                 engTitle: "💍 RSVP - Compromiso", wedTitle: "🕊️ RSVP - Boda Formal", giftsTitle: "🌍 Regalos - Luna de Miel", totalGifts: "Total Recaudado:", thGuest: "Invitado", thEmail: "Correo", thResponse: "Respuesta", thActions: "Acciones", thGiftDetail: "Detalle", thAmount: "Monto",
                 deniedTitle: "⛔ Acceso Denegado", deniedDesc: "Cuenta no autorizada.", btnUnderstand: "Entendido", delConfirmTitle: "⚠️ Confirmar Borrado", delConfirmDesc: "¿Eliminar respuesta de", delWarning: "Esta acción no se puede deshacer.", btnCancel: "Cancelar", btnYesDelete: "Sí, eliminar",
                 dynYesAttend: "✅ Sí asistirá", dynNoAttend: "❌ No asistirá", dynNoEmail: "Sin correo", dynDiet: "Dieta:", dynMenu: "Menú:", dynNoMenu: "Sin detalles.", dynBtnDelete: "Borrar", loginErr: "Error: "
@@ -400,17 +402,6 @@
         window.toggleLanguage = function() {
             const newLang = window.currentLang === 'en' ? 'es' : 'en';
             applyLanguage(newLang);
-        }
-
-        // --- FUNCIONES DEL MODAL ELEGANTE ---
-        window.mostrarModal = function(titulo, texto) {
-            document.getElementById('modal-titulo-elegante').innerText = titulo;
-            document.getElementById('modal-texto-elegante').innerText = texto;
-            document.getElementById('modal-elegante').style.display = 'flex';
-        }
-
-        window.cerrarModal = function() {
-            document.getElementById('modal-elegante').style.display = 'none';
         }
 
         // --- LÓGICA DE DATOS ---
@@ -435,7 +426,15 @@
             tbodyInv.innerHTML = "";
             window.datosMemoria.invitaciones.forEach(data => {
                 let lista = data.invitados.map(i => `• ${i.nombre} (${i.tipo})`).join('<br>');
-                tbodyInv.innerHTML += `<tr><td><strong>${data.nombre_invitacion}</strong></td><td>${lista}</td><td>${data.email_vinculado || '---'}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('invitaciones', '${data.id}', '${data.nombre_invitacion}')">${d.dynBtnDelete}</button></td></tr>`;
+                tbodyInv.innerHTML += `<tr>
+                    <td><strong>${data.nombre_invitacion}</strong></td>
+                    <td>${lista}</td>
+                    <td>${data.email_vinculado || '---'}</td>
+                    <td style="text-align:center;">
+                        <button class="btn-borrar" style="background:var(--color-acento); color:white; border:none; margin-bottom:5px; width:100%;" onclick="adminEditarInvitacion('${data.id}')">Editar</button>
+                        <button class="btn-borrar" style="width:100%;" onclick="confirmarBorrado('invitaciones', '${data.id}', '${data.nombre_invitacion}')">${d.dynBtnDelete}</button>
+                    </td>
+                </tr>`;
             });
 
             const tbodyComp = document.querySelector('#tabla-compromiso tbody');
@@ -463,15 +462,51 @@
         }
 
         // --- GESTOR INVITACIONES ---
+        window.mostrarModal = function(titulo, texto) {
+            document.getElementById('modal-titulo-elegante').innerText = titulo;
+            document.getElementById('modal-texto-elegante').innerText = texto;
+            document.getElementById('modal-elegante').style.display = 'flex';
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById('modal-elegante').style.display = 'none';
+        }
+
         window.adminAgregarMiembro = function() {
             const container = document.getElementById('admin-miembros-container');
             container.insertAdjacentHTML('beforeend', `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;"><input type="text" class="m-nombre" placeholder="Nombre completo" style="flex:2;"><select class="m-tipo" style="flex:1;"><option value="adulto">Adulto</option><option value="niño">Niño</option></select><button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button></div>`);
         }
 
+        window.adminEditarInvitacion = function(id) {
+            const inv = window.datosMemoria.invitaciones.find(i => i.id === id);
+            if (!inv) return;
+
+            idEditando = id;
+            document.getElementById('admin-grupo-nombre').value = inv.nombre_invitacion;
+            const container = document.getElementById('admin-miembros-container');
+            container.innerHTML = "";
+
+            inv.invitados.forEach(miembro => {
+                const html = `<div class="miembro-row" style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" class="m-nombre" value="${miembro.nombre}" placeholder="Nombre completo" style="flex:2;">
+                    <select class="m-tipo" style="flex:1;">
+                        <option value="adulto" ${miembro.tipo === 'adulto' ? 'selected' : ''}>Adulto</option>
+                        <option value="niño" ${miembro.tipo === 'niño' ? 'selected' : ''}>Niño</option>
+                    </select>
+                    <button type="button" class="btn-borrar" onclick="this.parentElement.remove()">X</button>
+                </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+            
+            const btnSave = document.querySelector('.btn-save-inv');
+            if(btnSave) btnSave.innerText = "Actualizar Invitación";
+            window.scrollTo({ top: document.getElementById('admin-grupo-nombre').offsetTop - 100, behavior: 'smooth' });
+        }
+
         window.adminGuardarGrupo = async function() {
             const nGrupo = document.getElementById('admin-grupo-nombre').value;
             const filas = document.querySelectorAll('.miembro-row');
-            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre del grupo y añade al menos un miembro.");
+            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre y añade miembros.");
             
             let arr = [];
             filas.forEach(f => {
@@ -481,14 +516,31 @@
             });
 
             try {
-                await addDoc(collection(db, "invitaciones"), { nombre_invitacion: nGrupo, email_vinculado: "", invitados: arr });
-                mostrarModal("¡Éxito!", "Invitación guardada en la base de datos.");
+                if (idEditando) {
+                    await updateDoc(doc(db, "invitaciones", idEditando), {
+                        nombre_invitacion: nGrupo,
+                        invitados: arr
+                    });
+                    mostrarModal("¡Éxito!", "Invitación actualizada correctamente.");
+                } else {
+                    await addDoc(collection(db, "invitaciones"), {
+                        nombre_invitacion: nGrupo,
+                        email_vinculado: "",
+                        invitados: arr
+                    });
+                    mostrarModal("¡Éxito!", "Invitación guardada en la base de datos.");
+                }
+                
+                idEditando = null;
+                const btnSave = document.querySelector('.btn-save-inv');
+                if(btnSave) btnSave.innerText = dict[window.currentLang].btnSaveInv;
+                
                 document.getElementById('admin-grupo-nombre').value = "";
                 document.getElementById('admin-miembros-container').innerHTML = "";
                 cargarDatosDesdeFirebase();
                 adminAgregarMiembro();
             } catch (e) { 
-                mostrarModal("Error", "Hubo un problema al guardar la invitación."); 
+                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos."); 
             }
         }
 

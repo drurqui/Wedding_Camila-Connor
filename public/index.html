@@ -165,10 +165,6 @@
             color: var(--color-vino);
             border: 2px solid var(--color-vino);
         }
-        .btn-outline:hover {
-            background-color: var(--color-vino);
-            color: white;
-        }
 
         input[type="text"], input[type="email"], select {
             width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
@@ -177,7 +173,6 @@
 
         .platillos-container { display: flex; gap: 15px; }
 
-        /* MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
@@ -215,8 +210,8 @@
             <h2 style="font-size: clamp(3rem, 10vw, 4rem);" data-i18n="welcomeTitle">Welcome!</h2>
             <p data-i18n="welcomeDesc">Please identify yourself to RSVP.</p>
             <div style="max-width: 400px; margin: 0 auto;">
-                <input type="text" id="guest-nombre" placeholder="Your Name and Surname" required>
-                <input type="email" id="guest-email" placeholder="Your Email Address" required>
+                <input type="text" id="guest-nombre" placeholder="Your Name" required>
+                <input type="email" id="guest-email" placeholder="Your Email" required>
                 <button onclick="registrarInvitado()" style="background-color: var(--color-acento);" data-i18n="btnEnter">Enter Invitation</button>
             </div>
         </div>
@@ -468,7 +463,7 @@
             applyLanguage(newLang);
         }
 
-        // --- LÓGICA DE INVITACIÓN (MODIFICADA CON BÚSQUEDA DIFUSA) ---
+        // --- LÓGICA DE INVITACIÓN (MODIFICADA CON BÚSQUEDA DIFUSA E ID MAESTRO) ---
         function normalizar(t) {
             return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
         }
@@ -583,8 +578,11 @@
 
                 if (match) {
                     if (!match.email_vinculado) await setDoc(doc(db, "invitaciones", matchId), { email_vinculado: emailIngresado }, { merge: true });
+                    
+                    localStorage.setItem('invIdMaster', matchId);
                     localStorage.setItem('invInvitadoNombre', match.nombre_invitacion);
                     localStorage.setItem('invInvitadoEmail', emailIngresado);
+                    
                     document.getElementById('display-nombre-invitado').innerText = match.nombre_invitacion;
                     document.getElementById('seccion-registro').style.display = 'none';
                     document.getElementById('contenido-principal').style.display = 'block';
@@ -602,23 +600,27 @@
             const browserLang = navigator.language.toLowerCase();
             applyLanguage(savedLang || (browserLang.startsWith('es') ? 'es' : 'en'));
 
-            const nombreG = localStorage.getItem('invInvitadoNombre');
-            const emailG = localStorage.getItem('invInvitadoEmail');
-            if(nombreG && emailG) {
-                document.getElementById('display-nombre-invitado').innerText = nombreG;
-                document.getElementById('seccion-registro').style.display = 'none';
-                document.getElementById('contenido-principal').style.display = 'block';
-                // Recargar grupo si refrescan
-                const snap = await getDocs(collection(db, "invitaciones"));
-                snap.forEach(doc => { if(doc.data().email_vinculado === emailG) { 
-                    document.getElementById('guests-wrapper').innerHTML = ''; guestCount = 0;
-                    doc.data().invitados.forEach(i => agregarAcompanante(i));
-                }});
+            const invId = localStorage.getItem('invIdMaster');
+            
+            if(invId) {
+                const docRef = doc(db, "invitaciones", invId);
+                const docSnap = await getDoc(docRef);
+                
+                if(docSnap.exists()){
+                    const data = docSnap.data();
+                    document.getElementById('display-nombre-invitado').innerText = data.nombre_invitacion;
+                    document.getElementById('seccion-registro').style.display = 'none';
+                    document.getElementById('contenido-principal').style.display = 'block';
+                    document.getElementById('guests-wrapper').innerHTML = "";
+                    data.invitados.forEach(i => agregarAcompanante(i));
+                }
             }
         }
 
         window.cambiarInvitado = function() {
-            localStorage.removeItem('invInvitadoNombre'); localStorage.removeItem('invInvitadoEmail');
+            localStorage.removeItem('invIdMaster');
+            localStorage.removeItem('invInvitadoNombre');
+            localStorage.removeItem('invInvitadoEmail');
             location.reload();
         }
 
