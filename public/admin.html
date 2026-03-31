@@ -369,7 +369,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -550,7 +550,7 @@
             if (!inv) return;
 
             idEditando = id;
-            emailEditando = inv.email_vinculado; // <-- NUEVO: Guardamos en memoria su email
+            emailEditando = inv.email_vinculado; // Guardamos el email para buscar su RSVP
             
             document.getElementById('admin-grupo-nombre').value = inv.nombre_invitacion;
             const container = document.getElementById('admin-miembros-container');
@@ -578,36 +578,72 @@
             const filas = document.querySelectorAll('.miembro-row');
             if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre y añade miembros.");
             
-            let arr = [];
+            let arrMaestro = [];
             filas.forEach(f => {
                 const t = f.querySelector('.m-tipo').value;
                 const n = f.querySelector('.m-nombre').value;
-                if(n) arr.push({ nombre: n, tipo: t, dieta: "None", starter: t === 'niño' ? 'Sin entrada (Niño)' : '', entree: '' });
+                if(n) arrMaestro.push({ nombre: n, tipo: t, dieta: "None", starter: t === 'niño' ? 'Sin entrada (Niño)' : '', entree: '' });
             });
 
             try {
                 if (idEditando) {
-                    // 1. Actualiza la Lista Maestra
+                    // 1. Actualizamos la Lista Maestra
                     await updateDoc(doc(db, "invitaciones", idEditando), {
                         nombre_invitacion: nGrupo,
-                        invitados: arr
+                        invitados: arrMaestro
                     });
-                    
-                    // 2. MAGIA AUTOMÁTICA: Si ya tenían email (ya habían hecho RSVP), lo borramos para forzar refresco
+
+                    // 2. SINCRONIZACIÓN INTELIGENTE CON RSVP
                     if (emailEditando) {
-                        const emailID = emailEditando.toLowerCase().trim();
+                        const rsvpRef = doc(db, "rsvps_compromiso", emailEditando.toLowerCase().trim());
+                        const rsvpSnap = await getDoc(rsvpRef);
+                        
+                        if (rsvpSnap.exists()) {
+                            const rsvpData = rsvpSnap.data();
+                            let rsvpActualizado = [];
+
+                            arrMaestro.forEach(invMaster => {
+                                // Buscamos si esta persona ya existía en el RSVP viejo
+                                let invViejo = rsvpData.invitados ? rsvpData.invitados.find(r => r.nombre.toLowerCase().trim() === invMaster.nombre.toLowerCase().trim()) : null;
+                                
+                                if (invViejo) {
+                                    // Si le cambiaste la edad de adulto a niño (o viceversa), reseteamos solo su comida
+                                    if (invViejo.tipo !== invMaster.tipo) {
+                                        invViejo.tipo = invMaster.tipo;
+                                        invViejo.starter = invMaster.tipo === 'niño' ? 'Sin entrada (Niño)' : '';
+                                        invViejo.entree = '';
+                                    }
+                                    rsvpActualizado.push(invViejo); // Conserva su asistencia y comida si no cambió de edad
+                                } else {
+                                    // Si agregaste a alguien nuevo, lo metemos en blanco
+                                    rsvpActualizado.push({
+                                        nombre: invMaster.nombre,
+                                        tipo: invMaster.tipo,
+                                        asistencia: "no", 
+                                        dieta: "None",
+                                        starter: invMaster.starter,
+                                        entree: invMaster.entree
+                                    });
+                                }
+                            });
+                            
+                            // Guardamos el RSVP parchado en la base de datos
+                            await updateDoc(rsvpRef, { invitados: rsvpActualizado });
+                        }
                     }
 
-                    mostrarModal("¡Éxito!", "Lista actualizada. Las confirmaciones previas de esta familia se han reiniciado automáticamente.");
+                    mostrarModal("¡Éxito!", "Invitación actualizada y sincronizada correctamente.");
                 } else {
+                    // Creación de grupo nuevo
                     await addDoc(collection(db, "invitaciones"), {
                         nombre_invitacion: nGrupo,
                         email_vinculado: "",
-                        invitados: arr
+                        invitados: arrMaestro
                     });
                     mostrarModal("¡Éxito!", "Invitación guardada en la base de datos.");
                 }
                 
+                // Limpieza del formulario
                 idEditando = null;
                 emailEditando = null;
                 const btnSave = document.querySelector('.btn-save-inv');
@@ -618,7 +654,8 @@
                 cargarDatosDesdeFirebase();
                 adminAgregarMiembro();
             } catch (e) { 
-                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos."); 
+                console.error(e);
+                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos de Firebase."); 
             }
         }
 
