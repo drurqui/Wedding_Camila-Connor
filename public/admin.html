@@ -26,6 +26,7 @@
             line-height: 1.6;
         }
         
+        /* Selector de Idiomas */
         .lang-switcher {
             position: absolute;
             top: 20px;
@@ -252,6 +253,14 @@
         </div>
     </div>
 
+    <div id="modal-elegante" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2 id="modal-titulo-elegante">Mensaje</h2>
+            <p id="modal-texto-elegante" style="color: #666; margin-bottom: 25px;">Detalle del mensaje aquí.</p>
+            <button onclick="document.getElementById('modal-elegante').style.display='none'" class="btn-cerrar-modal" id="modal-btn-elegante">Aceptar</button>
+        </div>
+    </div>
+
     <div id="login-section" class="container">
         <div class="section-card">
             <h1 data-i18n="loginTitle">Acceso Privado</h1>
@@ -285,15 +294,15 @@
                 <input type="text" id="admin-grupo-nombre" placeholder="Nombre de la Invitación (Ej: Familia Pérez)">
                 <div id="admin-miembros-container"></div>
                 <button type="button" class="btn-outline-admin" onclick="adminAgregarMiembro()" data-i18n="btnAddMember">+ Añadir Persona</button>
-                <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación en Base de Datos</button>
+                <button type="button" class="btn-save-inv" onclick="adminGuardarGrupo()" data-i18n="btnSaveInv">Guardar Invitación</button>
             </div>
 
             <table id="tabla-maestra">
                 <thead><tr>
-                    <th data-i18n="thInvName">Nombre de Invitación</th>
-                    <th data-i18n="thMembers">Integrantes</th>
-                    <th data-i18n="thLinkedEmail">Email Vinculado</th>
-                    <th style="text-align: center;" data-i18n="thActions">Acciones</th>
+                    <th style="width: 30%;" data-i18n="thInvName">Nombre de Invitación</th>
+                    <th style="width: 40%;" data-i18n="thMembers">Integrantes</th>
+                    <th style="width: 20%;" data-i18n="thLinkedEmail">Email Vinculado</th>
+                    <th style="width: 10%; text-align: center;" data-i18n="thActions">Acciones</th>
                 </tr></thead>
                 <tbody></tbody>
             </table>
@@ -340,7 +349,6 @@
     </div>
 
     <script type="module">
-        // ADVERTENCIA: He añadido 'addDoc' a la lista de imports para que el botón funcione
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -362,7 +370,7 @@
         const correosAutorizados = ["david.ricardo@urquilla.com", "davidurquilla@gmail.com", "camilasofia@urquilla.com", "shields@urquilla.com"];
         window.datosMemoria = { compromiso: [], boda: [], regalos: [], invitaciones: [] };
 
-        // --- SISTEMA BILINGÜE ADMIN ---
+        // --- SISTEMA BILINGÜE ---
         window.currentLang = 'en';
         const dict = {
             en: {
@@ -393,6 +401,13 @@
         window.toggleLanguage = function() {
             const newLang = window.currentLang === 'en' ? 'es' : 'en';
             applyLanguage(newLang);
+        }
+
+        // --- NUEVA FUNCIÓN PARA MODAL ELEGANTE (REEMPLAZA ALERTS) ---
+        window.mostrarModal = function(titulo, texto) {
+            document.getElementById('modal-titulo-elegante').innerText = titulo;
+            document.getElementById('modal-texto-elegante').innerText = texto;
+            document.getElementById('modal-elegante').style.display = 'flex';
         }
 
         // --- LÓGICA DE DATOS ---
@@ -453,7 +468,7 @@
         window.adminGuardarGrupo = async function() {
             const nGrupo = document.getElementById('admin-grupo-nombre').value;
             const filas = document.querySelectorAll('.miembro-row');
-            if(!nGrupo || filas.length === 0) return alert("Completa los datos.");
+            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre del grupo y añade al menos un miembro.");
             
             let arr = [];
             filas.forEach(f => {
@@ -464,11 +479,14 @@
 
             try {
                 await addDoc(collection(db, "invitaciones"), { nombre_invitacion: nGrupo, email_vinculado: "", invitados: arr });
-                alert("Invitación guardada.");
+                mostrarModal("¡Éxito!", "Invitación guardada en la base de datos.");
                 document.getElementById('admin-grupo-nombre').value = "";
                 document.getElementById('admin-miembros-container').innerHTML = "";
                 cargarDatosDesdeFirebase();
-            } catch (e) { alert("Error al guardar."); }
+                adminAgregarMiembro();
+            } catch (e) { 
+                mostrarModal("Error", "Hubo un problema al guardar la invitación. Verifica los permisos.");
+            }
         }
 
         // --- AUTH & BORRADO ---
@@ -489,6 +507,7 @@
                 cargarDatosDesdeFirebase();
             } else {
                 document.getElementById('login-section').style.display = 'block';
+                document.getElementById('dashboard-section').style.display = 'none';
                 if(user) signOut(auth).then(() => document.getElementById('modal-no-autorizado').style.display = 'flex');
             }
         });

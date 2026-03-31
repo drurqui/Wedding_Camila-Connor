@@ -183,11 +183,11 @@
             background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
             z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s;
         }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
             background: var(--color-blanco); padding: 40px; border-radius: 12px; text-align: center;
             max-width: 400px; width: 90%; transform: translateY(-20px); transition: 0.3s;
         }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .modal-content h2 { font-size: clamp(2.5rem, 8vw, 3.5rem); color: var(--color-acento); margin-bottom: 5px; }
 
@@ -377,7 +377,7 @@
                 errorTitle: "Oops...",
                 errorDesc: "There was a problem saving your RSVP. Please try again.",
                 notFoundTitle: "Invitation not found",
-                notFoundDesc: "No pudimos encontrarte en la lista. Intenta escribiendo solo tu primer nombre y primer apellido."
+                notFoundDesc: "We couldn't find you on the list. Try using your full name."
             },
             es: {
                 heroSub: "Celebración de Compromiso",
@@ -430,16 +430,36 @@
 
         window.applyLanguage = function(lang) {
             window.currentLang = lang;
+            
             document.title = lang === 'en' ? 'Shields-Urquilla Wedding' : 'Boda Shields-Urquilla';
+            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[lang][key]) el.innerHTML = dict[lang][key];
             });
+
             document.getElementById('guest-nombre').placeholder = dict[lang].namePh;
             document.getElementById('guest-email').placeholder = dict[lang].emailPh;
             document.getElementById('modal-btn').innerText = dict[lang].modalOk;
+
             document.getElementById('lang-en').className = lang === 'en' ? 'active' : '';
             document.getElementById('lang-es').className = lang === 'es' ? 'active' : '';
+
+            if(guestCount > 0) {
+                let tempInfo = [];
+                document.querySelectorAll('.guest-form-block').forEach(b => {
+                    tempInfo.push({
+                        nombre: b.querySelector('.i-nombre').value,
+                        dieta: b.querySelector('.i-dieta').value,
+                        starter: b.querySelector('.i-starter').value,
+                        entree: b.querySelector('.i-entree').value
+                    });
+                });
+                document.getElementById('guests-wrapper').innerHTML = '';
+                let tempCount = guestCount;
+                guestCount = 0;
+                tempInfo.forEach(info => agregarAcompanante(info));
+            }
         }
 
         window.toggleLanguage = function() {
@@ -544,6 +564,7 @@
             const nombreIngresado = document.getElementById('guest-nombre').value;
             const emailIngresado = document.getElementById('guest-email').value;
             const dLang = dict[window.currentLang];
+
             if(!nombreIngresado || !emailIngresado) { mostrarModal(dLang.errMissingData, dLang.errMissingDataDesc); return; }
             
             try {
