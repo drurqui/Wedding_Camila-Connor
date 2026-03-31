@@ -11,7 +11,7 @@ app = FastAPI()
 # --- 1. CONFIGURACIONES IMPORTANTES ---
 URL_FRONTEND = "https://shieldsurquilla.com"
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-webhook_secret = "whsec_lOM99DYANbeeCk0rAEzfJwxsi0yAGGvP" # El que copiaste en el Paso 1
+webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 # --- 2. INICIALIZAR FIREBASE ---
 from firebase_admin import credentials, firestore
