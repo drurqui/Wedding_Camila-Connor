@@ -376,6 +376,7 @@
         window.datosMemoria = { compromiso: [], boda: [], regalos: [], invitaciones: [] };
         
         let idEditando = null;
+        let emailEditando = null;
 
         // --- SISTEMA BILINGÜE ---
         window.currentLang = 'en';
@@ -528,6 +529,8 @@
             if (!inv) return;
 
             idEditando = id;
+            emailEditando = inv.email_vinculado; // <-- NUEVO: Guardamos en memoria su email
+            
             document.getElementById('admin-grupo-nombre').value = inv.nombre_invitacion;
             const container = document.getElementById('admin-miembros-container');
             container.innerHTML = "";
@@ -552,7 +555,7 @@
         window.adminGuardarGrupo = async function() {
             const nGrupo = document.getElementById('admin-grupo-nombre').value;
             const filas = document.querySelectorAll('.miembro-row');
-            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre del grupo y añade al menos un miembro.");
+            if(!nGrupo || filas.length === 0) return mostrarModal("Faltan datos", "Por favor completa el nombre y añade miembros.");
             
             let arr = [];
             filas.forEach(f => {
@@ -563,11 +566,20 @@
 
             try {
                 if (idEditando) {
+                    // 1. Actualiza la Lista Maestra
                     await updateDoc(doc(db, "invitaciones", idEditando), {
                         nombre_invitacion: nGrupo,
                         invitados: arr
                     });
-                    mostrarModal("¡Éxito!", "Invitación actualizada correctamente.");
+                    
+                    // 2. MAGIA AUTOMÁTICA: Si ya tenían email (ya habían hecho RSVP), lo borramos para forzar refresco
+                    if (emailEditando) {
+                        const emailID = emailEditando.toLowerCase().trim();
+                        try { await deleteDoc(doc(db, "rsvps_compromiso", emailID)); } catch(e){}
+                        try { await deleteDoc(doc(db, "rsvps_boda", emailID)); } catch(e){}
+                    }
+
+                    mostrarModal("¡Éxito!", "Lista actualizada. Las confirmaciones previas de esta familia se han reiniciado automáticamente.");
                 } else {
                     await addDoc(collection(db, "invitaciones"), {
                         nombre_invitacion: nGrupo,
@@ -578,6 +590,7 @@
                 }
                 
                 idEditando = null;
+                emailEditando = null;
                 const btnSave = document.querySelector('.btn-save-inv');
                 if(btnSave) btnSave.innerText = dict[window.currentLang].btnSaveInv;
                 
@@ -586,7 +599,7 @@
                 cargarDatosDesdeFirebase();
                 adminAgregarMiembro();
             } catch (e) { 
-                mostrarModal("Error", "Hubo un problema al guardar la invitación."); 
+                mostrarModal("Error", "Hubo un problema al guardar. Revisa los permisos."); 
             }
         }
 
