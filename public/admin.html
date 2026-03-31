@@ -211,7 +211,6 @@
         }
         .btn-borrar:hover { background-color: #d9534f; color: white; }
 
-        /* Estilos para el nuevo formulario de Invitaciones */
         input[type="text"], select {
             width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
             border-radius: 6px; font-family: 'Montserrat', sans-serif; background-color: #fafafa;
@@ -341,6 +340,7 @@
     </div>
 
     <script type="module">
+        // ADVERTENCIA: He añadido 'addDoc' a la lista de imports para que el botón funcione
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -362,28 +362,27 @@
         const correosAutorizados = ["david.ricardo@urquilla.com", "davidurquilla@gmail.com", "camilasofia@urquilla.com", "shields@urquilla.com"];
         window.datosMemoria = { compromiso: [], boda: [], regalos: [], invitaciones: [] };
 
-        // --- DICCIONARIO COMPLETO (BILINGÜE) ---
+        // --- SISTEMA BILINGÜE ADMIN ---
         window.currentLang = 'en';
         const dict = {
             en: {
-                pageTitle: "Couple's Dashboard", loginTitle: "Private Access", loginSub: "Exclusive panel for wedding administration.", btnGoogle: "Sign in with Google", logout: "Log Out", panelTitle: "Couple's Dashboard", sessionActive: "Active session:",
+                pageTitle: "Dashboard", loginTitle: "Private Access", loginSub: "Wedding administration panel.", btnGoogle: "Sign in with Google", logout: "Log Out", panelTitle: "Couple's Dashboard", sessionActive: "Active session:",
                 masterTitle: "📋 Invitation Manager (Master List)", addGroupTitle: "Add Invitation Group", btnAddMember: "+ Add Member", btnSaveInv: "Save Invitation", thInvName: "Inv. Name", thMembers: "Members", thLinkedEmail: "Linked Email",
                 engTitle: "💍 RSVP - Engagement Party", wedTitle: "🕊️ RSVP - Formal Wedding", giftsTitle: "🌍 Honeymoon Gifts", totalGifts: "Total Raised:", thGuest: "Guest", thEmail: "Email", thResponse: "Response", thActions: "Actions", thGiftDetail: "Gift Detail", thAmount: "Amount",
-                deniedTitle: "⛔ Access Denied", deniedDesc: "Account doesn't have permissions.", btnUnderstand: "Understood", delConfirmTitle: "⚠️ Confirm Deletion", delConfirmDesc: "Are you sure you want to delete", delWarning: "Action cannot be undone.", btnCancel: "Cancel", btnYesDelete: "Yes, delete",
+                deniedTitle: "⛔ Access Denied", deniedDesc: "Unauthorized account.", btnUnderstand: "Understood", delConfirmTitle: "⚠️ Confirm Deletion", delConfirmDesc: "Delete response from", delWarning: "Action cannot be undone.", btnCancel: "Cancel", btnYesDelete: "Yes, delete",
                 dynYesAttend: "✅ Attending", dynNoAttend: "❌ Not attending", dynNoEmail: "No email", dynDiet: "Diet:", dynMenu: "Menu:", dynNoMenu: "No menu details.", dynBtnDelete: "Delete", loginErr: "Login error: "
             },
             es: {
-                pageTitle: "Panel de Novios", loginTitle: "Acceso Privado", loginSub: "Panel exclusivo para la administración.", btnGoogle: "Entrar con Google", logout: "Cerrar Sesión", panelTitle: "Panel de Novios", sessionActive: "Sesión activa:",
+                pageTitle: "Panel", loginTitle: "Acceso Privado", loginSub: "Panel de administración.", btnGoogle: "Entrar con Google", logout: "Cerrar Sesión", panelTitle: "Panel de Novios", sessionActive: "Sesión activa:",
                 masterTitle: "📋 Gestor de Invitaciones (Lista Maestra)", addGroupTitle: "Agregar Grupo", btnAddMember: "+ Añadir Persona", btnSaveInv: "Guardar Invitación", thInvName: "Nombre Inv.", thMembers: "Miembros", thLinkedEmail: "Email Vinculado",
                 engTitle: "💍 RSVP - Compromiso", wedTitle: "🕊️ RSVP - Boda Formal", giftsTitle: "🌍 Regalos - Luna de Miel", totalGifts: "Total Recaudado:", thGuest: "Invitado", thEmail: "Correo", thResponse: "Respuesta", thActions: "Acciones", thGiftDetail: "Detalle", thAmount: "Monto",
-                deniedTitle: "⛔ Acceso Denegado", deniedDesc: "Cuenta no autorizada.", btnUnderstand: "Entendido", delConfirmTitle: "⚠️ Confirmar Borrado", delConfirmDesc: "¿Deseas eliminar a", delWarning: "Esta acción no se puede deshacer.", btnCancel: "Cancelar", btnYesDelete: "Sí, eliminar",
+                deniedTitle: "⛔ Acceso Denegado", deniedDesc: "Cuenta no autorizada.", btnUnderstand: "Entendido", delConfirmTitle: "⚠️ Confirmar Borrado", delConfirmDesc: "¿Eliminar respuesta de", delWarning: "Esta acción no se puede deshacer.", btnCancel: "Cancelar", btnYesDelete: "Sí, eliminar",
                 dynYesAttend: "✅ Sí asistirá", dynNoAttend: "❌ No asistirá", dynNoEmail: "Sin correo", dynDiet: "Dieta:", dynMenu: "Menú:", dynNoMenu: "Sin detalles.", dynBtnDelete: "Borrar", loginErr: "Error: "
             }
         };
 
         window.applyLanguage = function(lang) {
             window.currentLang = lang;
-            document.title = dict[lang].pageTitle;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[lang][key]) el.innerHTML = dict[lang][key];
@@ -414,7 +413,6 @@
         function renderizarTablas() {
             const d = dict[window.currentLang];
             
-            // Tabla Invitaciones (Maestra)
             const tbodyInv = document.querySelector('#tabla-maestra tbody');
             tbodyInv.innerHTML = "";
             window.datosMemoria.invitaciones.forEach(data => {
@@ -422,15 +420,13 @@
                 tbodyInv.innerHTML += `<tr><td><strong>${data.nombre_invitacion}</strong></td><td>${lista}</td><td>${data.email_vinculado || '---'}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('invitaciones', '${data.id}', '${data.nombre_invitacion}')">${d.dynBtnDelete}</button></td></tr>`;
             });
 
-            // Tabla RSVP Compromiso
             const tbodyComp = document.querySelector('#tabla-compromiso tbody');
             tbodyComp.innerHTML = "";
             window.datosMemoria.compromiso.forEach(data => {
-                let resHTML = data.asistencia === 'no' ? `<span style="color:#d9534f;">${d.dynNoAttend}</span>` : `<strong>${d.dynYesAttend}</strong><br>` + (data.invitados ? data.invitados.map(i => `• ${i.nombre}: ${i.starter} / ${i.entree}`).join('<br>') : d.dynNoMenu);
+                let resHTML = data.asistencia === 'no' ? d.dynNoAttend : `<strong>${d.dynYesAttend}</strong><br>` + (data.invitados ? data.invitados.map(i => `• ${i.nombre}: ${i.starter} / ${i.entree}`).join('<br>') : d.dynNoMenu);
                 tbodyComp.innerHTML += `<tr><td><strong>${data.nombre}</strong></td><td>${data.email}</td><td>${resHTML}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('rsvps_compromiso', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button></td></tr>`;
             });
 
-            // Tabla RSVP Boda
             const tbodyBoda = document.querySelector('#tabla-boda tbody');
             tbodyBoda.innerHTML = "";
             window.datosMemoria.boda.forEach(data => {
@@ -438,7 +434,6 @@
                 tbodyBoda.innerHTML += `<tr><td><strong>${data.nombre}</strong></td><td>${data.email}</td><td>${resHTML}</td><td style="text-align:center;"><button class="btn-borrar" onclick="confirmarBorrado('rsvps_boda', '${data.id}', '${data.nombre}')">${d.dynBtnDelete}</button></td></tr>`;
             });
 
-            // Tabla Regalos
             const tbodyRegalos = document.querySelector('#tabla-regalos tbody');
             tbodyRegalos.innerHTML = "";
             let total = 0;
@@ -462,15 +457,18 @@
             
             let arr = [];
             filas.forEach(f => {
-                const tipo = f.querySelector('.m-tipo').value;
-                arr.push({ nombre: f.querySelector('.m-nombre').value, tipo: tipo, dieta: "None", starter: tipo === 'niño' ? 'Sin entrada (Niño)' : '', entree: '' });
+                const t = f.querySelector('.m-tipo').value;
+                const n = f.querySelector('.m-nombre').value;
+                if(n) arr.push({ nombre: n, tipo: t, dieta: "None", starter: t === 'niño' ? 'Sin entrada (Niño)' : '', entree: '' });
             });
 
-            await addDoc(collection(db, "invitaciones"), { nombre_invitacion: nGrupo, email_vinculado: "", invitados: arr });
-            alert("Invitación guardada.");
-            document.getElementById('admin-grupo-nombre').value = "";
-            document.getElementById('admin-miembros-container').innerHTML = "";
-            cargarDatosDesdeFirebase();
+            try {
+                await addDoc(collection(db, "invitaciones"), { nombre_invitacion: nGrupo, email_vinculado: "", invitados: arr });
+                alert("Invitación guardada.");
+                document.getElementById('admin-grupo-nombre').value = "";
+                document.getElementById('admin-miembros-container').innerHTML = "";
+                cargarDatosDesdeFirebase();
+            } catch (e) { alert("Error al guardar."); }
         }
 
         // --- AUTH & BORRADO ---
@@ -491,7 +489,6 @@
                 cargarDatosDesdeFirebase();
             } else {
                 document.getElementById('login-section').style.display = 'block';
-                document.getElementById('dashboard-section').style.display = 'none';
                 if(user) signOut(auth).then(() => document.getElementById('modal-no-autorizado').style.display = 'flex');
             }
         });
