@@ -596,8 +596,6 @@
                     // 2. MAGIA AUTOMÁTICA: Si ya tenían email (ya habían hecho RSVP), lo borramos para forzar refresco
                     if (emailEditando) {
                         const emailID = emailEditando.toLowerCase().trim();
-                        try { await deleteDoc(doc(db, "rsvps_compromiso", emailID)); } catch(e){}
-                        try { await deleteDoc(doc(db, "rsvps_boda", emailID)); } catch(e){}
                     }
 
                     mostrarModal("¡Éxito!", "Lista actualizada. Las confirmaciones previas de esta familia se han reiniciado automáticamente.");

@@ -568,7 +568,6 @@
             const nombreIngresado = document.getElementById('guest-nombre').value;
             const emailIngresado = document.getElementById('guest-email').value;
             const dLang = dict[window.currentLang];
-
             if(!nombreIngresado || !emailIngresado) { mostrarModal(dLang.errMissingData, dLang.errMissingDataDesc); return; }
             
             try {
@@ -595,13 +594,46 @@
                     document.getElementById('display-nombre-invitado').innerText = match.nombre_invitacion;
                     document.getElementById('seccion-registro').style.display = 'none';
                     document.getElementById('contenido-principal').style.display = 'block';
-                    document.getElementById('guests-wrapper').innerHTML = '';
-                    guestCount = 0;
-                    match.invitados.forEach(i => agregarAcompanante(i));
+
+                    // CARGA INTELIGENTE: Cruza Lista Maestra con RSVP guardado
+                    await cargarInvitadosFusionados(match.invitados, emailIngresado);
+
                 } else {
                     mostrarModal(dLang.notFoundTitle, dLang.notFoundDesc);
                 }
             } catch(e) { console.error(e); }
+        }
+
+        async function cargarInvitadosFusionados(listaMaestra, email) {
+            const rsvpRef = doc(db, "rsvps_compromiso", email.toLowerCase().trim());
+            const rsvpSnap = await getDoc(rsvpRef);
+            const rsvpData = rsvpSnap.exists() ? rsvpSnap.data() : null;
+
+            document.getElementById('guests-wrapper').innerHTML = '';
+            guestCount = 0;
+
+            listaMaestra.forEach(invMaster => {
+                // Buscamos si esta persona específica ya tiene una respuesta en el RSVP guardado
+                let respuestaPrevia = null;
+                if (rsvpData && rsvpData.invitados) {
+                    respuestaPrevia = rsvpData.invitados.find(r => normalizar(r.nombre) === normalizar(invMaster.nombre));
+                }
+
+                if (respuestaPrevia) {
+                    // Si ya existía, cargamos sus elecciones (comida, dieta, asistencia)
+                    agregarAcompanante({
+                        nombre: invMaster.nombre,
+                        tipo: invMaster.tipo,
+                        asistencia: respuestaPrevia.asistencia || "si",
+                        dieta: respuestaPrevia.dieta || "None",
+                        starter: respuestaPrevia.starter || "",
+                        entree: respuestaPrevia.entree || ""
+                    });
+                } else {
+                    // Si es nuevo (agregado por admin), carga con valores por defecto (en blanco)
+                    agregarAcompanante(invMaster);
+                }
+            });
         }
 
         window.onload = async function() {
@@ -610,8 +642,9 @@
             applyLanguage(savedLang || (browserLang.startsWith('es') ? 'es' : 'en'));
 
             const invId = localStorage.getItem('invIdMaster');
+            const emailG = localStorage.getItem('invInvitadoEmail');
             
-            if(invId) {
+            if(invId && emailG) {
                 const docRef = doc(db, "invitaciones", invId);
                 const docSnap = await getDoc(docRef);
                 
@@ -620,8 +653,9 @@
                     document.getElementById('display-nombre-invitado').innerText = data.nombre_invitacion;
                     document.getElementById('seccion-registro').style.display = 'none';
                     document.getElementById('contenido-principal').style.display = 'block';
-                    document.getElementById('guests-wrapper').innerHTML = "";
-                    data.invitados.forEach(i => agregarAcompanante(i));
+                    
+                    // Usamos la fusión para no perder datos al refrescar
+                    await cargarInvitadosFusionados(data.invitados, emailG);
                 }
             }
         }
