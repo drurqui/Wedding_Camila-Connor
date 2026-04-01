@@ -4,10 +4,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import translationES from '../locales/es.json';
 import translationEN from '../locales/en.json';
+import translationFR from '../locales/fr.json'; // 1. Importamos el francés
 
 const resources = {
   en: { translation: translationEN },
-  es: { translation: translationES }
+  es: { translation: translationES },
+  fr: { translation: translationFR } // 2. Lo agregamos a los recursos
 };
 
 i18n
@@ -16,7 +18,7 @@ i18n
   .init({
     resources,
     fallbackLng: 'es',
-    supportedLngs: ['es', 'en'],
+    supportedLngs: ['es', 'en', 'fr'], // 3. Indicamos que soportamos 'fr'
     interpolation: {
       escapeValue: false 
     },

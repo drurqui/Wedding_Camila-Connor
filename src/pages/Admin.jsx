@@ -28,7 +28,15 @@ const Admin = () => {
   const [confirmModal, setConfirmModal] = useState({ open: false, title: t('common.confirm'), message: '', action: null });
 
   const toggleLanguage = () => {
-    const nextLang = i18n.language.startsWith('es') ? 'en' : 'es';
+    // Obtenemos el idioma actual (tomamos solo las primeras 2 letras por si es 'es-ES' o 'en-US')
+    const currentLang = i18n.language.substring(0, 2); 
+    
+    // Hacemos un ciclo: es -> en -> fr -> es
+    let nextLang = 'es';
+    if (currentLang === 'es') nextLang = 'en';
+    else if (currentLang === 'en') nextLang = 'fr';
+    else if (currentLang === 'fr') nextLang = 'es';
+
     i18n.changeLanguage(nextLang);
   };
 
@@ -131,7 +139,7 @@ const Admin = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: '#fdfbf7', pb: 10 }}>
       <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 100 }}>
         <Button variant="contained" color="secondary" onClick={toggleLanguage} sx={{ borderRadius: '20px', minWidth: 'auto', fontWeight: 'bold' }}>
-          {t('common.changeLanguage')}
+          {i18n.language.startsWith('es') ? 'EN' : i18n.language.startsWith('en') ? 'FR' : 'ES'}
         </Button>
       </Box>
 
