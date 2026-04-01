@@ -1,0 +1,187 @@
+{
+  "common": {
+    "changeLanguage": "EN",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "yesDelete": "Sí, Borrar",
+    "warning": "Aviso",
+    "confirm": "Confirmar",
+    "understood": "Entendido",
+    "success": "Éxito",
+    "error": "Error"
+  },
+  "adminLogin": {
+    "title": "Acceso Privado",
+    "subtitle": "Panel exclusivo para la administración de la boda.",
+    "button": "Entrar con Google"
+  },
+  "home": {
+    "alerts": {
+      "emptyFields": "Por favor, llena ambos campos para continuar.",
+      "notFound": "No pudimos encontrarte en la lista. Intenta escribiendo tu primer nombre y apellido.",
+      "multipleMatches": "Hay varios invitados que coinciden con ese nombre. Por favor, escribe tu nombre y apellido completos.",
+      "connectionError": "Hubo un problema de conexión. Intenta de nuevo.",
+      "missingMenu": "Por favor selecciona la entrada y plato fuerte para {{name}}.",
+      "saveError": "Hubo un problema al guardar tu confirmación."
+    },
+    "hero": {
+      "title": "Shields Urquilla",
+      "subtitle": "CELEBRACIÓN DE COMPROMISO",
+      "date": "15 de Noviembre de 2026"
+    },
+    "step1": {
+      "title": "¡Bienvenidos!",
+      "subtitle": "Por favor, identifícate para confirmar tu asistencia.",
+      "nameLabel": "Nombre como en la Invitación",
+      "emailLabel": "Correo Electrónico",
+      "button": "ENTRAR A LA INVITACIÓN"
+    },
+    "step2": {
+      "guestLabel": "Invitado: ",
+      "changeButton": "(Cambiar)",
+      "welcomeLine1": "Bienvenidos a la celebración de nuestro",
+      "welcomeLine2": "compromiso en el hermoso Prince of Wales.",
+      "description": "Experimenta la elegancia victoriana atemporal de este hermoso y preservado lugar histórico. Ubicado en el corazón de Niagara-on-the-Lake, este hotel clásico es el escenario perfecto para nuestra celebración.",
+      "eventDate": "Domingo, 15 de Noviembre de 2026",
+      "eventRoom": "Salón Hampton Court",
+      "eventHotel": "Prince of Wales Hotel",
+      "eventCity": "Niagara-on-the-lake",
+      "eventTime": "12:00 PM",
+      "dressCode": "Vestimenta Semi-Formal",
+      "rsvpTitle": "RSVP",
+      "rsvpDeadline": "Por favor confirma antes del 30 de Octubre",
+      "rsvpQuestion": "¿Quiénes asistirán?",
+      "childBadge": "Niño/a",
+      "willAttendLabel": "¿Asistirá?",
+      "willAttendYes": "Sí asistirá",
+      "willAttendNo": "No asistirá",
+      "dietLabel": "Restricciones Alimenticias",
+      "dietNone": "Ninguna",
+      "dietGluten": "Gluten free",
+      "dietVegetarian": "Vegetariano",
+      "dietVegan": "Vegano",
+      "kidsMenuText": "🧸 Menú Infantil Automático",
+      "starterLabel": "Entradas",
+      "starter1": "\"Prince of Wales\" Caesar Salad",
+      "starter2": "Tomato Soup",
+      "entreeLabel": "Plato Fuerte",
+      "entree1": "Grilled Chicken Breast",
+      "entree2": "Three Cheese Tortellini",
+      "continueButton": "CONTINUAR",
+      "lodgingTitle": "Hospedaje",
+      "lodgingText1": "Para su comodidad, hemos reservado un bloque de habitaciones en el",
+      "lodgingText2": "para la noche del domingo 15 de noviembre de 2026.",
+      "lodgingText3": "Para asegurar su habitación con tarifa especial de grupo, por favor haga su reserva en la web del hotel usando el Group ID:",
+      "lodgingNote": "* La tarifa de descuento de $200 aplica para habitaciones tradicionales de 1 cama Queen, 1 King, o 2 Dobles | 4 personas | 320 sq ft.",
+      "lodgingButton": "VISITAR SITIO WEB - RESERVAR",
+      "closingText": "¡Gracias, nos vemos pronto!"
+    },
+    "step3": {
+      "title": "¡Gracias!",
+      "subtitle": "Tu confirmación se ha guardado exitosamente.",
+      "button": "Volver al Inicio"
+    }
+  },
+  "admin": {
+    "alerts": {
+      "deleteRsvpTitle": "Borrar RSVP",
+      "deleteRsvpMsg": "¿Estás seguro de que deseas borrar este RSVP? Se perderá la confirmación de asistencia y selección de menú.",
+      "deleteRsvpError": "Error al borrar RSVP: ",
+      "updateRsvpError": "Error al actualizar RSVP: ",
+      "assignName": "Asigna un nombre a la invitación.",
+      "allNeedNames": "Todos los integrantes del grupo deben tener un nombre.",
+      "saveSuccess": "Invitación guardada exitosamente en la Lista Maestra.",
+      "errorPrefix": "Error: ",
+      "deleteInvTitle": "Borrar Invitación",
+      "deleteInvMsg": "¿Estás seguro de que deseas borrar permanentemente esta invitación de la Lista Maestra?",
+      "deleteError": "Hubo un error al eliminar.",
+      "emptyName": "El nombre de la invitación no puede estar vacío.",
+      "saveChangesError": "Error al guardar los cambios."
+    },
+    "header": {
+      "title": "Panel de Administración",
+      "subtitle": "SHIELDS & URQUILLA • CONTROL",
+      "logout": "Salir"
+    },
+    "stats": {
+      "guests": "INVITADOS",
+      "confirmed": "CONFIRMADOS",
+      "adults": "ADULTOS",
+      "kids": "NIÑOS"
+    },
+    "tabs": {
+      "rsvps": "RSVPs Recibidos",
+      "masterList": "Visualizar Lista Maestra",
+      "kitchen": "Reporte de Cocina",
+      "addInv": "Añadir Invitación"
+    },
+    "loading": "Actualizando base de datos...",
+    "table": {
+      "family": "Familia / Remitente",
+      "attendance": "Asistencia",
+      "details": "Detalle de Invitados y Menús",
+      "actions": "Acciones",
+      "noName": "Sin nombre",
+      "willAttend": "Asistirán",
+      "wontAttend": "No asistirán",
+      "child": "(Niño/a)",
+      "starter": "Entrada:",
+      "entree": "Plato:",
+      "notSelected": "No seleccionado",
+      "allergy": "⚠️ Alergia: ",
+      "declined": "Declinó asistencia",
+      "noGuests": "No hay invitados registrados.",
+      "noConfirmations": "Aún no hay confirmaciones recibidas.",
+      "invName": "Nombre de la Invitación",
+      "groupMembers": "Integrantes del Grupo",
+      "guestAccess": "Acceso del Invitado",
+      "untitled": "Sin Título",
+      "anonymous": "Anónimo",
+      "noMemberData": "Sin datos de integrantes",
+      "pendingLogin": "Pendiente de primer login",
+      "emptyMaster": "La lista maestra está vacía."
+    },
+    "kitchen": {
+      "starters": "Starters",
+      "entrees": "Entrees",
+      "kidsMenu": "Menú Infantil",
+      "allergies": "Alergias / Restricciones",
+      "notChosen": "No elegido",
+      "kidsTotal": "Total de menús para niños requeridos",
+      "noAllergies": "No se han reportado alergias."
+    },
+    "addInv": {
+      "title": "Registrar en Lista Maestra",
+      "invTitle": "Título de la Invitación",
+      "placeholder": "Ej: Familia Urquilla Bonilla",
+      "membersLabel": "Integrantes del Grupo",
+      "fullName": "Nombre Completo",
+      "category": "Categoría",
+      "adult": "Adulto",
+      "kid": "Niño/a",
+      "addMemberButton": "Añadir Integrante",
+      "saveInvButton": "Guardar Invitación"
+    },
+    "editMaster": {
+      "title": "Editar Invitación Maestra",
+      "titleLabel": "Título",
+      "nameLabel": "Nombre",
+      "typeLabel": "Tipo",
+      "adultLabel": "Adulto",
+      "kidLabel": "Niño"
+    },
+    "editRsvp": {
+      "title": "Control Total RSVP",
+      "sender": "Remitente / Familia",
+      "email": "Email",
+      "guestManagement": "GESTIÓN DE INVITADOS Y MENÚS",
+      "confirmed": "Confirmado (Sí)",
+      "declined": "Declinado (No)",
+      "starter": "Starter (Entrada)",
+      "entree": "Entree (Plato Fuerte)",
+      "allergies": "Alergias / Dieta",
+      "saveButton": "Guardar Cambios RSVP"
+    }
+  }
+}

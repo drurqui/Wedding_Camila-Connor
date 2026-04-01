@@ -1,0 +1,187 @@
+{
+  "common": {
+    "changeLanguage": "ES",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "yesDelete": "Yes, Delete",
+    "warning": "Warning",
+    "confirm": "Confirm",
+    "understood": "Understood",
+    "success": "Success",
+    "error": "Error"
+  },
+  "adminLogin": {
+    "title": "Private Access",
+    "subtitle": "Exclusive panel for wedding administration.",
+    "button": "Sign in with Google"
+  },
+  "home": {
+    "alerts": {
+      "emptyFields": "Please fill out both fields to continue.",
+      "notFound": "We couldn't find you on the list. Try typing your first and last name.",
+      "multipleMatches": "There are several guests matching that name. Please type your full name.",
+      "connectionError": "There was a connection problem. Please try again.",
+      "missingMenu": "Please select the starter and entree for {{name}}.",
+      "saveError": "There was a problem saving your RSVP."
+    },
+    "hero": {
+      "title": "Shields Urquilla",
+      "subtitle": "ENGAGEMENT CELEBRATION",
+      "date": "November 15, 2026"
+    },
+    "step1": {
+      "title": "Welcome!",
+      "subtitle": "Please identify yourself to RSVP.",
+      "nameLabel": "Name as shown on Invitation",
+      "emailLabel": "Email Address",
+      "button": "ENTER INVITATION"
+    },
+    "step2": {
+      "guestLabel": "Guest: ",
+      "changeButton": "(Change)",
+      "welcomeLine1": "Welcome to our engagement celebration",
+      "welcomeLine2": "at the beautiful Prince of Wales.",
+      "description": "Experience timeless Victorian elegance at this beautifully preserved historic landmark. Located in the heart of Niagara-on-the-Lake, this classic hotel is the perfect setting for our celebration.",
+      "eventDate": "Sunday, November 15, 2026",
+      "eventRoom": "Hampton Court Room",
+      "eventHotel": "Prince of Wales Hotel",
+      "eventCity": "Niagara-on-the-lake",
+      "eventTime": "12:00 PM",
+      "dressCode": "Semi-Formal Attire",
+      "rsvpTitle": "RSVP",
+      "rsvpDeadline": "Please confirm before October 30",
+      "rsvpQuestion": "Who will attend?",
+      "childBadge": "Child",
+      "willAttendLabel": "Will attend?",
+      "willAttendYes": "Joyfully Accept",
+      "willAttendNo": "Regretfully Decline",
+      "dietLabel": "Dietary Restrictions",
+      "dietNone": "None",
+      "dietGluten": "Gluten free",
+      "dietVegetarian": "Vegetarian",
+      "dietVegan": "Vegan",
+      "kidsMenuText": "🧸 Automatic Kids Menu",
+      "starterLabel": "Starters",
+      "starter1": "\"Prince of Wales\" Caesar Salad",
+      "starter2": "Tomato Soup",
+      "entreeLabel": "Entree",
+      "entree1": "Grilled Chicken Breast",
+      "entree2": "Three Cheese Tortellini",
+      "continueButton": "CONTINUE",
+      "lodgingTitle": "Accommodations",
+      "lodgingText1": "For your convenience, we have reserved a block of rooms at the",
+      "lodgingText2": "for the night of Sunday, November 15, 2026.",
+      "lodgingText3": "To secure your room at a special group rate, please make your reservation on the hotel's website using the Group ID:",
+      "lodgingNote": "* The $200 discounted rate applies to traditional rooms with 1 Queen, 1 King, or 2 Double beds | 4 people | 320 sq ft.",
+      "lodgingButton": "VISIT WEBSITE - BOOK",
+      "closingText": "Thank you, see you soon!"
+    },
+    "step3": {
+      "title": "Thank You!",
+      "subtitle": "Your RSVP has been successfully saved.",
+      "button": "Back to Home"
+    }
+  },
+  "admin": {
+    "alerts": {
+      "deleteRsvpTitle": "Delete RSVP",
+      "deleteRsvpMsg": "Are you sure you want to delete this RSVP? Attendance confirmation and menu selection will be lost.",
+      "deleteRsvpError": "Error deleting RSVP: ",
+      "updateRsvpError": "Error updating RSVP: ",
+      "assignName": "Assign a name to the invitation.",
+      "allNeedNames": "All group members must have a name.",
+      "saveSuccess": "Invitation successfully saved in the Master List.",
+      "errorPrefix": "Error: ",
+      "deleteInvTitle": "Delete Invitation",
+      "deleteInvMsg": "Are you sure you want to permanently delete this invitation from the Master List?",
+      "deleteError": "There was an error deleting.",
+      "emptyName": "The invitation name cannot be empty.",
+      "saveChangesError": "Error saving changes."
+    },
+    "header": {
+      "title": "Admin Dashboard",
+      "subtitle": "SHIELDS & URQUILLA • CONTROL",
+      "logout": "Logout"
+    },
+    "stats": {
+      "guests": "GUESTS",
+      "confirmed": "CONFIRMED",
+      "adults": "ADULTS",
+      "kids": "KIDS"
+    },
+    "tabs": {
+      "rsvps": "Received RSVPs",
+      "masterList": "View Master List",
+      "kitchen": "Kitchen Report",
+      "addInv": "Add Invitation"
+    },
+    "loading": "Updating database...",
+    "table": {
+      "family": "Family / Sender",
+      "attendance": "Attendance",
+      "details": "Guest Details & Menus",
+      "actions": "Actions",
+      "noName": "No name",
+      "willAttend": "Attending",
+      "wontAttend": "Not attending",
+      "child": "(Child)",
+      "starter": "Starter:",
+      "entree": "Entree:",
+      "notSelected": "Not selected",
+      "allergy": "⚠️ Allergy: ",
+      "declined": "Declined attendance",
+      "noGuests": "No guests registered.",
+      "noConfirmations": "No RSVPs received yet.",
+      "invName": "Invitation Name",
+      "groupMembers": "Group Members",
+      "guestAccess": "Guest Access",
+      "untitled": "Untitled",
+      "anonymous": "Anonymous",
+      "noMemberData": "No member data",
+      "pendingLogin": "Pending first login",
+      "emptyMaster": "The master list is empty."
+    },
+    "kitchen": {
+      "starters": "Starters",
+      "entrees": "Entrees",
+      "kidsMenu": "Kids Menu",
+      "allergies": "Allergies / Restrictions",
+      "notChosen": "Not chosen",
+      "kidsTotal": "Total kids menus required",
+      "noAllergies": "No allergies reported."
+    },
+    "addInv": {
+      "title": "Register in Master List",
+      "invTitle": "Invitation Title",
+      "placeholder": "Ex: The Smith Family",
+      "membersLabel": "Group Members",
+      "fullName": "Full Name",
+      "category": "Category",
+      "adult": "Adult",
+      "kid": "Child",
+      "addMemberButton": "Add Member",
+      "saveInvButton": "Save Invitation"
+    },
+    "editMaster": {
+      "title": "Edit Master Invitation",
+      "titleLabel": "Title",
+      "nameLabel": "Name",
+      "typeLabel": "Type",
+      "adultLabel": "Adult",
+      "kidLabel": "Child"
+    },
+    "editRsvp": {
+      "title": "Total RSVP Control",
+      "sender": "Sender / Family",
+      "email": "Email",
+      "guestManagement": "GUEST & MENU MANAGEMENT",
+      "confirmed": "Confirmed (Yes)",
+      "declined": "Declined (No)",
+      "starter": "Starter",
+      "entree": "Entree",
+      "allergies": "Allergies / Diet",
+      "saveButton": "Save RSVP Changes"
+    }
+  }
+}

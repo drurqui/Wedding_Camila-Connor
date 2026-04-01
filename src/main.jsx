@@ -4,6 +4,9 @@ import App from './App';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+// INICIALIZADOR DE IDIOMA
+import './config/i18n'; 
+
 // Definimos el tema visual EXACTO de tu boda
 const theme = createTheme({
   palette: {
