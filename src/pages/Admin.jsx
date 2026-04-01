@@ -1,306 +1,307 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, Container, Typography, AppBar, Toolbar, Button, Card, CardContent, 
-  TextField, Select, MenuItem, IconButton, Table, TableBody, TableCell, 
-  TableContainer, TableHead, TableRow, Paper, Collapse, Stack 
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
-import { useAuth } from '../context/AuthContext';
-import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { Box, Container, Typography, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Tab, Tabs, CircularProgress, IconButton, Divider, Grid, TextField, Button, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select } from '@mui/material';
+import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Admin = () => {
-  const { user, logout } = useAuth();
-  
-  // Estados para todas las tablas
-  const [invitaciones, setInvitaciones] = useState([]);
-  const [rsvpsCompromiso, setRsvpsCompromiso] = useState([]);
-  const [rsvpsBoda, setRsvpsBoda] = useState([]);
-  const [regalos, setRegalos] = useState([]);
-  
-  const [mostrarMaestra, setMostrarMaestra] = useState(false); // Falso por defecto para que inicie oculta
-  
-  // Estados para el formulario de nuevo grupo
-  const [nombreGrupo, setNombreGrupo] = useState('');
-  const [miembros, setMiembros] = useState([{ nombre: '', tipo: 'adulto' }]);
+  const [tabValue, setTabValue] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [rsvps, setRsvps] = useState([]); 
+  const [listaMaestra, setListaMaestra] = useState([]); 
+  const [stats, setStats] = useState({ adultos: 0, ninos: 0, confirmados: 0, totalInvitados: 0 });
+  const [nuevaInvitacion, setNuevaInvitacion] = useState({ nombre_invitacion: '', invitados: [{ nombre: '', tipo: 'adulto' }] });
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [rsvpEditDialogOpen, setRsvpEditDialogOpen] = useState(false);
+  const [editRsvpData, setEditRsvpData] = useState(null);
 
-  // Cargar TODOS los datos al iniciar
-  const cargarDatos = async () => {
-    try {
-      // 1. Invitaciones (Maestra)
-      const invSnap = await getDocs(collection(db, "invitaciones"));
-      setInvitaciones(invSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  // Estados para Modales Visuales
+  const [alertModal, setAlertModal] = useState({ open: false, title: 'Aviso', message: '' });
+  const [confirmModal, setConfirmModal] = useState({ open: false, title: 'Confirmar', message: '', action: null });
 
-      // 2. RSVP Compromiso
-      const compSnap = await getDocs(collection(db, "rsvps_compromiso"));
-      setRsvpsCompromiso(compSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-
-      // 3. RSVP Boda
-      const bodaSnap = await getDocs(collection(db, "rsvps_boda"));
-      setRsvpsBoda(bodaSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-
-      // 4. Regalos
-      const regalosSnap = await getDocs(collection(db, "regalos_luna_miel"));
-      setRegalos(regalosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-
-    } catch (error) {
-      console.error("Error cargando datos:", error);
-    }
-  };
-
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  // Manejo dinámico del formulario de miembros
-  const agregarMiembroForm = () => setMiembros([...miembros, { nombre: '', tipo: 'adulto' }]);
-  
-  const actualizarMiembro = (index, campo, valor) => {
-    const nuevosMiembros = [...miembros];
-    nuevosMiembros[index][campo] = valor;
-    setMiembros(nuevosMiembros);
-  };
-
-  const quitarMiembroForm = (index) => setMiembros(miembros.filter((_, i) => i !== index));
-
-  // Guardar en Firebase
-  const guardarGrupo = async () => {
-    if (!nombreGrupo || miembros.some(m => !m.nombre)) {
-      alert("Completa el nombre del grupo y de todos los miembros.");
-      return;
-    }
-
-    const invitadosFormateados = miembros.map(m => ({
-      nombre: m.nombre, tipo: m.tipo, dieta: "None",
-      starter: m.tipo === 'niño' ? 'Sin entrada (Niño)' : '', entree: ''
-    }));
+  const fetchData = async () => {
+    setLoading(true);
+    let dataRsvp = []; let dataMaster = [];
 
     try {
-      await addDoc(collection(db, "invitaciones"), {
-        nombre_invitacion: nombreGrupo, email_vinculado: "", invitados: invitadosFormateados
-      });
-      setNombreGrupo('');
-      setMiembros([{ nombre: '', tipo: 'adulto' }]);
-      cargarDatos();
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar.");
-    }
+      const snapRsvp = await getDocs(collection(db, "rsvps_compromiso"));
+      dataRsvp = snapRsvp.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => { const dateA = a.fecha?.toMillis ? a.fecha.toMillis() : 0; const dateB = b.fecha?.toMillis ? b.fecha.toMillis() : 0; return dateB - dateA; });
+      setRsvps(dataRsvp);
+    } catch (error) { console.error("Error al cargar RSVPs:", error); }
+
+    try {
+      const snapMaster = await getDocs(collection(db, "invitaciones"));
+      dataMaster = snapMaster.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => { const nameA = a.nombre_invitacion || ""; const nameB = b.nombre_invitacion || ""; return nameA.localeCompare(nameB); });
+      setListaMaestra(dataMaster);
+    } catch (error) { console.error("Error al cargar Lista Maestra:", error); }
+      
+    try {
+      let countConfirmados = 0; let countAdultos = 0; let countNinos = 0; let countTotalInvitados = 0;
+      dataRsvp.forEach(rsvp => { rsvp.invitados?.forEach(inv => { if (inv.asistencia === 'si') { countConfirmados++; if (inv.tipo === 'niño') { countNinos++; } else { countAdultos++; } } }); });
+      dataMaster.forEach(m => { countTotalInvitados += (m.invitados?.length || 0); });
+      setStats({ confirmados: countConfirmados, adultos: countAdultos, ninos: countNinos, totalInvitados: countTotalInvitados });
+    } catch (error) { console.error("Error calculando estadísticas:", error); }
+    setLoading(false);
   };
 
-  // Borrar cualquier documento de cualquier colección
-  const borrarRegistro = async (coleccion, id) => {
-    if(window.confirm(`¿Seguro que deseas eliminar este registro de ${coleccion}?`)) {
-      try {
-        await deleteDoc(doc(db, coleccion, id));
-        cargarDatos();
-      } catch (error) {
-        console.error("Error al borrar:", error);
+  useEffect(() => { fetchData(); }, []);
+
+  const eliminarRsvp = (id) => {
+    setConfirmModal({ open: true, title: 'Borrar RSVP', message: "¿Estás seguro de que deseas borrar este RSVP? Se perderá la confirmación de asistencia y selección de menú.",
+      action: async () => {
+        setConfirmModal({ ...confirmModal, open: false }); setLoading(true);
+        try { await deleteDoc(doc(db, "rsvps_compromiso", id)); fetchData(); } 
+        catch (error) { setAlertModal({ open: true, title: 'Error', message: "Error al borrar RSVP: " + error.message }); setLoading(false); }
       }
-    }
+    });
   };
 
-  // Calcular total de regalos
-  const totalRecaudado = regalos.reduce((acc, curr) => acc + (Number(curr.monto_usd) || 0), 0);
+  const abrirModalEdicionRsvp = (rsvp) => { setEditRsvpData(JSON.parse(JSON.stringify(rsvp))); setRsvpEditDialogOpen(true); };
+
+  const handleRsvpGuestChange = (index, field, value) => {
+    const list = [...editRsvpData.invitados]; list[index][field] = value;
+    if (field === 'tipo' && value === 'niño') { list[index]['starter'] = 'Menú Infantil'; list[index]['entree'] = 'Menú Infantil'; }
+    setEditRsvpData({ ...editRsvpData, invitados: list });
+  };
+
+  const guardarEdicionRsvp = async () => {
+    setLoading(true);
+    try {
+      const docRef = doc(db, "rsvps_compromiso", editRsvpData.id);
+      await updateDoc(docRef, { nombre: editRsvpData.nombre, email: editRsvpData.email, invitados: editRsvpData.invitados });
+      setRsvpEditDialogOpen(false); fetchData();
+    } catch (error) { setAlertModal({ open: true, title: 'Error', message: "Error al actualizar RSVP: " + error.message }); setLoading(false); }
+  };
+
+  const handleAddGuestField = () => { setNuevaInvitacion({ ...nuevaInvitacion, invitados: [...nuevaInvitacion.invitados, { nombre: '', tipo: 'adulto' }] }); };
+  const handleRemoveGuestField = (index) => { const list = [...nuevaInvitacion.invitados]; list.splice(index, 1); setNuevaInvitacion({ ...nuevaInvitacion, invitados: list }); };
+  const handleGuestChange = (index, field, value) => { const list = [...nuevaInvitacion.invitados]; list[index][field] = value; setNuevaInvitacion({ ...nuevaInvitacion, invitados: list }); };
+
+  const guardarNuevaInvitacion = async () => {
+    if (!nuevaInvitacion.nombre_invitacion.trim()) { setAlertModal({ open: true, title: 'Aviso', message: "Asigna un nombre a la invitación." }); return; }
+    if (nuevaInvitacion.invitados.some(i => i.nombre.trim() === "")) { setAlertModal({ open: true, title: 'Aviso', message: "Todos los integrantes del grupo deben tener un nombre." }); return; }
+    setLoading(true);
+    try {
+      await addDoc(collection(db, "invitaciones"), { nombre_invitacion: nuevaInvitacion.nombre_invitacion, invitados: nuevaInvitacion.invitados, email_vinculado: "", creado_el: serverTimestamp() });
+      setAlertModal({ open: true, title: 'Éxito', message: "Invitación guardada exitosamente en la Lista Maestra." });
+      setNuevaInvitacion({ nombre_invitacion: '', invitados: [{ nombre: '', tipo: 'adulto' }] }); fetchData();
+    } catch (e) { setAlertModal({ open: true, title: 'Error', message: "Error: " + e.message }); }
+    setLoading(false);
+  };
+
+  const eliminarInvitacion = (id) => {
+    setConfirmModal({ open: true, title: 'Borrar Invitación', message: "¿Estás seguro de que deseas borrar permanentemente esta invitación de la Lista Maestra?",
+      action: async () => {
+        setConfirmModal({ ...confirmModal, open: false }); setLoading(true);
+        try { await deleteDoc(doc(db, "invitaciones", id)); fetchData(); } 
+        catch (error) { setAlertModal({ open: true, title: 'Error', message: "Hubo un error al eliminar." }); setLoading(false); }
+      }
+    });
+  };
+
+  const abrirModalEdicion = (invitacion) => { setEditData(JSON.parse(JSON.stringify(invitacion))); setEditDialogOpen(true); };
+
+  const guardarEdicion = async () => {
+    if (!editData.nombre_invitacion.trim()) { setAlertModal({ open: true, title: 'Aviso', message: "El nombre de la invitación no puede estar vacío." }); return; }
+    if (editData.invitados.some(i => i.nombre.trim() === "")) { setAlertModal({ open: true, title: 'Aviso', message: "Todos los integrantes deben tener un nombre." }); return; }
+    setLoading(true);
+    try {
+      const docRef = doc(db, "invitaciones", editData.id);
+      await updateDoc(docRef, { nombre_invitacion: editData.nombre_invitacion, invitados: editData.invitados });
+      setEditDialogOpen(false); fetchData();
+    } catch (error) { setAlertModal({ open: true, title: 'Error', message: "Error al guardar los cambios." }); setLoading(false); }
+  };
+
+  const headerStyle = { bgcolor: '#711c2e', color: '#ffffff', fontWeight: 'bold', fontFamily: "'Montserrat', sans-serif", textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' };
 
   return (
-    <Box sx={{ pb: 10 }}>
-      <AppBar position="static" color="transparent" elevation={1} sx={{ bgcolor: 'white' }}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" color="primary" sx={{ fontFamily: "'Playfair Display', serif", fontWeight: 'bold' }}>
-            Shields Urquilla
-          </Typography>
-          <Button color="error" variant="outlined" size="small" onClick={logout}>Cerrar Sesión</Button>
-        </Toolbar>
-      </AppBar>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#fdfbf7', pb: 10 }}>
+      <Box sx={{ bgcolor: '#ffffff', borderBottom: '2px solid #711c2e', p: 4, mb: 5, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+        <Container maxWidth="lg"><Grid container alignItems="center" justifyContent="space-between"><Grid item><Typography variant="h3" sx={{ fontFamily: "'Playfair Display', serif", color: '#711c2e', mb: 1 }}>Panel de Administración</Typography><Typography variant="subtitle1" sx={{ color: '#dabc60', fontWeight: 500, letterSpacing: '1px' }}>SHIELDS & URQUILLA • CONTROL</Typography></Grid><Grid item sx={{ display: 'flex', gap: 2 }}><Button variant="outlined" startIcon={<ExitToAppIcon />} onClick={() => window.location.href = '/'} sx={{ color: '#711c2e', borderColor: '#711c2e', fontWeight: 'bold', '&:hover': { bgcolor: '#fdfbf7', borderColor: '#5a1524' } }}>Salir</Button><IconButton onClick={fetchData} sx={{ bgcolor: '#711c2e', color: 'white', '&:hover': { bgcolor: '#5a1524' }, width: 50, height: 50 }}><RefreshIcon /></IconButton></Grid></Grid></Container>
+      </Box>
 
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h4" color="secondary" sx={{ textAlign: 'center', mb: 1, fontFamily: "'Playfair Display', serif" }}>
-          Panel de Novios
-        </Typography>
-        <Typography variant="subtitle2" sx={{ textAlign: 'center', mb: 4, color: 'text.secondary' }}>
-          Sesión activa: {user?.email}
-        </Typography>
+      <Container maxWidth="lg">
+        <Grid container spacing={3} sx={{ mb: 5 }}>
+          <Grid item xs={12} sm={3}><Card sx={{ p: 3, textAlign: 'center', border: '1px solid #e0e0e0' }}><Typography variant="caption" sx={{ color: '#888', fontWeight: 'bold' }}>INVITADOS</Typography><Typography variant="h4" sx={{ color: '#711c2e', fontWeight: 'bold', mt: 1 }}>{stats.totalInvitados}</Typography></Card></Grid>
+          <Grid item xs={12} sm={3}><Card sx={{ p: 3, textAlign: 'center', border: '1px solid #711c2e', bgcolor: '#fffcf5' }}><Typography variant="caption" sx={{ color: '#711c2e', fontWeight: 'bold' }}>CONFIRMADOS</Typography><Typography variant="h4" sx={{ color: '#711c2e', fontWeight: 'bold', mt: 1 }}>{stats.confirmados}</Typography></Card></Grid>
+          <Grid item xs={12} sm={3}><Card sx={{ p: 3, textAlign: 'center', border: '1px solid #e0e0e0' }}><Typography variant="caption" sx={{ color: '#888', fontWeight: 'bold' }}>ADULTOS</Typography><Typography variant="h4" sx={{ color: '#dabc60', fontWeight: 'bold', mt: 1 }}>{stats.adultos}</Typography></Card></Grid>
+          <Grid item xs={12} sm={3}><Card sx={{ p: 3, textAlign: 'center', border: '1px solid #e0e0e0' }}><Typography variant="caption" sx={{ color: '#888', fontWeight: 'bold' }}>NIÑOS</Typography><Typography variant="h4" sx={{ color: '#711c2e', fontWeight: 'bold', mt: 1 }}>{stats.ninos}</Typography></Card></Grid>
+        </Grid>
 
-        {/* SECCIÓN 1: GESTOR DE INVITACIONES */}
-        <Box sx={{ mb: 6 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', pb: 2, mb: 3 }}>
-            <Typography variant="h5" color="primary">📋 Gestor de Invitaciones (Maestra)</Typography>
-            <Button variant="outlined" color="secondary" endIcon={mostrarMaestra ? <ExpandLessIcon /> : <ExpandMoreIcon />} onClick={() => setMostrarMaestra(!mostrarMaestra)}>
-              {mostrarMaestra ? 'Ocultar' : 'Mostrar'}
-            </Button>
-          </Box>
+        <Paper sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid #711c2e', boxShadow: 'none' }}>
+          <Tabs value={tabValue} onChange={(e, v) => setTabValue(v)} variant="fullWidth" indicatorColor="primary" textColor="primary" sx={{ bgcolor: '#f8f8f8', borderBottom: '1px solid #eee' }}><Tab label="RSVPs Recibidos" sx={{ fontWeight: 'bold' }} /><Tab label="Visualizar Lista Maestra" sx={{ fontWeight: 'bold' }} /><Tab label="Reporte de Cocina" sx={{ fontWeight: 'bold' }} /><Tab label="Añadir Invitación" sx={{ fontWeight: 'bold' }} /></Tabs>
 
-          <Collapse in={mostrarMaestra}>
-            <Card sx={{ mb: 4, border: '1px dashed #d4af37', bgcolor: '#fffdf5', boxShadow: 0 }}>
-              <CardContent>
-                <Typography variant="h6" color="secondary" gutterBottom>Agregar Grupo de Invitación</Typography>
-                <TextField fullWidth label="Nombre de la Invitación (Ej: Familia Pérez)" variant="outlined" size="small" sx={{ mb: 3, bgcolor: 'white' }} value={nombreGrupo} onChange={(e) => setNombreGrupo(e.target.value)} />
-                {miembros.map((miembro, index) => (
-                  <Stack direction="row" spacing={2} sx={{ mb: 2 }} key={index}>
-                    <TextField fullWidth label="Nombre de la persona" size="small" sx={{ bgcolor: 'white' }} value={miembro.nombre} onChange={(e) => actualizarMiembro(index, 'nombre', e.target.value)} />
-                    <Select size="small" value={miembro.tipo} sx={{ bgcolor: 'white', minWidth: 120 }} onChange={(e) => actualizarMiembro(index, 'tipo', e.target.value)}>
-                      <MenuItem value="adulto">Adulto</MenuItem>
-                      <MenuItem value="niño">Niño</MenuItem>
-                    </Select>
-                    <IconButton color="error" onClick={() => quitarMiembroForm(index)}><DeleteIcon /></IconButton>
-                  </Stack>
-                ))}
-                <Button startIcon={<AddCircleOutlineIcon />} onClick={agregarMiembroForm} sx={{ mb: 2 }}>Añadir Persona</Button>
-                <Button fullWidth variant="contained" color="secondary" onClick={guardarGrupo}>Guardar Invitación en Base de Datos</Button>
-              </CardContent>
-            </Card>
+          {loading ? (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 10 }}><CircularProgress size={60} sx={{ color: '#711c2e', mb: 2 }} /><Typography sx={{ color: '#711c2e', fontWeight: 500 }}>Actualizando base de datos...</Typography></Box>
+          ) : (
+            <Box sx={{ p: 4 }}>
+              {tabValue === 0 && (
+                <TableContainer><Table><TableHead><TableRow><TableCell sx={headerStyle}>Familia / Remitente</TableCell><TableCell sx={headerStyle}>Asistencia</TableCell><TableCell sx={headerStyle}>Detalle de Invitados y Menús</TableCell><TableCell sx={headerStyle} align="center">Acciones</TableCell></TableRow></TableHead>
+                    <TableBody>
+                      {rsvps.length > 0 ? rsvps.map((row) => (
+                        <TableRow key={row.id} hover><TableCell sx={{ fontWeight: 'bold', verticalAlign: 'top' }}>{row.nombre || "Sin nombre"}<Typography variant="body2" sx={{ color: '#999', mt: 0.5 }}>{row.email}</Typography></TableCell><TableCell sx={{ verticalAlign: 'top' }}><Chip label={row.asistencia === 'si' ? "Asistirán" : "No asistirán"} color={row.asistencia === 'si' ? "success" : "error"} variant="outlined" size="small" /></TableCell>
+                          <TableCell>
+                            {row.invitados && Array.isArray(row.invitados) ? row.invitados.map((inv, i) => (
+                              <Box key={i} sx={{ mb: 2, p: 2, bgcolor: '#fafafa', borderRadius: 1, border: '1px solid #eee' }}><Typography variant="body2" sx={{ fontWeight: 'bold', color: '#711c2e' }}>{inv.nombre} {inv.tipo === 'niño' && '(Niño/a)'}</Typography>
+                                {inv.asistencia === 'si' ? (<Box sx={{ mt: 1 }}><Typography variant="caption" display="block"><strong>Entrada:</strong> {inv.starter || "No seleccionada"}</Typography><Typography variant="caption" display="block"><strong>Plato:</strong> {inv.entree || "No seleccionado"}</Typography>{inv.dieta && inv.dieta !== 'None' && (<Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 'bold', mt: 0.5 }} display="block">⚠️ Alergia: {inv.dieta}</Typography>)}</Box>) : (<Typography variant="caption" sx={{ color: '#bbb', fontStyle: 'italic' }}>Declinó asistencia</Typography>)}
+                              </Box>
+                            )) : (<Typography variant="caption" sx={{ color: '#bbb' }}>No hay invitados registrados.</Typography>)}
+                          </TableCell>
+                          <TableCell align="center" sx={{ verticalAlign: 'top' }}><IconButton onClick={() => abrirModalEdicionRsvp(row)} size="small" sx={{ color: '#dabc60', mr: 1 }}><EditIcon /></IconButton><IconButton onClick={() => eliminarRsvp(row.id)} size="small" color="error"><DeleteIcon /></IconButton></TableCell>
+                        </TableRow>
+                      )) : (<TableRow><TableCell colSpan={4} align="center" sx={{ py: 4, color: '#888' }}>Aún no hay confirmaciones recibidas.</TableCell></TableRow>)}
+                    </TableBody></Table></TableContainer>
+              )}
 
-            <TableContainer component={Paper} elevation={2}>
-              <Table>
-                <TableHead sx={{ bgcolor: '#fafafa' }}>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Nombre de Invitación</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Integrantes</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Email Vinculado</TableCell>
-                    <TableCell align="center" sx={{ fontWeight: 'bold', color: '#711c2e' }}>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {invitaciones.map((inv) => (
-                    <TableRow key={inv.id} hover>
-                      <TableCell><strong>{inv.nombre_invitacion}</strong></TableCell>
-                      <TableCell>
-                        <ul style={{ margin: 0, paddingLeft: 20 }}>
-                          {inv.invitados.map((i, idx) => (
-                            <li key={idx}>{i.nombre} <Typography component="span" variant="caption" color="text.secondary">({i.tipo})</Typography></li>
+              {tabValue === 1 && (
+                <TableContainer><Table><TableHead><TableRow><TableCell sx={headerStyle}>Nombre de la Invitación</TableCell><TableCell sx={headerStyle}>Integrantes del Grupo</TableCell><TableCell sx={headerStyle}>Acceso del Invitado</TableCell><TableCell sx={headerStyle} align="center">Acciones</TableCell></TableRow></TableHead>
+                    <TableBody>
+                      {listaMaestra.length > 0 ? listaMaestra.map((row) => (
+                        <TableRow key={row.id} hover><TableCell sx={{ fontWeight: 'bold' }}>{row.nombre_invitacion || "Sin Título"}</TableCell>
+                          <TableCell>{row.invitados && Array.isArray(row.invitados) ? row.invitados.map((inv, i) => (<Chip key={i} label={inv.nombre || "Anónimo"} size="small" variant="outlined" sx={{ mr: 1, mb: 1, borderColor: inv.tipo === 'niño' ? '#dabc60' : '#ccc' }} />)) : (<Typography variant="caption" color="textSecondary">Sin datos de integrantes</Typography>)}</TableCell>
+                          <TableCell>{row.email_vinculado ? (<Chip label={row.email_vinculado} size="small" color="primary" />) : (<Typography variant="caption" sx={{ color: '#bbb' }}>Pendiente de primer login</Typography>)}</TableCell>
+                          <TableCell align="center"><IconButton onClick={() => abrirModalEdicion(row)} size="small" sx={{ color: '#dabc60', mr: 1 }}><EditIcon /></IconButton><IconButton onClick={() => eliminarInvitacion(row.id)} size="small" color="error"><DeleteIcon /></IconButton></TableCell>
+                        </TableRow>
+                      )) : (<TableRow><TableCell colSpan={4} align="center" sx={{ py: 4, color: '#888' }}>La lista maestra está vacía.</TableCell></TableRow>)}
+                    </TableBody></Table></TableContainer>
+              )}
+
+              {tabValue === 2 && (
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ p: 3, height: '100%', borderTop: '4px solid #711c2e', display: 'flex', flexDirection: 'column' }}>
+                      <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: '#711c2e', mb: 2 }}>Starters</Typography>
+                      <Box sx={{ flexGrow: 1 }}>
+                        {Object.entries(rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si').reduce((acc, i) => { const plato = i.starter || "No elegido"; acc[plato] = (acc[plato] || 0) + 1; return acc; }, {})).map(([plato, total]) => (
+                          <Box key={plato} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, borderBottom: '1px dashed #ccc', mb: 1, gap: 2 }}><Typography variant="body2" sx={{ fontWeight: 500, flex: 1, wordBreak: 'break-word' }}>{plato}</Typography><Typography variant="body2" sx={{ fontWeight: 'bold', color: '#711c2e', minWidth: '30px', textAlign: 'right' }}>{total}</Typography></Box>
+                        ))}
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ p: 3, height: '100%', borderTop: '4px solid #711c2e', display: 'flex', flexDirection: 'column' }}>
+                      <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: '#711c2e', mb: 2 }}>Entrees</Typography>
+                      <Box sx={{ flexGrow: 1 }}>
+                        {Object.entries(rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si').reduce((acc, i) => { const plato = i.entree || "No elegido"; acc[plato] = (acc[plato] || 0) + 1; return acc; }, {})).map(([plato, total]) => (
+                          <Box key={plato} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, borderBottom: '1px dashed #ccc', mb: 1, gap: 2 }}><Typography variant="body2" sx={{ fontWeight: 500, flex: 1, wordBreak: 'break-word' }}>{plato}</Typography><Typography variant="body2" sx={{ fontWeight: 'bold', color: '#711c2e', minWidth: '30px', textAlign: 'right' }}>{total}</Typography></Box>
+                        ))}
+                      </Box>
+                    </Card>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ p: 3, height: '100%', borderTop: '4px solid #dabc60', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                      <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: '#dabc60', mb: 1, textAlign: 'center', width: '100%' }}>Menú Infantil</Typography>
+                      <Typography variant="h4" sx={{ color: '#711c2e', fontWeight: 'bold', my: 2, display: 'inline-flex', alignItems: 'center' }}>{rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si' && i.tipo === 'niño').length}</Typography>
+                      <Typography variant="body2" sx={{ color: '#888', textAlign: 'center' }}>Total de menús para niños requeridos</Typography>
+                    </Card>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ p: 3, height: '100%', borderTop: '4px solid #d32f2f', display: 'flex', flexDirection: 'column' }}>
+                      <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: '#d32f2f', mb: 2 }}>Alergias / Restricciones</Typography>
+                      <Box sx={{ flexGrow: 1, maxHeight: 300, overflow: 'auto' }}>
+                        {rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si' && i.dieta && i.dieta !== 'None').map((inv, idx) => (
+                            <Box key={idx} sx={{ p: 1.5, mb: 1.5, borderLeft: '3px solid #d32f2f', bgcolor: '#fff5f5', borderRadius: '0 4px 4px 0' }}><Typography variant="body2" sx={{ fontWeight: 'bold' }}>{inv.nombre}</Typography><Typography variant="caption" sx={{ color: '#d32f2f', display: 'block', mt: 0.5 }}>{inv.dieta}</Typography></Box>
                           ))}
-                        </ul>
-                      </TableCell>
-                      <TableCell>{inv.email_vinculado || '---'}</TableCell>
-                      <TableCell align="center">
-                        <IconButton color="error" onClick={() => borrarRegistro('invitaciones', inv.id)}><DeleteIcon /></IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Collapse>
-        </Box>
+                        {rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si' && i.dieta && i.dieta !== 'None').length === 0 && (<Typography variant="body2" sx={{ color: '#888', fontStyle: 'italic' }}>No se han reportado alergias.</Typography>)}
+                      </Box>
+                    </Card>
+                  </Grid>
+                </Grid>
+              )}
 
-        {/* SECCIÓN 2: RSVP COMPROMISO */}
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h5" color="primary" sx={{ borderBottom: '1px solid #eee', pb: 2, mb: 3 }}>💍 RSVP - Fiesta de Compromiso</Typography>
-          <TableContainer component={Paper} elevation={2}>
-            <Table>
-              <TableHead sx={{ bgcolor: '#fafafa' }}>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Invitado</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Correo Electrónico</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Respuesta</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 'bold', color: '#711c2e' }}>Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rsvpsCompromiso.map((rsvp) => (
-                  <TableRow key={rsvp.id} hover>
-                    <TableCell><strong>{rsvp.nombre}</strong></TableCell>
-                    <TableCell>{rsvp.email}</TableCell>
-                    <TableCell>
-                      {rsvp.invitados && rsvp.invitados.length > 0 ? (
-                        <ul style={{ margin: 0, paddingLeft: 15, fontSize: '0.9rem' }}>
-                          {rsvp.invitados.map((inv, idx) => (
-                            <li key={idx} style={{ marginBottom: '8px' }}>
-                              {inv.asistencia === 'si' ? (
-                                <>
-                                  <strong style={{ color: '#2e7d32' }}>✅ {inv.nombre}</strong><br/>
-                                  <span style={{ color: '#666', fontSize: '0.85em' }}>Dieta: {inv.dieta} | {inv.starter} / {inv.entree}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <strong style={{ color: '#d9534f' }}>❌ {inv.nombre}</strong> <span style={{ color: '#666', fontSize: '0.85em' }}>(No asistirá)</span>
-                                </>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <Typography color="error">Sin datos de menú</Typography>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton color="error" onClick={() => borrarRegistro('rsvps_compromiso', rsvp.id)}><DeleteIcon /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-
-        {/* SECCIÓN 3: RSVP BODA FORMAL */}
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h5" color="primary" sx={{ borderBottom: '1px solid #eee', pb: 2, mb: 3 }}>🕊️ RSVP - Boda Formal</Typography>
-          <TableContainer component={Paper} elevation={2}>
-            <Table>
-              <TableHead sx={{ bgcolor: '#fafafa' }}>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Invitado</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Correo Electrónico</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Respuesta</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 'bold', color: '#711c2e' }}>Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rsvpsBoda.map((rsvp) => (
-                  <TableRow key={rsvp.id} hover>
-                    <TableCell><strong>{rsvp.nombre}</strong></TableCell>
-                    <TableCell>{rsvp.email}</TableCell>
-                    <TableCell>{rsvp.asistencia === 'si' ? '✅ Sí asistirá' : '❌ No asistirá'}</TableCell>
-                    <TableCell align="center">
-                      <IconButton color="error" onClick={() => borrarRegistro('rsvps_boda', rsvp.id)}><DeleteIcon /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-
-        {/* SECCIÓN 4: REGALOS LUNA DE MIEL */}
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h5" color="primary" sx={{ borderBottom: '1px solid #eee', pb: 2, mb: 3 }}>🌍 Regalos - Luna de Miel</Typography>
-          <Box sx={{ bgcolor: '#fffdf5', p: 3, borderRadius: 2, textAlign: 'right', border: '1px dashed #d4af37', mb: 3 }}>
-            <Typography variant="h6" color="text.secondary" component="span" sx={{ mr: 2 }}>Total Recaudado:</Typography>
-            <Typography variant="h4" color="secondary" component="span" sx={{ fontFamily: "'Playfair Display', serif", fontWeight: 'bold' }}>
-              ${totalRecaudado} USD
-            </Typography>
-          </Box>
-          <TableContainer component={Paper} elevation={2}>
-            <Table>
-              <TableHead sx={{ bgcolor: '#fafafa' }}>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Invitado</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Correo Electrónico</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#711c2e' }}>Detalle del Regalo</TableCell>
-                  <TableCell align="right" sx={{ fontWeight: 'bold', color: '#711c2e' }}>Monto</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {regalos.map((regalo) => (
-                  <TableRow key={regalo.id} hover>
-                    <TableCell>{regalo.nombre}</TableCell>
-                    <TableCell>{regalo.email}</TableCell>
-                    <TableCell sx={{ color: 'text.secondary' }}>{regalo.regalo}</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 'bold', color: '#2c3e50' }}>${regalo.monto_usd}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-
+              {tabValue === 3 && (
+                <Box sx={{ maxWidth: 700, mx: 'auto', py: 2 }}>
+                  <Typography variant="h5" sx={{ fontFamily: "'Playfair Display', serif", color: '#711c2e', mb: 4, textAlign: 'center' }}>Registrar en Lista Maestra</Typography>
+                  <Card sx={{ p: 4, border: '1px solid #dabc60', boxShadow: '0 4px 15px rgba(218, 188, 96, 0.1)' }}>
+                    <TextField fullWidth label="Título de la Invitación" placeholder="Ej: Familia Urquilla Bonilla" variant="outlined" value={nuevaInvitacion.nombre_invitacion} onChange={(e) => setNuevaInvitacion({...nuevaInvitacion, nombre_invitacion: e.target.value})} sx={{ mb: 4 }} />
+                    <Typography variant="subtitle2" sx={{ mb: 2, color: '#711c2e', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.7rem' }}>Integrantes del Grupo</Typography>
+                    {nuevaInvitacion.invitados.map((guest, index) => (
+                      <Grid container spacing={2} key={index} sx={{ mb: 3 }} alignItems="center">
+                        <Grid item xs={7}><TextField fullWidth label="Nombre Completo" variant="outlined" size="small" value={guest.nombre} onChange={(e) => handleGuestChange(index, 'nombre', e.target.value)} /></Grid>
+                        <Grid item xs={3}><TextField select fullWidth size="small" label="Categoría" value={guest.tipo} onChange={(e) => handleGuestChange(index, 'tipo', e.target.value)}><MenuItem value="adulto">Adulto</MenuItem><MenuItem value="niño">Niño/a</MenuItem></TextField></Grid>
+                        <Grid item xs={2} sx={{ textAlign: 'center' }}><IconButton onClick={() => handleRemoveGuestField(index)} disabled={nuevaInvitacion.invitados.length === 1} color="error"><DeleteIcon /></IconButton></Grid>
+                      </Grid>
+                    ))}
+                    <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddGuestField} sx={{ mb: 4, color: '#711c2e', fontWeight: 'bold' }}>Añadir Integrante</Button><Divider sx={{ mb: 4 }} />
+                    <Button fullWidth variant="contained" size="large" onClick={guardarNuevaInvitacion} sx={{ bgcolor: '#711c2e', color: 'white', py: 2, fontWeight: 'bold', '&:hover': { bgcolor: '#5a1524' } }}>Guardar Invitación</Button>
+                  </Card>
+                </Box>
+              )}
+            </Box>
+          )}
+        </Paper>
       </Container>
+
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} fullWidth>
+        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white' }}>Editar Invitación Maestra</DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          {editData && (<Box><TextField fullWidth label="Título" value={editData.nombre_invitacion} onChange={(e) => setEditData({...editData, nombre_invitacion: e.target.value})} sx={{ my: 2 }} />
+              {editData.invitados.map((g, i) => (
+                <Grid container spacing={1} key={i} sx={{ mb: 2 }}><Grid item xs={8}><TextField fullWidth label="Nombre" size="small" value={g.nombre} onChange={(e) => { const l = [...editData.invitados]; l[i].nombre = e.target.value; setEditData({...editData, invitados: l}); }} /></Grid>
+                  <Grid item xs={4}><TextField select fullWidth label="Tipo" size="small" value={g.tipo} onChange={(e) => { const l = [...editData.invitados]; l[i].tipo = e.target.value; setEditData({...editData, invitados: l}); }}><MenuItem value="adulto">Adulto</MenuItem><MenuItem value="niño">Niño</MenuItem></TextField></Grid>
+                </Grid>))}
+            </Box>)}
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}><Button onClick={() => setEditDialogOpen(false)}>Cerrar</Button><Button onClick={guardarEdicion} variant="contained" sx={{ bgcolor: '#711c2e' }}>Guardar</Button></DialogActions>
+      </Dialog>
+
+      <Dialog open={rsvpEditDialogOpen} onClose={() => setRsvpEditDialogOpen(false)} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white' }}>Control Total RSVP</DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          {editRsvpData && (<Box><Grid container spacing={2} sx={{ mb: 3, mt: 1 }}><Grid item xs={12} sm={6}><TextField fullWidth label="Remitente / Familia" value={editRsvpData.nombre} onChange={(e) => setEditRsvpData({...editRsvpData, nombre: e.target.value})} /></Grid>
+                <Grid item xs={12} sm={6}><TextField fullWidth label="Email" value={editRsvpData.email} onChange={(e) => setEditRsvpData({...editRsvpData, email: e.target.value})} /></Grid>
+              </Grid>
+              <Typography variant="subtitle2" sx={{ color: '#711c2e', mb: 2, fontWeight: 'bold' }}>GESTIÓN DE INVITADOS Y MENÚS</Typography>
+              {editRsvpData.invitados.map((inv, idx) => (
+                <Box key={idx} sx={{ p: 2, mb: 2, border: '1px solid #ddd', borderRadius: 2, bgcolor: '#fafafa' }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}><TextField fullWidth label="Nombre" size="small" value={inv.nombre} onChange={(e) => handleRsvpGuestChange(idx, 'nombre', e.target.value)} /></Grid>
+                    <Grid item xs={6} sm={4}><FormControl fullWidth size="small"><InputLabel>Categoría</InputLabel><Select value={inv.tipo} label="Categoría" onChange={(e) => handleRsvpGuestChange(idx, 'tipo', e.target.value)}><MenuItem value="adulto">Adulto</MenuItem><MenuItem value="niño">Niño/a</MenuItem></Select></FormControl></Grid>
+                    <Grid item xs={6} sm={4}><FormControl fullWidth size="small"><InputLabel>Asistencia</InputLabel><Select value={inv.asistencia} label="Asistencia" onChange={(e) => handleRsvpGuestChange(idx, 'asistencia', e.target.value)}><MenuItem value="si">Confirmado (Sí)</MenuItem><MenuItem value="no">Declinado (No)</MenuItem></Select></FormControl></Grid>
+                    {inv.asistencia === 'si' && (
+                      inv.tipo === 'niño' ? (
+                        <><Grid item xs={12} sm={4}><TextField fullWidth size="small" label="Starter (Entrada)" value="Menú Infantil" disabled sx={{ bgcolor: '#ebebeb' }} /></Grid>
+                          <Grid item xs={12} sm={4}><TextField fullWidth size="small" label="Entree (Plato Fuerte)" value="Menú Infantil" disabled sx={{ bgcolor: '#ebebeb' }} /></Grid>
+                          <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>Alergias / Dieta</InputLabel><Select value={inv.dieta || 'None'} label="Alergias / Dieta" onChange={(e) => handleRsvpGuestChange(idx, 'dieta', e.target.value)}><MenuItem value="None">Ninguna</MenuItem><MenuItem value="Gluten free">Gluten free</MenuItem><MenuItem value="Vegetarian">Vegetariano</MenuItem><MenuItem value="Vegan">Vegano</MenuItem></Select></FormControl></Grid></>
+                      ) : (
+                        <><Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>Starter (Entrada)</InputLabel><Select value={inv.starter || ''} label="Starter (Entrada)" onChange={(e) => handleRsvpGuestChange(idx, 'starter', e.target.value)}><MenuItem value='Caesar Salad'>"Prince of Wales" Caesar Salad</MenuItem><MenuItem value='Tomato Soup'>Tomato Soup</MenuItem></Select></FormControl></Grid>
+                          <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>Entree (Plato Fuerte)</InputLabel><Select value={inv.entree || ''} label="Entree (Plato Fuerte)" onChange={(e) => handleRsvpGuestChange(idx, 'entree', e.target.value)}><MenuItem value='Grilled Chicken Breast'>Grilled Chicken Breast</MenuItem><MenuItem value='Three Cheese Tortellini'>Three Cheese Tortellini</MenuItem></Select></FormControl></Grid>
+                          <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>Alergias / Dieta</InputLabel><Select value={inv.dieta || 'None'} label="Alergias / Dieta" onChange={(e) => handleRsvpGuestChange(idx, 'dieta', e.target.value)}><MenuItem value="None">Ninguna</MenuItem><MenuItem value="Gluten free">Gluten free</MenuItem><MenuItem value="Vegetarian">Vegetariano</MenuItem><MenuItem value="Vegan">Vegano</MenuItem></Select></FormControl></Grid></>
+                      )
+                    )}
+                  </Grid>
+                </Box>))}
+            </Box>)}
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}><Button onClick={() => setRsvpEditDialogOpen(false)}>Cancelar</Button><Button onClick={guardarEdicionRsvp} variant="contained" sx={{ bgcolor: '#711c2e' }}>Guardar Cambios RSVP</Button></DialogActions>
+      </Dialog>
+
+      {/* MODAL GLOBAL PARA AVISOS ADMIN */}
+      <Dialog open={alertModal.open} onClose={() => setAlertModal({ ...alertModal, open: false })} PaperProps={{ sx: { borderRadius: 2, border: '2px solid #dabc60', minWidth: '300px' } }}>
+        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white', fontFamily: "'Playfair Display', serif", textAlign: 'center', fontSize: '1.5rem' }}>{alertModal.title}</DialogTitle>
+        <DialogContent sx={{ p: 4, textAlign: 'center', mt: 2 }}><Typography variant="body1" sx={{ color: '#5a3b45', fontWeight: 500 }}>{alertModal.message}</Typography></DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', pb: 3 }}><Button onClick={() => setAlertModal({ ...alertModal, open: false })} variant="contained" sx={{ bgcolor: '#711c2e', '&:hover': { bgcolor: '#5a1524' } }}>Entendido</Button></DialogActions>
+      </Dialog>
+
+      {/* MODAL DE CONFIRMACIÓN DE BORRADO ADMIN */}
+      <Dialog open={confirmModal.open} onClose={() => setConfirmModal({ ...confirmModal, open: false })} PaperProps={{ sx: { borderRadius: 2, border: '2px solid #dabc60', minWidth: '350px' } }}>
+        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white', fontFamily: "'Playfair Display', serif", textAlign: 'center', fontSize: '1.5rem' }}>{confirmModal.title}</DialogTitle>
+        <DialogContent sx={{ p: 4, textAlign: 'center', mt: 2 }}><Typography variant="body1" sx={{ color: '#5a3b45', fontWeight: 500 }}>{confirmModal.message}</Typography></DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', gap: 2, pb: 3 }}>
+          <Button onClick={() => setConfirmModal({ ...confirmModal, open: false })} variant="outlined" sx={{ color: '#711c2e', borderColor: '#711c2e' }}>Cancelar</Button>
+          <Button onClick={confirmModal.action} variant="contained" sx={{ bgcolor: '#711c2e', '&:hover': { bgcolor: '#5a1524' } }}>Sí, Borrar</Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
   );
 };
