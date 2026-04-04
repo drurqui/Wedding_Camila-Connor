@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Admin = () => {
   const { t, i18n } = useTranslation();
@@ -26,6 +27,16 @@ const Admin = () => {
   // Estados para Modales Visuales
   const [alertModal, setAlertModal] = useState({ open: false, title: t('common.warning'), message: '' });
   const [confirmModal, setConfirmModal] = useState({ open: false, title: t('common.confirm'), message: '', action: null });
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth); // Desloguea de Firebase/Google
+      window.location.href = '/'; // Redirige a la raíz
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   const toggleLanguage = () => {
     // Obtenemos el idioma actual (tomamos solo las primeras 2 letras por si es 'es-ES' o 'en-US')
