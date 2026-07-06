@@ -75,7 +75,10 @@
       "lodgingText3": "To secure your room at a special group rate, please make your reservation on the hotel's website using the Group ID:",
       "lodgingNote": "* The $200 discounted rate applies to traditional rooms with 1 Queen, 1 King, or 2 Double beds | 4 people | 320 sq ft.",
       "lodgingButton": "VISIT WEBSITE - BOOK",
-      "closingText": "Thank you, see you soon!"
+      "closingText": "Thank you, see you soon!",
+      "registryTitle": "Registry",
+      "registryText": "Your presence on our special day is the greatest gift we could ask for. However, if you wish to honor us with a gift, we have registered a list on Amazon.",
+      "registryButton": "VIEW AMAZON REGISTRY"
     },
     "step3": {
       "title": "Thank You!",

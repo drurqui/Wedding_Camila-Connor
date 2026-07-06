@@ -75,7 +75,10 @@
       "lodgingText3": "Para asegurar su habitación con tarifa especial de grupo, por favor haga su reserva en la web del hotel usando el Group ID:",
       "lodgingNote": "* La tarifa de descuento de $200 aplica para habitaciones tradicionales de 1 cama Queen, 1 King, o 2 Dobles | 4 personas | 320 sq ft.",
       "lodgingButton": "VISITAR SITIO WEB - RESERVAR",
-      "closingText": "¡Gracias, nos vemos pronto!"
+      "closingText": "¡Gracias, nos vemos pronto!",
+      "registryTitle": "Mesa de Regalos",
+      "registryText": "El mejor regalo para nosotros es tu presencia en este día tan especial. Sin embargo, si deseas tener un detalle adicional, hemos preparado una lista de regalos en Amazon.",
+      "registryButton": "VER LISTA EN AMAZON"
     },
     "step3": {
       "title": "¡Gracias!",
