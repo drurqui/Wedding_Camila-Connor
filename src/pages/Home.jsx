@@ -146,6 +146,7 @@ const Home = () => {
                 <Typography sx={{ color: '#999', fontStyle: 'italic', fontSize: '0.85rem' }}>{t('home.step2.dressCode')}</Typography>
               </Box>
             </Card>
+            
             <Card sx={cardStyle}>
               <Typography variant="h2" color="secondary" sx={{ textAlign: 'center', mb: 1, fontSize: { xs: '3.5rem', md: '4.5rem' } }}>{t('home.step2.rsvpTitle')}</Typography>
               <Typography sx={{ color: '#711c2e', textAlign: 'center', mb: 3, fontSize: '1rem' }}>{t('home.step2.rsvpDeadline')}</Typography>
@@ -173,6 +174,37 @@ const Home = () => {
               ))}
               <Button fullWidth variant="contained" size="large" onClick={submitRSVP} disabled={loading} sx={{ mt: 2, py: 1.5, bgcolor: '#711c2e', color: 'white', '&:hover': { bgcolor: '#5a1524' } }}>{loading ? <CircularProgress size={24} color="inherit" /> : t('home.step2.continueButton')}</Button>
             </Card>
+
+            {/* MESA DE REGALOS (REGISTRY) */}
+            <Card sx={cardStyle}>
+              <Typography variant="h2" color="secondary" sx={{ textAlign: 'center', mb: 3, fontSize: { xs: '3rem', md: '4.5rem' } }}>
+                {t('home.step2.registryTitle')}
+              </Typography>
+              <Box sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+                <Typography variant="body1" sx={{ color: '#666', mb: 4, lineHeight: 1.6 }}>
+                  {t('home.step2.registryText')}
+                </Typography>
+                <Button 
+                  variant="outlined" 
+                  href="https://www.amazon.ca/wedding/share/ShieldsUrquilla" 
+                  target="_blank" 
+                  sx={{ 
+                    color: '#711c2e', 
+                    borderColor: '#711c2e', 
+                    borderRadius: '30px', 
+                    padding: '10px 24px', 
+                    '&:hover': { 
+                      borderColor: '#5a1524', 
+                      backgroundColor: 'rgba(113, 28, 46, 0.04)' 
+                    } 
+                  }}
+                >
+                  {t('home.step2.registryButton')}
+                </Button>
+              </Box>
+            </Card>
+
+            {/* HOSPEDAJE (ACCOMMODATIONS) */}
             <Card sx={cardStyle}>
               <Typography variant="h2" color="secondary" sx={{ textAlign: 'center', mb: 3, fontSize: { xs: '3rem', md: '4.5rem' } }}>{t('home.step2.lodgingTitle')}</Typography>
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, alignItems: 'center' }}>
@@ -186,6 +218,7 @@ const Home = () => {
                 <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}><img src="/POW-Traditional-Room.webp" alt="Habitación Prince of Wales" style={{ width: '100%', maxWidth: '500px', borderRadius: '8px', objectFit: 'cover' }} /></Box>
               </Box>
             </Card>
+
             <Card sx={cardStyle}><Typography variant="h2" color="secondary" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' }, mb: 0, textAlign: 'center' }}>{t('home.step2.closingText')}</Typography></Card>
           </Box>
         )}
