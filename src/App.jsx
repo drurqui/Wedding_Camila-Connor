@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
+import NotFound from './pages/NotFound';
 import { Box, Button, Typography, Container, Card } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -58,6 +59,9 @@ function App() {
                             <Admin />
                         </ProtectedRoute>
                     } />
+
+                    {/* Ruta 404 (catch-all) */}
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
         </AuthProvider>

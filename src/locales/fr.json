@@ -11,6 +11,11 @@
     "success": "Succès",
     "error": "Erreur"
   },
+  "notFound": {
+    "title": "Page non trouvée",
+    "message": "Oups ! La page que vous cherchez n'existe pas ou a été déplacée.",
+    "button": "Retour à l'accueil"
+  },
   "adminLogin": {
     "title": "Accès Privé",
     "subtitle": "Panneau exclusif pour l'administration du mariage.",

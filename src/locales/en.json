@@ -11,6 +11,11 @@
     "success": "Success",
     "error": "Error"
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "Oops! The page you are looking for does not exist or has been moved.",
+    "button": "Back to Home"
+  },
   "adminLogin": {
     "title": "Private Access",
     "subtitle": "Exclusive panel for wedding administration.",

@@ -11,6 +11,11 @@
     "success": "Éxito",
     "error": "Error"
   },
+  "notFound": {
+    "title": "Página no encontrada",
+    "message": "¡Ups! La página que buscas no existe o ha sido movida.",
+    "button": "Volver al Inicio"
+  },
   "adminLogin": {
     "title": "Acceso Privado",
     "subtitle": "Panel exclusivo para la administración de la boda.",
