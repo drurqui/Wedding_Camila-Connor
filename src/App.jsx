@@ -49,6 +49,7 @@ function App() {
                 <Routes>
                     {/* Ruta pública para los invitados */}
                     <Route path="/" element={<Home />} />
+                    <Route path="/engagement" element={<Navigate to="/" replace />} />
                     
                     {/* Rutas privadas para ustedes */}
                     <Route path="/admin/login" element={<AdminLogin />} />
