@@ -158,22 +158,27 @@ const Wedding = () => {
       }
     } catch (err) {
       console.error("Error Stripe:", err);
-      setErrorMessage("No se pudo contactar el servidor de pagos. Por favor intenta de nuevo en unos momentos.");
       setLoadingPayment(false);
     }
   };
 
-  // Paleta de colores basada en el Canva de la novia
+  // Paleta de colores armonizada orgánicamente con el nuevo monograma cobre sobre verde pino
   const colors = {
-    forestGreen: '#2b4334',
-    forestDark: '#1d2f24',
-    sandBeige: '#f5ebd7',
-    sandLight: '#faf5eb',
-    terracotta: '#b85d38',
-    terracottaDark: '#984a2a',
-    goldAccent: '#d4af37',
+    forestGreen: '#1e382b',      // Verde pino profundo idéntico al fondo del nuevo monograma
+    forestDark: '#14261d',       // Verde sombra para contrastes y fondos profundos
+    forestMedium: '#274b39',     // Verde medio elegante
+    sandBeige: '#f6ebd7',        // Crema cálido de los diseños de Canva
+    sandLight: '#faf6ef',        // Fondo suave marfil
+    copper: '#c7784f',           // Cobre metálico cálido idéntico al relieve del monograma
+    copperLight: '#d98d68',      // Cobre claro para estados hover y reflejos
+    copperDark: '#a15632',       // Cobre oscuro de contraste
+    copperGlow: 'rgba(199, 120, 79, 0.35)',
+    goldAccent: '#dfaf74',       // Oro cobrizo para detalles estelares
     charcoal: '#222222',
-    creamText: '#f5ebd7',
+    creamText: '#f6ebd7',
+    // Aliases para compatibilidad estilística
+    terracotta: '#c7784f',
+    terracottaDark: '#a15632',
   };
 
   return (
@@ -186,11 +191,11 @@ const Wedding = () => {
           onClick={toggleLanguage} 
           sx={{ 
             borderRadius: '20px', 
-            bgcolor: colors.terracotta, 
+            bgcolor: colors.copper, 
             color: '#fff', 
             fontWeight: 'bold',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-            '&:hover': { bgcolor: colors.terracottaDark } 
+            boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+            '&:hover': { bgcolor: colors.copperDark } 
           }}
         >
           {i18n.language.startsWith('es') ? 'EN' : i18n.language.startsWith('en') ? 'FR' : 'ES'}
@@ -198,7 +203,7 @@ const Wedding = () => {
       </Box>
 
       {/* Banner de acceso al Engagement */}
-      <Box sx={{ bgcolor: colors.forestDark, py: 1, textAlign: 'center' }}>
+      <Box sx={{ bgcolor: colors.forestDark, py: 1.2, textAlign: 'center', borderBottom: `1px solid rgba(199, 120, 79, 0.2)` }}>
         <Typography variant="caption" sx={{ color: colors.goldAccent, letterSpacing: 1.5, textTransform: 'uppercase', fontSize: '0.75rem' }}>
           {t('wedding.nav.engagementLink')}:{' '}
           <RouterLink to="/engagement" style={{ color: '#ffffff', textDecoration: 'underline', fontWeight: 600 }}>
@@ -210,8 +215,8 @@ const Wedding = () => {
       {/* HERO SECTION DE LA BODA */}
       <Box 
         sx={{ 
-          minHeight: '75vh', 
-          backgroundImage: `linear-gradient(rgba(29, 47, 36, 0.7), rgba(29, 47, 36, 0.85)), url('/foret_venue.jpg')`, 
+          minHeight: '80vh', 
+          backgroundImage: `linear-gradient(rgba(20, 38, 29, 0.72), rgba(20, 38, 29, 0.88)), url('/foret_venue.jpg')`, 
           backgroundSize: 'cover', 
           backgroundPosition: 'center', 
           display: 'flex', 
@@ -220,25 +225,28 @@ const Wedding = () => {
           alignItems: 'center', 
           color: 'white', 
           px: 3, 
-          py: 8,
+          py: 9,
           textAlign: 'center' 
         }}
       >
-        {/* Monograma de la novia */}
+        {/* Monograma en relieve 3D cobre sobre verde pino */}
         <Box 
           component="img" 
           src="/cs-monogram.jpg" 
           alt="Camila & Connor Monogram" 
           sx={{ 
-            width: { xs: 90, sm: 120 }, 
-            height: { xs: 90, sm: 120 }, 
+            width: { xs: 130, sm: 170 }, 
+            height: { xs: 130, sm: 170 }, 
             borderRadius: '50%', 
             objectFit: 'cover',
             mb: 3,
-            p: 0.5,
-            bgcolor: '#ffffff',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-            border: `2px solid ${colors.goldAccent}`
+            boxShadow: '0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(199, 120, 79, 0.35)',
+            border: `2.5px solid ${colors.copper}`,
+            transition: 'transform 0.4s ease, box-shadow 0.4s ease',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 20px 48px rgba(0,0,0,0.7), 0 0 32px rgba(199, 120, 79, 0.5)',
+            }
           }} 
         />
         <Typography 
@@ -293,21 +301,39 @@ const Wedding = () => {
           <Button 
             variant="outlined" 
             href="#honeymoon" 
-            sx={{ color: colors.sandBeige, borderColor: colors.goldAccent, borderRadius: '30px', px: 3 }}
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: 3,
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
           >
             {t('wedding.nav.honeymoon')}
           </Button>
           <Button 
             variant="outlined" 
             href="#logistics" 
-            sx={{ color: colors.sandBeige, borderColor: colors.goldAccent, borderRadius: '30px', px: 3 }}
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: 3,
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
           >
             {t('wedding.nav.logistics')}
           </Button>
           <Button 
             variant="outlined" 
             href="#details" 
-            sx={{ color: colors.sandBeige, borderColor: colors.goldAccent, borderRadius: '30px', px: 3 }}
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: 3,
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
           >
             {t('wedding.nav.details')}
           </Button>
@@ -323,12 +349,15 @@ const Wedding = () => {
             src="/cs-monogram.jpg" 
             alt="CS Monogram" 
             sx={{ 
-              width: 65, 
-              height: 65, 
+              width: { xs: 85, sm: 110 }, 
+              height: { xs: 85, sm: 110 }, 
               borderRadius: '50%', 
               mx: 'auto', 
               mb: 2,
-              filter: 'brightness(1.05)'
+              boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(199, 120, 79, 0.3)',
+              border: `2px solid ${colors.copper}`,
+              transition: 'transform 0.3s ease',
+              '&:hover': { transform: 'scale(1.05)' }
             }} 
           />
           <Typography 
@@ -349,8 +378,8 @@ const Wedding = () => {
             variant="h4" 
             sx={{ 
               fontFamily: "'Monsieur La Doulaise', cursive", 
-              fontSize: { xs: '3rem', md: '4rem' }, 
-              color: colors.goldAccent,
+              fontSize: { xs: '3rem', md: '4.2rem' }, 
+              color: colors.copperLight,
               mt: -2,
               mb: 3
             }}
