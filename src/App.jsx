@@ -2,10 +2,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Home from './pages/Home';
+import Wedding from './pages/Wedding';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import { Box, Button, Typography, Container, Card } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
+// Configuración del evento predeterminado en la raíz (/):
+// 'engagement' actualmente; cuando concluya el compromiso, cambiar a 'wedding'.
+const ACTIVE_EVENT = 'engagement';
 
 // Componente guardián: si no hay usuario, lo patea al login
 const ProtectedRoute = ({ children }) => {
@@ -48,11 +53,20 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    {/* Ruta pública para los invitados */}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/engagement" element={<Navigate to="/" replace />} />
+                    {/* Ruta pública raíz: muestra el evento activo configurado */}
+                    <Route path="/" element={ACTIVE_EVENT === 'engagement' ? <Home /> : <Wedding />} />
                     
-                    {/* Rutas privadas para ustedes */}
+                    {/* Rutas explícitas de Engagement (EN, ES, FR) */}
+                    <Route path="/engagement" element={<Home />} />
+                    <Route path="/compromiso" element={<Home />} />
+                    <Route path="/fiancailles" element={<Home />} />
+                    
+                    {/* Rutas explícitas de Wedding (EN, ES, FR) */}
+                    <Route path="/wedding" element={<Wedding />} />
+                    <Route path="/boda" element={<Wedding />} />
+                    <Route path="/mariage" element={<Wedding />} />
+                    
+                    {/* Rutas privadas para administradores */}
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin" element={
                         <ProtectedRoute>

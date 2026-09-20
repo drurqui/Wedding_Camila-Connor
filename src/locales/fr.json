@@ -191,5 +191,106 @@
       "allergies": "Allergies / Régime",
       "saveButton": "Enregistrer les modifications RSVP"
     }
+  },
+  "wedding": {
+    "nav": {
+      "honeymoon": "Lune de Miel",
+      "logistics": "Voyage & Logistique",
+      "accommodations": "Hébergement",
+      "details": "Détails",
+      "engagementLink": "Fête de Fiançailles"
+    },
+    "hero": {
+      "subtitle": "NOTRE MARIAGE",
+      "title": "Camila & Connor",
+      "date": "Samedi 7 Août 2027",
+      "venue": "Forêt • Comasagua, El Salvador"
+    },
+    "honeymoon": {
+      "title": "THE HONEYMOON FUND",
+      "welcome": "Bienvenue sur notre fonds de lune de miel !",
+      "description": "Si vous tenez absolument à nous offrir un cadeau en plus de votre présence, vous êtes au bon endroit ! Découvrez ici les expériences que nous rêvons de vivre lors de notre lune de miel. Vous pouvez choisir différentes aventures et financer une part de notre tout premier voyage en tant que mari et femme.",
+      "items": {
+        "airfare": {
+          "title": "BILLETS D'AVION",
+          "description": "AIDEZ-NOUS À FINANCER LES VOLS DU CANADA VERS MILAN, PUIS EN SICILE, EN GRÈCE ET LE RETOUR À LA MAISON.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 PART • $100 USD / $135 CAD",
+          "need": 35
+        },
+        "train": {
+          "title": "PASS TRAIN GRANDE VITESSE",
+          "description": "BILLETS EN PREMIÈRE CLASSE POUR LE TRAIN PITTORESQUE À GRANDE VITESSE DE MILAN JUSQU'À ROME.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 PART • $100 USD / $135 CAD",
+          "need": 4
+        },
+        "lakeComo": {
+          "title": "TOUR EN BATEAU SUR LE LAC DE CÔME",
+          "description": "UNE APRÈS-MIDI ROMANTIQUE SUR L'EAU, À EXPLORER L'ARCHITECTURE HISTORIQUE ET LES VILLAS DU LAC DE CÔME À BORD D'UN BATEAU CLASSIQUE.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 PART • $150 USD / $200 CAD",
+          "need": 2
+        }
+      },
+      "customContribution": {
+        "title": "CONTRIBUTION LIBRE",
+        "description": "Vous souhaitez contribuer avec un montant personnalisé pour notre lune de miel ? Chaque geste nous aide à forger des souvenirs inoubliables.",
+        "placeholder": "Montant en USD (min 5 $)",
+        "button": "Envoyer un Don Libre"
+      },
+      "modal": {
+        "title": "Offrir une Expérience",
+        "subtitle": "Vous contribuez pour",
+        "nameLabel": "Votre Nom Complet",
+        "emailLabel": "Votre Email (pour le reçu)",
+        "quantityLabel": "Nombre de parts",
+        "totalLabel": "Contribution Totale",
+        "proceedStripe": "Payer en toute sécurité avec Stripe",
+        "processing": "Connexion à Stripe en cours...",
+        "cancel": "Annuler",
+        "errors": {
+          "nameRequired": "Veuillez saisir votre nom.",
+          "emailRequired": "Veuillez saisir une adresse email valide.",
+          "minAmount": "Le montant minimum est de 5 $ USD."
+        }
+      },
+      "addToCart": "Participer",
+      "currencyNote": "Montants affichés en USD et CAD. Les paiements sont sécurisés par Stripe."
+    },
+    "logistics": {
+      "title": "VOYAGE ET LOGISTIQUE",
+      "q1": "À QUEL AÉROPORT DOIS-JE ARRIVER ?",
+      "a1": "Vous devez réserver vos vols vers l'Aéroport International d'El Salvador (SAL). C'est la plateforme internationale principale, située à environ 1 heure de San Salvador et 1h30 de Comasagua.",
+      "q2": "EXISTE-T-IL UN TARIF DE VOL PRIVILÉGIÉ ?",
+      "a2": "Vous êtes l'un de nos invités les plus précieux et nous vous remercions d'anticiper si tôt. Nous négocions avec une agence des tarifs préférentiels pour un vol direct Toronto - San Salvador le vendredi 6 août et San Salvador - Toronto le lundi 8 août. Laissez-nous votre email via notre page RSVP et nous vous avertirons dès que ces tarifs seront confirmés. Si vous préférez réserver de votre côté, préparez votre voyage en toute liberté !",
+      "q3": "AI-JE BESOIN D'UN VISA TOURISTIQUE ?",
+      "a3": "La plupart des voyageurs, y compris les citoyens canadiens et américains, n'ont pas besoin de visa préalable pour les courts séjours. Vous aurez simplement besoin d'un passeport valide 6 mois après vos dates de séjour et de la carte de touriste de 12 $ USD à acheter à l'aéroport à l'arrivée.",
+      "q4": "ET SI JE SOUHAITE PROLONGER MON SÉJOUR ?",
+      "a4": "Si vous souhaitez passer des vacances au Salvador, nous vous conseillons de prolonger la semaine suivant le mariage, car la semaine précédente coïncide avec les fêtes nationales locales et les sites sont très fréquentés. Nous mettrons à disposition une liste de circuits guidés et leurs tarifs par personne.",
+      "q5": "FAUT-IL LOUER UNE VOITURE OU UTILISER UBER ET LES TAXIS ?",
+      "a5": "Si vous ne venez que pour le week-end des célébrations, nous vous recommandons d'utiliser Uber. San Salvador est une ville très bien desservie par Uber, abordable et sûre. Pour les excursions et transferts plus lointains, des transports privés dédiés pourront être coordonnés."
+    },
+    "accommodations": {
+      "title": "HÉBERGEMENT",
+      "q": "OÙ LOGER ?",
+      "a": "Bravo pour votre prévoyance ! Nous préparons un bloc de chambres réservées pour les nuits des 6, 7 et 8 août à l'Hôtel Hilton de San Salvador. Restez à l'écoute, nous vous communiquerons le lien et le code dès qu'ils seront actifs."
+    },
+    "details": {
+      "title": "DÉTAILS DU 7 AOÛT",
+      "q1": "OÙ ET À QUELLE HEURE SE DÉROULERA LE MARIAGE ?",
+      "a1": "La cérémonie et la réception auront lieu le samedi 7 août 2027 à Forêt à Comasagua, El Salvador, à partir de 15h30.",
+      "q2": "COMMENT SE RENDRE AU LIEU DE RÉCEPTION ?",
+      "a2": "Des navettes aller-retour seront mises en place entre l'Hôtel Hilton et Forêt le jour du mariage ! Rendez-vous dans le hall de l'hôtel à 14h30 le samedi 7 août 2027. Si vous préférez conduire, indiquez Forêt dans votre GPS (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Un service de voiturier (Valet Parking) gratuit sera disponible sur place.",
+      "q3": "QUEL EST LE CODE VESTIMENTAIRE ?",
+      "a3": "Tenue de soirée / Formelle. Pour les dames : Robes longues ou élégantes descendant aux chevilles (couleurs vives et motifs botaniques vivement encouragés !). Pour les messieurs : Costume sombre ou smoking."
+    },
+    "rsvpNotice": {
+      "title": "RSVP pour le Mariage",
+      "text": "Les confirmations officielles pour le mariage au Salvador ouvriront ultérieurement. Surveillez vos emails !"
+    }
   }
 }

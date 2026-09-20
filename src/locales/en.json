@@ -191,5 +191,106 @@
       "allergies": "Allergies / Diet",
       "saveButton": "Save RSVP Changes"
     }
+  },
+  "wedding": {
+    "nav": {
+      "honeymoon": "Honeymoon Fund",
+      "logistics": "Travel & Logistics",
+      "accommodations": "Accommodations",
+      "details": "Details",
+      "engagementLink": "Engagement Celebration"
+    },
+    "hero": {
+      "subtitle": "OUR WEDDING CELEBRATION",
+      "title": "Camila & Connor",
+      "date": "Saturday, August 7, 2027",
+      "venue": "Forêt • Comasagua, El Salvador"
+    },
+    "honeymoon": {
+      "title": "THE HONEYMOON FUND",
+      "welcome": "Welcome to our Honeymoon fund!",
+      "description": "If you must insist on gifting us something other than your presence, you're in the right place! Here you can find a list of things we are planning to do for our amazing honeymoon! You can choose different experiences for us, and pay for a part of our first adventure as a family.",
+      "items": {
+        "airfare": {
+          "title": "AIRFARE",
+          "description": "HELP COVER THE FLIGHTS TAKING US TO AND FROM CANADA TO MILAN, DOWN TO SICILY, ACROSS GREECE, AND BACK HOME.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 SHARE • $100 USD / $135 CAD",
+          "need": 35
+        },
+        "train": {
+          "title": "HIGH SPEED TRAIN PASSES",
+          "description": "FIRST CLASS TICKETS ON THE TRAIN FROM MILAN DOWN TO ROME.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 SHARE • $100 USD / $135 CAD",
+          "need": 4
+        },
+        "lakeComo": {
+          "title": "LAKE COMO BOAT TOUR",
+          "description": "A ROMANTIC AFTERNOON ON THE WATER, EXPLORING THE HISTORIC ARCHITECTURE AND MOUNTAIN VIEWS OF LAKE COMO FROM A CLASSIC BOAT.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 SHARE • $150 USD / $200 CAD",
+          "need": 2
+        }
+      },
+      "customContribution": {
+        "title": "OPEN CONTRIBUTION",
+        "description": "Prefer to contribute a custom amount to our honeymoon? Every gift helps us create memories we will treasure forever.",
+        "placeholder": "Amount in USD (min $5)",
+        "button": "Send Custom Gift"
+      },
+      "modal": {
+        "title": "Gift an Experience",
+        "subtitle": "You are contributing to",
+        "nameLabel": "Your Full Name",
+        "emailLabel": "Your Email (for receipt)",
+        "quantityLabel": "Number of shares",
+        "totalLabel": "Total Contribution",
+        "proceedStripe": "Pay with Stripe",
+        "processing": "Connecting to Stripe...",
+        "cancel": "Cancel",
+        "errors": {
+          "nameRequired": "Please enter your name.",
+          "emailRequired": "Please enter a valid email address.",
+          "minAmount": "Minimum contribution is $5 USD."
+        }
+      },
+      "addToCart": "Contribute",
+      "currencyNote": "Amounts displayed in USD & CAD. Checkout is processed securely through Stripe."
+    },
+    "logistics": {
+      "title": "TRAVEL AND LOGISTICS",
+      "q1": "WHAT AIRPORT SHOULD I FLY INTO?",
+      "a1": "You will want to book your flights into El Salvador International Airport (SAL). It is the primary international hub and is located approximately 1 hour from San Salvador and 1.5 hours from Comasagua.",
+      "q2": "IS THERE A SPECIAL RATE?",
+      "a2": "You're one of our most valued guests, and we thank you for checking so early. We are working with a travel agency to secure special rates on a direct flight from Toronto to San Salvador on Friday August 6 and from El Salvador to Toronto on Monday August 8. Please enter your e-mail through our RSVP page and we'll send you a message when these rates have been confirmed. If you chose to book your flight independently, proceed with your planning!",
+      "q3": "DO I NEED A TRAVEL VISA TO ENTER EL SALVADOR?",
+      "a3": "Most visitors, including Canadian and American citizens, do not need a visa for short visits. You will need a passport valid for at least 6 months beyond your travel dates and a $12 USD tourist card, which is typically purchased upon arrival at the airport.",
+      "q4": "WHAT IF I WANT TO STAY FOR LONGER?",
+      "a4": "If you would like to stay and vacation in El Salvador, the week after the wedding is recommended, as the week prior is a Salvadoran holiday week and tourist attractions tend to become overwhelmed with visitors. Click here to see tours available to our guests along with the prices per person.",
+      "q5": "SHOULD I RENT A CAR, OR IS IT BETTER TO USE UBERS AND TAXIS?",
+      "a5": "If you are only staying for the weekend of celebration, we recommend using Uber. San Salvador is an Uber friendly city, where transport is cheap and reliable. For tours and transportation to other parts of the country, we recommend booking with private tour providers as they handle all transport needs related to our events."
+    },
+    "accommodations": {
+      "title": "ACCOMMODATIONS",
+      "q": "WHERE SHOULD I STAY?",
+      "a": "You are here early! We are preparing a block of rooms for the nights of August 6, 7, and 8 at the Hilton Hotel in San Salvador. Enter your e-mail through our RSVP page and we'll send you a message when the block has been secured."
+    },
+    "details": {
+      "title": "DETAILS FOR AUGUST 7",
+      "q1": "WHEN AND WHERE IS THE WEDDING TAKING PLACE?",
+      "a1": "The ceremony and reception will both be held on Saturday, August 7, 2027, at Forêt in Comasagua, El Salvador. Starting at 3:30 pm.",
+      "q2": "HOW DO I GET TO THE VENUE?",
+      "a2": "We will provide shuttles between the Hilton Hotel and the venue on the day of the wedding! You just need to be ready at the lobby of the hotel by 2:30 pm on Saturday August 7 2027. If you prefer to drive, you should set your GPS to Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506, El Salvador) Valet Parking will be provided on site throughout the evening.",
+      "q3": "WHAT IS THE DRESS CODE?",
+      "a3": "For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of vibrant colors or botanical prints! For Men: Formal suits or tuxedos."
+    },
+    "rsvpNotice": {
+      "title": "Wedding RSVP",
+      "text": "Official RSVPs for the wedding ceremony and reception in El Salvador will open soon. Keep an eye on your email for your invitation!"
+    }
   }
 }

@@ -191,5 +191,106 @@
       "allergies": "Alergias / Dieta",
       "saveButton": "Guardar Cambios RSVP"
     }
+  },
+  "wedding": {
+    "nav": {
+      "honeymoon": "Luna de Miel",
+      "logistics": "Viaje y Logística",
+      "accommodations": "Hospedaje",
+      "details": "Detalles",
+      "engagementLink": "Fiesta de Compromiso"
+    },
+    "hero": {
+      "subtitle": "NUESTRA BODA",
+      "title": "Camila & Connor",
+      "date": "Sábado, 7 de Agosto de 2027",
+      "venue": "Forêt • Comasagua, El Salvador"
+    },
+    "honeymoon": {
+      "title": "THE HONEYMOON FUND",
+      "welcome": "¡Bienvenidos a nuestro fondo de Luna de Miel!",
+      "description": "Si insistes en regalarnos algo además de tu valiosa presencia, ¡estás en el lugar indicado! Aquí encontrarás las experiencias que planeamos disfrutar en nuestra luna de miel. Puedes elegir diferentes vivencias y patrocinar parte de nuestra primera gran aventura como familia.",
+      "items": {
+        "airfare": {
+          "title": "BOLETOS AÉREOS",
+          "description": "AYÚDANOS A CUBRIR LOS VUELOS QUE NOS LLEVARÁN DESDE CANADÁ HACIA MILÁN, BAJANDO A SICILIA, ATRAVESANDO GRECIA Y DE REGRESO A CASA.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 CUOTA • $100 USD / $135 CAD",
+          "need": 35
+        },
+        "train": {
+          "title": "TRENES DE ALTA VELOCIDAD",
+          "description": "PASAJES DE PRIMERA CLASE EN EL TREN ESCÉNICO DE ALTA VELOCIDAD DESDE MILÁN HASTA ROMA.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 CUOTA • $100 USD / $135 CAD",
+          "need": 4
+        },
+        "lakeComo": {
+          "title": "TOUR EN BOTE EN EL LAGO DE COMO",
+          "description": "UNA TARDE ROMÁNTICA EN EL AGUA, EXPLORANDO LA ARQUITECTURA HISTÓRICA Y LAS VISTAS MONTAÑOSAS DEL LAGO DE COMO A BORDO DE UN BOTE CLÁSICO.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 CUOTA • $150 USD / $200 CAD",
+          "need": 2
+        }
+      },
+      "customContribution": {
+        "title": "APORTE LIBRE",
+        "description": "¿Prefieres aportar una cantidad personalizada para nuestra luna de miel? Todo apoyo suma para crear recuerdos que atesoraremos toda la vida.",
+        "placeholder": "Monto en USD (mínimo $5)",
+        "button": "Enviar Regalo Libre"
+      },
+      "modal": {
+        "title": "Regalar Experiencia",
+        "subtitle": "Estás aportando a",
+        "nameLabel": "Tu Nombre Completo",
+        "emailLabel": "Tu Correo Electrónico (para el recibo)",
+        "quantityLabel": "Cantidad de cuotas",
+        "totalLabel": "Aporte Total",
+        "proceedStripe": "Pagar de forma segura con Stripe",
+        "processing": "Conectando con Stripe...",
+        "cancel": "Cancelar",
+        "errors": {
+          "nameRequired": "Por favor ingresa tu nombre.",
+          "emailRequired": "Por favor ingresa un correo válido.",
+          "minAmount": "El aporte mínimo es de $5 USD."
+        }
+      },
+      "addToCart": "Regalar",
+      "currencyNote": "Montos expresados en USD y CAD. Los pagos son procesados de forma segura mediante Stripe."
+    },
+    "logistics": {
+      "title": "VIAJE Y LOGÍSTICA",
+      "q1": "¿A QUÉ AEROPUERTO DEBO LLEGAR?",
+      "a1": "Debes reservar tus vuelos hacia el Aeropuerto Internacional de El Salvador (SAL). Es el principal centro de conexiones aéreas y se encuentra a aproximadamente 1 hora de San Salvador y a 1.5 horas de Comasagua.",
+      "q2": "¿HAY ALGUNA TARIFA ESPECIAL DE VUELO?",
+      "a2": "Eres uno de nuestros invitados más especiales y te agradecemos estar atento desde temprano. Estamos coordinando con una agencia de viajes tarifas especiales para un vuelo directo Toronto - San Salvador el viernes 6 de agosto y San Salvador - Toronto el lunes 8 de agosto. Déjanos tu correo en la página de confirmación y te avisaremos en cuanto tengamos confirmadas estas tarifas. Si prefieres reservar por tu cuenta, ¡adelante con tu itinerario!",
+      "q3": "¿NECESITO VISA DE TURISMO PARA INGRESAR A EL SALVADOR?",
+      "a3": "La mayoría de visitantes, incluyendo ciudadanos canadienses y estadounidenses, no requieren visa para estadías cortas. Únicamente necesitas pasaporte con al menos 6 meses de vigencia y la tarjeta turística de $12 USD que se adquiere al llegar en el aeropuerto.",
+      "q4": "¿QUÉ SUCEDE SI DESEO QUEDARME MÁS DÍAS?",
+      "a4": "Si deseas vacacionar en El Salvador, te recomendamos extender tu estadía la semana posterior a la boda, ya que la semana previa es feriado nacional en El Salvador y los destinos turísticos suelen estar muy concurridos. Compartiremos una lista de tours recomendados con tarifas por persona.",
+      "q5": "¿DEBO ALQUILAR UN AUTO O ES MEJOR USAR UBER Y TAXIS?",
+      "a5": "Si solo vienes para el fin de semana del evento, te recomendamos usar Uber. San Salvador es una ciudad muy amigable con Uber, económico y confiable. Para traslados turísticos o a otros departamentos del país, se pueden coordinar tours y transporte privado especializado."
+    },
+    "accommodations": {
+      "title": "HOSPEDAJE",
+      "q": "¿DÓNDE DEBO HOSPEDARME?",
+      "a": "¡Qué bueno que te prepares con tiempo! Estamos gestionando un bloque de habitaciones con tarifa preferencial para las noches del 6, 7 y 8 de agosto en el Hotel Hilton de San Salvador. Manténte atento y te compartiremos el enlace y código de reserva en cuanto esté activo."
+    },
+    "details": {
+      "title": "DETALLES DEL 7 DE AGOSTO",
+      "q1": "¿DÓNDE Y A QUÉ HORA SE LLEVARÁ A CABO LA BODA?",
+      "a1": "Tanto la ceremonia como la recepción se celebrarán el sábado 7 de agosto de 2027 en Forêt en Comasagua, El Salvador, a partir de las 3:30 pm.",
+      "q2": "¿CÓMO LLEGO AL LUGAR DEL EVENTO?",
+      "a2": "¡Pondremos a disposición transporte tipo shuttle de ida y vuelta entre el Hotel Hilton y Forêt el día de la boda! Solo debes presentarte en el lobby del hotel a las 2:30 pm del sábado 7 de agosto de 2027. Si prefieres manejar en tu propio vehículo, configura tu GPS a Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Habrá servicio de Valet Parking gratuito durante toda la velada.",
+      "q3": "¿CUÁL ES EL CÓDIGO DE VESTIMENTA?",
+      "a3": "Formal / Etiqueta rigurosa. Damas: Vestidos largos o elegantes hasta el tobillo (¡te animamos a usar colores vibrantes o estampados botánicos!). Caballeros: Traje formal o esmoquin."
+    },
+    "rsvpNotice": {
+      "title": "Confirmación para la Boda",
+      "text": "Las confirmaciones oficiales de asistencia (RSVP) para la boda en El Salvador abrirán más adelante. ¡Te mantendremos informado por correo electrónico!"
+    }
   }
 }
