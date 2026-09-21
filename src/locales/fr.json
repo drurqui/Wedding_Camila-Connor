@@ -119,10 +119,11 @@
       "kids": "ENFANTS"
     },
     "tabs": {
-      "rsvps": "RSVP Reçus",
-      "masterList": "Voir Liste Principale",
+      "weddingRsvps": "RSVPs Mariage 💍",
+      "rsvps": "RSVPs Fiançailles",
+      "masterList": "Voir la Liste Principale",
       "kitchen": "Rapport Cuisine",
-      "addInv": "Ajouter Invitation"
+      "addInv": "Ajouter une Invitation"
     },
     "loading": "Mise à jour de la base de données...",
     "table": {
@@ -194,10 +195,11 @@
   },
   "wedding": {
     "nav": {
-      "honeymoon": "Lune de Miel",
+      "rsvp": "RSVP",
+      "details": "Détails",
       "logistics": "Voyage & Logistique",
       "accommodations": "Hébergement",
-      "details": "Détails",
+      "honeymoon": "Lune de Miel",
       "engagementLink": "Fête de Fiançailles"
     },
     "hero": {
@@ -207,7 +209,7 @@
       "venue": "Forêt • Comasagua, El Salvador"
     },
     "honeymoon": {
-      "title": "THE HONEYMOON FUND",
+      "title": "THE HONEYMOON",
       "welcome": "Bienvenue sur notre fonds de lune de miel !",
       "description": "Si vous tenez absolument à nous offrir un cadeau en plus de votre présence, vous êtes au bon endroit ! Découvrez ici les expériences que nous rêvons de vivre lors de notre lune de miel. Vous pouvez choisir différentes aventures et financer une part de notre tout premier voyage en tant que mari et femme.",
       "items": {
@@ -252,6 +254,7 @@
         "proceedStripe": "Payer en toute sécurité avec Stripe",
         "processing": "Connexion à Stripe en cours...",
         "cancel": "Annuler",
+        "payNow": "Payer",
         "errors": {
           "nameRequired": "Veuillez saisir votre nom.",
           "emailRequired": "Veuillez saisir une adresse email valide.",
@@ -260,6 +263,32 @@
       },
       "addToCart": "Participer",
       "currencyNote": "Montants affichés en USD et CAD. Les paiements sont sécurisés par Stripe."
+    },
+    "rsvpForm": {
+      "title": "CONFIRMATION DE PRÉSENCE (RSVP)",
+      "subtitle": "Merci de nous confirmer votre présence avant le 1er mai 2027",
+      "fullName": "Nom Complet",
+      "email": "Adresse Email",
+      "attendance": "Serez-vous des nôtres pour célébrer au Salvador ?",
+      "yes": "Oui, avec grand plaisir !",
+      "no": "Malheureusement, je ne pourrai pas",
+      "guests": "Nombre total de personnes (vous y compris)",
+      "guestNames": "Noms des accompagnants (optionnel)",
+      "shuttle": "Souhaitez-vous emprunter la navette (Hôtel Hilton ⇄ Forêt) ?",
+      "shuttleYes": "Oui, j'aurai besoin de la navette",
+      "shuttleNo": "Non, je me déplacerai par mes propres moyens",
+      "dietary": "Régime alimentaire particulier ou allergies",
+      "dietaryPlaceholder": "Ex. : Végétarien, sans gluten, allergie aux fruits de mer...",
+      "notes": "Un mot ou message pour Camila & Connor (optionnel)",
+      "notesPlaceholder": "Laissez votre message ici...",
+      "submit": "Envoyer la Confirmation",
+      "submitting": "Envoi en cours...",
+      "successTitle": "Confirmation Enregistrée !",
+      "successText": "Merci infiniment d'avoir confirmé. Nous avons hâte de célébrer cette journée magique avec vous au Salvador !",
+      "anotherRsvp": "Envoyer une autre confirmation",
+      "errorTitle": "Erreur lors de l'enregistrement",
+      "nameRequired": "Veuillez entrer votre nom complet.",
+      "emailRequired": "Veuillez entrer une adresse email valide."
     },
     "logistics": {
       "title": "VOYAGE ET LOGISTIQUE",

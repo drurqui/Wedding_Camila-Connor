@@ -57,7 +57,14 @@ class RegaloRequest(BaseModel):
     nombre_invitado: str = "Anónimo"
     email_invitado: str = ""
 
-# --- 4. CREAR SESIÓN DE PAGO ---
+# --- 3.5 CONFIGURACIÓN STRIPE PUBLICA ---
+@app.get("/config-stripe")
+async def config_stripe():
+    return {
+        "publishableKey": os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+    }
+
+# --- 4. CREAR SESIÓN DE PAGO (CHECKOUT) ---
 @app.post("/crear-sesion-pago")
 async def crear_sesion_pago(regalo: RegaloRequest):
     try:
@@ -95,7 +102,40 @@ async def crear_sesion_pago(regalo: RegaloRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# --- 5. WEBHOOK DE STRIPE ---
+# --- 5. CREAR PAYMENT INTENT (STRIPE ELEMENTS) ---
+@app.post("/crear-payment-intent")
+async def crear_payment_intent(regalo: RegaloRequest):
+    try:
+        monto_unitario = regalo.monto if regalo.monto is not None else (regalo.monto_usd or 5)
+        moneda_usada = (regalo.moneda or "usd").lower()
+        cantidad = max(1, regalo.cantidad)
+        monto_total_centavos = int(monto_unitario * cantidad * 100)
+
+        intent = stripe.PaymentIntent.create(
+            amount=monto_total_centavos,
+            currency=moneda_usada,
+            automatic_payment_methods={"enabled": True},
+            receipt_email=regalo.email_invitado if regalo.email_invitado else None,
+            description=f"Boda C&C • {regalo.nombre_regalo} ({regalo.nombre_invitado})",
+            metadata={
+                "regalo": regalo.nombre_regalo,
+                "nombre_invitado": regalo.nombre_invitado,
+                "email_invitado": regalo.email_invitado,
+                "moneda": moneda_usada,
+                "monto_unitario": str(monto_unitario),
+                "cantidad": str(cantidad)
+            }
+        )
+        return {
+            "clientSecret": intent.client_secret,
+            "id": intent.id,
+            "amount": monto_total_centavos / 100,
+            "currency": moneda_usada
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# --- 6. WEBHOOK DE STRIPE ---
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
     payload = await request.body()
@@ -110,10 +150,10 @@ async def stripe_webhook(request: Request):
     except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Firma inválida")
 
-    if event['type'] == 'checkout.session.completed':
+    event_type = event['type']
+
+    if event_type == 'checkout.session.completed':
         session = event['data']['object']
-        
-        # Extraer datos útiles de la sesión de Stripe
         customer_details = session.get("customer_details") or {}
         metadata = session.get("metadata") or {}
         
@@ -123,7 +163,6 @@ async def stripe_webhook(request: Request):
         moneda = session.get("currency", "usd").upper()
         regalo_elegido = metadata.get("regalo", "Regalo General")
 
-        # Guardar en Firestore
         db.collection("regalos_luna_miel").add({
             "nombre": nombre_invitado,
             "email": email_invitado,
@@ -131,8 +170,36 @@ async def stripe_webhook(request: Request):
             "monto": monto_total,
             "moneda": moneda,
             "stripe_session_id": session.get("id"),
+            "origen": "checkout_session",
             "fecha": firestore.SERVER_TIMESTAMP
         })
-        print(f"¡Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado en Firestore!")
+        print(f"[Checkout] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
 
-    return {"status": "success"}
+    elif event_type == 'payment_intent.succeeded':
+        intent = event['data']['object']
+        metadata = intent.get("metadata") or {}
+        
+        # Ignorar si proviene de una Checkout Session ya procesada
+        if intent.get("invoice") or intent.get("metadata", {}).get("checkout_session_id"):
+            return {"status": "ignored_duplicate_checkout"}
+
+        nombre_invitado = metadata.get("nombre_invitado") or "Anónimo"
+        email_invitado = intent.get("receipt_email") or metadata.get("email_invitado", "Sin email")
+        monto_total = intent.get("amount_received", intent.get("amount", 0)) / 100
+        moneda = intent.get("currency", "usd").upper()
+        regalo_elegido = metadata.get("regalo", "Regalo General")
+
+        db.collection("regalos_luna_miel").add({
+            "nombre": nombre_invitado,
+            "email": email_invitado,
+            "regalo": regalo_elegido,
+            "monto": monto_total,
+            "moneda": moneda,
+            "payment_intent_id": intent.get("id"),
+            "origen": "stripe_elements",
+            "fecha": firestore.SERVER_TIMESTAMP
+        })
+        print(f"[Elements] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
+
+    return {"status": "success"}
+

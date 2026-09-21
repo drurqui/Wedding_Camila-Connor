@@ -6,6 +6,10 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import StripePaymentForm from '../components/StripeElementsCheckout';
+import WeddingRsvpSection from '../components/WeddingRsvpSection';
 
 const Wedding = () => {
   const { t, i18n } = useTranslation();
@@ -31,6 +35,36 @@ const Wedding = () => {
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState('');
+
+  // Inicializar Stripe
+  useEffect(() => {
+    const initStripe = async () => {
+      let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+      const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:8080'
+        : 'https://api-boda-126620588755.us-central1.run.app';
+
+      if (!key) {
+        try {
+          const res = await fetch(`${backendBase}/config-stripe`);
+          const data = await res.json();
+          if (data.publishableKey) {
+            key = data.publishableKey;
+          }
+        } catch (e) {
+          console.warn('No se pudo cargar la clave pública de Stripe', e);
+        }
+      }
+
+      if (key) {
+        setStripePromise(loadStripe(key));
+      }
+    };
+
+    initStripe();
+  }, []);
 
   // Manejo de respuesta de Stripe en la URL (?pago=exito o ?pago=cancelado)
   useEffect(() => {
@@ -71,6 +105,7 @@ const Wedding = () => {
 
   const handleOpenGiftModal = (key, item) => {
     setErrorMessage('');
+    setClientSecret('');
     setFormData({
       nombre: '',
       email: '',
@@ -90,6 +125,7 @@ const Wedding = () => {
 
   const handleOpenCustomModal = () => {
     setErrorMessage('');
+    setClientSecret('');
     setFormData({
       nombre: '',
       email: '',
@@ -128,11 +164,39 @@ const Wedding = () => {
     setLoadingPayment(true);
     setErrorMessage('');
 
-    // URL del backend (Cloud Run en producción o fallback local)
     const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:8080'
       : 'https://api-boda-126620588755.us-central1.run.app';
 
+    // Intentar primero con Stripe Elements si está disponible el SDK de Stripe
+    if (stripePromise) {
+      try {
+        const res = await fetch(`${backendBase}/crear-payment-intent`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre_regalo: checkoutModal.title,
+            monto: finalAmount,
+            moneda: formData.moneda,
+            cantidad: checkoutModal.isCustom ? 1 : Math.max(1, formData.cantidad),
+            url_origen: window.location.origin + window.location.pathname,
+            nombre_invitado: formData.nombre.trim(),
+            email_invitado: formData.email.trim(),
+          }),
+        });
+
+        const intentData = await res.json();
+        if (intentData.clientSecret) {
+          setClientSecret(intentData.clientSecret);
+          setLoadingPayment(false);
+          return;
+        }
+      } catch (elementsErr) {
+        console.warn("Fallo al crear PaymentIntent para Elements, usando fallback Checkout:", elementsErr);
+      }
+    }
+
+    // Fallback o método estándar: Stripe Checkout con redirección
     try {
       const response = await fetch(`${backendBase}/crear-sesion-pago`, {
         method: 'POST',
@@ -157,7 +221,8 @@ const Wedding = () => {
         setLoadingPayment(false);
       }
     } catch (err) {
-      console.error("Error Stripe:", err);
+      console.error("Error Stripe Checkout:", err);
+      setErrorMessage('Error al conectar con el servidor de pagos.');
       setLoadingPayment(false);
     }
   };
@@ -300,7 +365,7 @@ const Wedding = () => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: 'center', mt: 4 }}>
           <Button 
             variant="outlined" 
-            href="#honeymoon" 
+            href="#rsvp" 
             sx={{ 
               color: colors.sandBeige, 
               borderColor: colors.copper, 
@@ -309,7 +374,20 @@ const Wedding = () => {
               '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
             }}
           >
-            {t('wedding.nav.honeymoon')}
+            {t('wedding.nav.rsvp')}
+          </Button>
+          <Button 
+            variant="outlined" 
+            href="#details" 
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: 3,
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
+          >
+            {t('wedding.nav.details')}
           </Button>
           <Button 
             variant="outlined" 
@@ -326,7 +404,7 @@ const Wedding = () => {
           </Button>
           <Button 
             variant="outlined" 
-            href="#details" 
+            href="#accommodations" 
             sx={{ 
               color: colors.sandBeige, 
               borderColor: colors.copper, 
@@ -335,429 +413,108 @@ const Wedding = () => {
               '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
             }}
           >
-            {t('wedding.nav.details')}
+            {t('wedding.nav.accommodations')}
+          </Button>
+          <Button 
+            variant="outlined" 
+            href="#honeymoon" 
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: 3,
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
+          >
+            {t('wedding.nav.honeymoon')}
           </Button>
         </Box>
       </Box>
 
-      {/* SECCIÓN 1: THE HONEYMOON FUND (Diseño Verde y Crema de Canva) */}
-      <Box id="honeymoon" sx={{ bgcolor: colors.forestGreen, color: colors.creamText, pt: 8, pb: 4, px: 3 }}>
-        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-          {/* Logo o Icono CS */}
-          <Box 
-            component="img" 
-            src="/cs-monogram.jpg" 
-            alt="CS Monogram" 
-            sx={{ 
-              width: { xs: 85, sm: 110 }, 
-              height: { xs: 85, sm: 110 }, 
-              borderRadius: '50%', 
-              mx: 'auto', 
-              mb: 2,
-              boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(199, 120, 79, 0.3)',
-              border: `2px solid ${colors.copper}`,
-              transition: 'transform 0.3s ease',
-              '&:hover': { transform: 'scale(1.05)' }
-            }} 
-          />
+      {/* SECCIÓN 1: RSVP / CONFIRMACIÓN DE ASISTENCIA (Directo y destacado al inicio) */}
+      <WeddingRsvpSection colors={colors} />
+
+      {/* SECCIÓN 2: DETAILS FOR AUGUST 7 (Canva Verde) */}
+      <Box id="details" sx={{ bgcolor: colors.forestGreen, color: colors.creamText, py: 10, px: 3 }}>
+        <Container maxWidth="md">
           <Typography 
             variant="h2" 
             sx={{ 
               fontFamily: "'Playfair Display', serif", 
-              fontSize: { xs: '2.5rem', md: '3.8rem' }, 
+              fontSize: { xs: '2.4rem', md: '3.6rem' }, 
               color: colors.sandBeige, 
               letterSpacing: 2,
-              fontWeight: 400,
-              textTransform: 'uppercase',
-              mb: 1 
-            }}
-          >
-            {t('wedding.honeymoon.title')}
-          </Typography>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              fontFamily: "'Monsieur La Doulaise', cursive", 
-              fontSize: { xs: '3rem', md: '4.2rem' }, 
-              color: colors.copperLight,
-              mt: -2,
-              mb: 3
-            }}
-          >
-            Fund
-          </Typography>
-
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              color: 'rgba(245, 235, 215, 0.9)', 
-              fontSize: { xs: '0.95rem', md: '1.05rem' }, 
-              lineHeight: 1.8, 
-              maxWidth: 700, 
-              mx: 'auto',
-              mb: 4
-            }}
-          >
-            {t('wedding.honeymoon.description')}
-          </Typography>
-        </Container>
-      </Box>
-
-      {/* TARJETAS DE REGALOS (Fondo Beige cálido, estilo Canva) */}
-      <Box sx={{ bgcolor: colors.sandBeige, py: 8, px: { xs: 2, md: 4 } }}>
-        <Container maxWidth="md">
-          
-          {/* Item 1: AIRFARE */}
-          <Card 
-            sx={{ 
-              bgcolor: 'transparent', 
-              boxShadow: 'none', 
-              borderRadius: 0, 
-              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
-              pb: 6, 
-              mb: 6 
-            }}
-          >
-            <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <Typography 
-                  variant="h3" 
-                  sx={{ 
-                    fontFamily: "'Playfair Display', serif", 
-                    color: colors.terracotta, 
-                    fontSize: { xs: '2.2rem', md: '2.8rem' }, 
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    mb: 2,
-                    display: { xs: 'block', sm: 'none' }
-                  }}
-                >
-                  {t('wedding.honeymoon.items.airfare.title')}
-                </Typography>
-                <Box 
-                  component="img" 
-                  src="/airfare.jpg" 
-                  alt="Airfare Flights" 
-                  sx={{ width: '100%', borderRadius: '6px', height: 260, objectFit: 'cover', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }} 
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography 
-                  variant="h3" 
-                  sx={{ 
-                    fontFamily: "'Playfair Display', serif", 
-                    color: colors.terracotta, 
-                    fontSize: { xs: '2.2rem', md: '2.8rem' }, 
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    mb: 2,
-                    display: { xs: 'none', sm: 'block' }
-                  }}
-                >
-                  {t('wedding.honeymoon.items.airfare.title')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.charcoal, 
-                    fontSize: '0.85rem', 
-                    letterSpacing: 1.5, 
-                    lineHeight: 1.7, 
-                    textTransform: 'uppercase', 
-                    mb: 3, 
-                    fontWeight: 500 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.airfare.description')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.terracotta, 
-                    fontWeight: 700, 
-                    letterSpacing: 1.5, 
-                    fontSize: '0.95rem', 
-                    mb: 2 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.airfare.shareText')}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
-                  <Typography variant="caption" sx={{ letterSpacing: 1.5, fontWeight: 600, color: '#666' }}>
-                    HAVE 0 NEED {t('wedding.honeymoon.items.airfare.need')}
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    onClick={() => handleOpenGiftModal('airfare', {
-                      title: t('wedding.honeymoon.items.airfare.title'),
-                      shareUsd: 100,
-                      shareCad: 135
-                    })}
-                    sx={{ 
-                      bgcolor: colors.forestGreen, 
-                      color: '#ffffff', 
-                      borderRadius: '20px', 
-                      px: 3,
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      '&:hover': { bgcolor: colors.forestDark } 
-                    }}
-                  >
-                    {t('wedding.honeymoon.addToCart')}
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </Card>
-
-          {/* Item 2: HIGH SPEED TRAIN PASSES (Inverted on desktop) */}
-          <Card 
-            sx={{ 
-              bgcolor: 'transparent', 
-              boxShadow: 'none', 
-              borderRadius: 0, 
-              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
-              pb: 6, 
-              mb: 6 
-            }}
-          >
-            <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} sm={6} order={{ xs: 2, sm: 1 }}>
-                <Typography 
-                  variant="h3" 
-                  sx={{ 
-                    fontFamily: "'Playfair Display', serif", 
-                    color: colors.terracotta, 
-                    fontSize: { xs: '2rem', md: '2.5rem' }, 
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    mb: 2 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.train.title')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.charcoal, 
-                    fontSize: '0.85rem', 
-                    letterSpacing: 1.5, 
-                    lineHeight: 1.7, 
-                    textTransform: 'uppercase', 
-                    mb: 3, 
-                    fontWeight: 500 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.train.description')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.terracotta, 
-                    fontWeight: 700, 
-                    letterSpacing: 1.5, 
-                    fontSize: '0.95rem', 
-                    mb: 2 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.train.shareText')}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
-                  <Typography variant="caption" sx={{ letterSpacing: 1.5, fontWeight: 600, color: '#666' }}>
-                    HAVE 0 NEED {t('wedding.honeymoon.items.train.need')}
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    onClick={() => handleOpenGiftModal('train', {
-                      title: t('wedding.honeymoon.items.train.title'),
-                      shareUsd: 100,
-                      shareCad: 135
-                    })}
-                    sx={{ 
-                      bgcolor: colors.forestGreen, 
-                      color: '#ffffff', 
-                      borderRadius: '20px', 
-                      px: 3,
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      '&:hover': { bgcolor: colors.forestDark } 
-                    }}
-                  >
-                    {t('wedding.honeymoon.addToCart')}
-                  </Button>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} order={{ xs: 1, sm: 2 }}>
-                <Box 
-                  component="img" 
-                  src="/train.jpg" 
-                  alt="High Speed Train" 
-                  sx={{ width: '100%', borderRadius: '6px', height: 260, objectFit: 'cover', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }} 
-                />
-              </Grid>
-            </Grid>
-          </Card>
-
-          {/* Item 3: LAKE COMO BOAT TOUR */}
-          <Card 
-            sx={{ 
-              bgcolor: 'transparent', 
-              boxShadow: 'none', 
-              borderRadius: 0, 
-              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
-              pb: 6, 
-              mb: 6 
-            }}
-          >
-            <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <Typography 
-                  variant="h3" 
-                  sx={{ 
-                    fontFamily: "'Playfair Display', serif", 
-                    color: colors.terracotta, 
-                    fontSize: { xs: '2rem', md: '2.5rem' }, 
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    mb: 2,
-                    display: { xs: 'block', sm: 'none' }
-                  }}
-                >
-                  {t('wedding.honeymoon.items.lakeComo.title')}
-                </Typography>
-                <Box 
-                  component="img" 
-                  src="/lake_como.jpg" 
-                  alt="Lake Como Boat Tour" 
-                  sx={{ width: '100%', borderRadius: '6px', height: 260, objectFit: 'cover', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }} 
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography 
-                  variant="h3" 
-                  sx={{ 
-                    fontFamily: "'Playfair Display', serif", 
-                    color: colors.terracotta, 
-                    fontSize: { xs: '2rem', md: '2.5rem' }, 
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    mb: 2,
-                    display: { xs: 'none', sm: 'block' }
-                  }}
-                >
-                  {t('wedding.honeymoon.items.lakeComo.title')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.charcoal, 
-                    fontSize: '0.85rem', 
-                    letterSpacing: 1.5, 
-                    lineHeight: 1.7, 
-                    textTransform: 'uppercase', 
-                    mb: 3, 
-                    fontWeight: 500 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.lakeComo.description')}
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: colors.terracotta, 
-                    fontWeight: 700, 
-                    letterSpacing: 1.5, 
-                    fontSize: '0.95rem', 
-                    mb: 2 
-                  }}
-                >
-                  {t('wedding.honeymoon.items.lakeComo.shareText')}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
-                  <Typography variant="caption" sx={{ letterSpacing: 1.5, fontWeight: 600, color: '#666' }}>
-                    HAVE 0 NEED {t('wedding.honeymoon.items.lakeComo.need')}
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    onClick={() => handleOpenGiftModal('lakeComo', {
-                      title: t('wedding.honeymoon.items.lakeComo.title'),
-                      shareUsd: 150,
-                      shareCad: 200
-                    })}
-                    sx={{ 
-                      bgcolor: colors.forestGreen, 
-                      color: '#ffffff', 
-                      borderRadius: '20px', 
-                      px: 3,
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      '&:hover': { bgcolor: colors.forestDark } 
-                    }}
-                  >
-                    {t('wedding.honeymoon.addToCart')}
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </Card>
-
-          {/* Item 4: APORTE LIBRE (Custom Contribution) */}
-          <Box 
-            sx={{ 
-              border: `2px dashed ${colors.terracotta}`, 
-              borderRadius: 3, 
-              p: { xs: 3, md: 5 }, 
               textAlign: 'center',
-              bgcolor: 'rgba(255,255,255,0.6)'
+              textTransform: 'uppercase',
+              mb: 6 
             }}
           >
-            <Typography 
-              variant="h4" 
-              sx={{ 
-                fontFamily: "'Playfair Display', serif", 
-                color: colors.terracotta, 
-                letterSpacing: 2, 
-                mb: 2 
-              }}
-            >
-              {t('wedding.honeymoon.customContribution.title')}
-            </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                color: colors.charcoal, 
-                maxWidth: 550, 
-                mx: 'auto', 
-                mb: 3, 
-                lineHeight: 1.6 
-              }}
-            >
-              {t('wedding.honeymoon.customContribution.description')}
-            </Typography>
-            <Button 
-              variant="contained" 
-              onClick={handleOpenCustomModal}
-              sx={{ 
-                bgcolor: colors.terracotta, 
-                color: '#fff', 
-                borderRadius: '30px', 
-                px: 4, 
-                py: 1.2,
-                fontWeight: 600,
-                '&:hover': { bgcolor: colors.terracottaDark } 
-              }}
-            >
-              {t('wedding.honeymoon.customContribution.button')}
-            </Button>
-          </Box>
-
-          <Typography 
-            variant="caption" 
-            display="block" 
-            sx={{ textAlign: 'center', mt: 4, color: '#777', fontStyle: 'italic' }}
-          >
-            {t('wedding.honeymoon.currencyNote')}
+            {t('wedding.details.title')}
           </Typography>
 
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {/* D1 */}
+            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
+              <Typography 
+                sx={{ 
+                  fontFamily: "'Montserrat', sans-serif", 
+                  fontWeight: 600, 
+                  letterSpacing: 1.5, 
+                  color: colors.goldAccent, 
+                  fontSize: '0.95rem',
+                  mb: 1
+                }}
+              >
+                {t('wedding.details.q1')}
+              </Typography>
+              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
+                {t('wedding.details.a1')}
+              </Typography>
+            </Box>
+
+            {/* D2 */}
+            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
+              <Typography 
+                sx={{ 
+                  fontFamily: "'Montserrat', sans-serif", 
+                  fontWeight: 600, 
+                  letterSpacing: 1.5, 
+                  color: colors.goldAccent, 
+                  fontSize: '0.95rem',
+                  mb: 1
+                }}
+              >
+                {t('wedding.details.q2')}
+              </Typography>
+              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
+                {t('wedding.details.a2')}
+              </Typography>
+            </Box>
+
+            {/* D3 */}
+            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
+              <Typography 
+                sx={{ 
+                  fontFamily: "'Montserrat', sans-serif", 
+                  fontWeight: 600, 
+                  letterSpacing: 1.5, 
+                  color: colors.goldAccent, 
+                  fontSize: '0.95rem',
+                  mb: 1
+                }}
+              >
+                {t('wedding.details.q3')}
+              </Typography>
+              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
+                {t('wedding.details.a3')}
+              </Typography>
+            </Box>
+          </Box>
         </Container>
       </Box>
 
-      {/* SECCIÓN 2: TRAVEL AND LOGISTICS (Canva Verde) */}
-      <Box id="logistics" sx={{ bgcolor: colors.forestGreen, color: colors.creamText, py: 10, px: 3 }}>
+      {/* SECCIÓN 3: TRAVEL AND LOGISTICS (Canva Verde Oscuro) */}
+      <Box id="logistics" sx={{ bgcolor: colors.forestDark, color: colors.creamText, py: 10, px: 3 }}>
         <Container maxWidth="md">
           <Typography 
             variant="h2" 
@@ -873,7 +630,7 @@ const Wedding = () => {
         </Container>
       </Box>
 
-      {/* SECCIÓN 3: ACCOMMODATIONS (Canva Beige) */}
+      {/* SECCIÓN 4: ACCOMMODATIONS (Canva Beige) */}
       <Box id="accommodations" sx={{ bgcolor: colors.sandBeige, py: 8, px: 3 }}>
         <Container maxWidth="md" sx={{ textAlign: 'center' }}>
           <Typography 
@@ -916,101 +673,417 @@ const Wedding = () => {
         </Container>
       </Box>
 
-      {/* SECCIÓN 4: DETAILS FOR AUGUST 7 (Canva Verde) */}
-      <Box id="details" sx={{ bgcolor: colors.forestGreen, color: colors.creamText, py: 10, px: 3 }}>
-        <Container maxWidth="md">
+      {/* SECCIÓN 5: THE HONEYMOON FUND (Al final de la página, estilo Canva) */}
+      <Box id="honeymoon" sx={{ bgcolor: colors.forestGreen, color: colors.creamText, pt: 8, pb: 4, px: 3 }}>
+        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+          {/* Logo o Icono CS */}
+          <Box 
+            component="img" 
+            src="/cs-monogram.jpg" 
+            alt="CS Monogram" 
+            sx={{ 
+              width: { xs: 85, sm: 110 }, 
+              height: { xs: 85, sm: 110 }, 
+              borderRadius: '50%', 
+              mx: 'auto', 
+              mb: 2,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(199, 120, 79, 0.3)',
+              border: `2px solid ${colors.copper}`,
+              transition: 'transform 0.3s ease',
+              '&:hover': { transform: 'scale(1.05)' }
+            }} 
+          />
           <Typography 
             variant="h2" 
             sx={{ 
               fontFamily: "'Playfair Display', serif", 
-              fontSize: { xs: '2.4rem', md: '3.6rem' }, 
+              fontSize: { xs: '2.5rem', md: '3.8rem' }, 
               color: colors.sandBeige, 
               letterSpacing: 2,
-              textAlign: 'center',
+              fontWeight: 400,
               textTransform: 'uppercase',
+              mb: 1 
+            }}
+          >
+            {t('wedding.honeymoon.title')}
+          </Typography>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontFamily: "'Monsieur La Doulaise', cursive", 
+              fontSize: { xs: '3rem', md: '4.2rem' }, 
+              color: colors.copperLight,
+              mt: -2,
+              mb: 3
+            }}
+          >
+            Fund
+          </Typography>
+
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              color: 'rgba(245, 235, 215, 0.9)', 
+              fontSize: { xs: '0.95rem', md: '1.05rem' }, 
+              lineHeight: 1.8, 
+              maxWidth: 700, 
+              mx: 'auto',
+              mb: 4
+            }}
+          >
+            {t('wedding.honeymoon.description')}
+          </Typography>
+        </Container>
+      </Box>
+
+      {/* TARJETAS DE REGALOS (Fondo Beige cálido, estilo Canva) */}
+      <Box sx={{ bgcolor: colors.sandBeige, py: 8, px: { xs: 2, md: 4 } }}>
+        <Container maxWidth="md">
+          
+          {/* Item 1: AIRFARE */}
+          <Card 
+            sx={{ 
+              bgcolor: 'transparent', 
+              boxShadow: 'none', 
+              borderRadius: 0, 
+              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
+              pb: 6, 
               mb: 6 
             }}
           >
-            {t('wedding.details.title')}
-          </Typography>
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={5}>
+                <Box 
+                  component="img" 
+                  src="/airfare.jpg" 
+                  alt={t('wedding.honeymoon.items.airfare.title')}
+                  sx={{ 
+                    width: '100%', 
+                    height: 240, 
+                    objectFit: 'cover', 
+                    borderRadius: 2,
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.15)' 
+                  }} 
+                />
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Typography 
+                  variant="overline" 
+                  sx={{ color: colors.copper, fontWeight: 700, letterSpacing: 2 }}
+                >
+                  EXPÉRIENCE 01
+                </Typography>
+                <Typography 
+                  variant="h4" 
+                  sx={{ 
+                    fontFamily: "'Playfair Display', serif", 
+                    color: colors.forestGreen, 
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    mb: 1.5 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.airfare.title')}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: colors.charcoal, 
+                    lineHeight: 1.7, 
+                    mb: 2.5,
+                    fontSize: '0.9rem' 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.airfare.description')}
+                </Typography>
+                <Typography 
+                  sx={{ 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontWeight: 600, 
+                    color: colors.copper, 
+                    fontSize: '0.85rem', 
+                    letterSpacing: 1,
+                    mb: 1 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.airfare.shareText')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#666', display: 'block', mb: 3 }}>
+                  HAVE 0 NEED {t('wedding.honeymoon.items.airfare.need')}
+                </Typography>
+                <Button 
+                  variant="contained" 
+                  onClick={() => handleOpenGiftModal('airfare', {
+                    title: t('wedding.honeymoon.items.airfare.title'),
+                    shareUsd: 100,
+                    shareCad: 135,
+                  })}
+                  sx={{ 
+                    bgcolor: colors.terracotta, 
+                    color: '#fff', 
+                    borderRadius: '25px', 
+                    px: 3.5, 
+                    py: 1,
+                    fontWeight: 600,
+                    letterSpacing: 1,
+                    '&:hover': { bgcolor: colors.terracottaDark } 
+                  }}
+                >
+                  {t('wedding.honeymoon.addToCart')}
+                </Button>
+              </Grid>
+            </Grid>
+          </Card>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            {/* D1 */}
-            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
-              <Typography 
-                sx={{ 
-                  fontFamily: "'Montserrat', sans-serif", 
-                  fontWeight: 600, 
-                  letterSpacing: 1.5, 
-                  color: colors.goldAccent, 
-                  fontSize: '0.95rem',
-                  mb: 1
-                }}
-              >
-                {t('wedding.details.q1')}
-              </Typography>
-              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
-                {t('wedding.details.a1')}
-              </Typography>
-            </Box>
-
-            {/* D2 */}
-            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
-              <Typography 
-                sx={{ 
-                  fontFamily: "'Montserrat', sans-serif", 
-                  fontWeight: 600, 
-                  letterSpacing: 1.5, 
-                  color: colors.goldAccent, 
-                  fontSize: '0.95rem',
-                  mb: 1
-                }}
-              >
-                {t('wedding.details.q2')}
-              </Typography>
-              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
-                {t('wedding.details.a2')}
-              </Typography>
-            </Box>
-
-            {/* D3 */}
-            <Box sx={{ borderLeft: `3px solid ${colors.goldAccent}`, pl: 3 }}>
-              <Typography 
-                sx={{ 
-                  fontFamily: "'Montserrat', sans-serif", 
-                  fontWeight: 600, 
-                  letterSpacing: 1.5, 
-                  color: colors.goldAccent, 
-                  fontSize: '0.95rem',
-                  mb: 1
-                }}
-              >
-                {t('wedding.details.q3')}
-              </Typography>
-              <Typography sx={{ color: colors.creamText, fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.9 }}>
-                {t('wedding.details.a3')}
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* Aviso de RSVP para la Boda */}
-          <Box 
+          {/* Item 2: TRAIN PASS */}
+          <Card 
             sx={{ 
-              mt: 8, 
-              border: `1px solid ${colors.goldAccent}`, 
-              borderRadius: 2, 
-              p: 4, 
-              textAlign: 'center',
-              bgcolor: 'rgba(29, 47, 36, 0.6)'
+              bgcolor: 'transparent', 
+              boxShadow: 'none', 
+              borderRadius: 0, 
+              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
+              pb: 6, 
+              mb: 6 
             }}
           >
-            <Typography variant="h4" sx={{ fontFamily: "'Playfair Display', serif", color: colors.goldAccent, mb: 1 }}>
-              {t('wedding.rsvpNotice.title')}
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={5}>
+                <Box 
+                  component="img" 
+                  src="/train.jpg" 
+                  alt={t('wedding.honeymoon.items.train.title')}
+                  sx={{ 
+                    width: '100%', 
+                    height: 240, 
+                    objectFit: 'cover', 
+                    borderRadius: 2,
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.15)' 
+                  }} 
+                />
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Typography 
+                  variant="overline" 
+                  sx={{ color: colors.copper, fontWeight: 700, letterSpacing: 2 }}
+                >
+                  EXPÉRIENCE 02
+                </Typography>
+                <Typography 
+                  variant="h4" 
+                  sx={{ 
+                    fontFamily: "'Playfair Display', serif", 
+                    color: colors.forestGreen, 
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    mb: 1.5 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.train.title')}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: colors.charcoal, 
+                    lineHeight: 1.7, 
+                    mb: 2.5,
+                    fontSize: '0.9rem' 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.train.description')}
+                </Typography>
+                <Typography 
+                  sx={{ 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontWeight: 600, 
+                    color: colors.copper, 
+                    fontSize: '0.85rem', 
+                    letterSpacing: 1,
+                    mb: 1 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.train.shareText')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#666', display: 'block', mb: 3 }}>
+                  HAVE 0 NEED {t('wedding.honeymoon.items.train.need')}
+                </Typography>
+                <Button 
+                  variant="contained" 
+                  onClick={() => handleOpenGiftModal('train', {
+                    title: t('wedding.honeymoon.items.train.title'),
+                    shareUsd: 100,
+                    shareCad: 135,
+                  })}
+                  sx={{ 
+                    bgcolor: colors.terracotta, 
+                    color: '#fff', 
+                    borderRadius: '25px', 
+                    px: 3.5, 
+                    py: 1,
+                    fontWeight: 600,
+                    letterSpacing: 1,
+                    '&:hover': { bgcolor: colors.terracottaDark } 
+                  }}
+                >
+                  {t('wedding.honeymoon.addToCart')}
+                </Button>
+              </Grid>
+            </Grid>
+          </Card>
+
+          {/* Item 3: LAKE COMO BOAT TOUR */}
+          <Card 
+            sx={{ 
+              bgcolor: 'transparent', 
+              boxShadow: 'none', 
+              borderRadius: 0, 
+              borderBottom: `1px solid rgba(184, 93, 56, 0.3)`, 
+              pb: 6, 
+              mb: 6 
+            }}
+          >
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={5}>
+                <Box 
+                  component="img" 
+                  src="/lake-como.jpg" 
+                  alt={t('wedding.honeymoon.items.lakeComo.title')}
+                  sx={{ 
+                    width: '100%', 
+                    height: 240, 
+                    objectFit: 'cover', 
+                    borderRadius: 2,
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.15)' 
+                  }} 
+                />
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Typography 
+                  variant="overline" 
+                  sx={{ color: colors.copper, fontWeight: 700, letterSpacing: 2 }}
+                >
+                  EXPÉRIENCE 03
+                </Typography>
+                <Typography 
+                  variant="h4" 
+                  sx={{ 
+                    fontFamily: "'Playfair Display', serif", 
+                    color: colors.forestGreen, 
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    mb: 1.5 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.lakeComo.title')}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: colors.charcoal, 
+                    lineHeight: 1.7, 
+                    mb: 2.5,
+                    fontSize: '0.9rem' 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.lakeComo.description')}
+                </Typography>
+                <Typography 
+                  sx={{ 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontWeight: 600, 
+                    color: colors.copper, 
+                    fontSize: '0.85rem', 
+                    letterSpacing: 1,
+                    mb: 1 
+                  }}
+                >
+                  {t('wedding.honeymoon.items.lakeComo.shareText')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#666', display: 'block', mb: 3 }}>
+                  HAVE 0 NEED {t('wedding.honeymoon.items.lakeComo.need')}
+                </Typography>
+                <Button 
+                  variant="contained" 
+                  onClick={() => handleOpenGiftModal('lakeComo', {
+                    title: t('wedding.honeymoon.items.lakeComo.title'),
+                    shareUsd: 150,
+                    shareCad: 200,
+                  })}
+                  sx={{ 
+                    bgcolor: colors.terracotta, 
+                    color: '#fff', 
+                    borderRadius: '25px', 
+                    px: 3.5, 
+                    py: 1,
+                    fontWeight: 600,
+                    letterSpacing: 1,
+                    '&:hover': { bgcolor: colors.terracottaDark } 
+                  }}
+                >
+                  {t('wedding.honeymoon.addToCart')}
+                </Button>
+              </Grid>
+            </Grid>
+          </Card>
+
+          {/* SECCIÓN APORTE LIBRE */}
+          <Box 
+            sx={{ 
+              bgcolor: colors.forestGreen, 
+              color: colors.creamText, 
+              borderRadius: 3, 
+              p: { xs: 3, md: 5 }, 
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.15)' 
+            }}
+          >
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                fontFamily: "'Playfair Display', serif", 
+                color: colors.sandBeige, 
+                letterSpacing: 1, 
+                mb: 1.5 
+              }}
+            >
+              {t('wedding.honeymoon.customContribution.title')}
             </Typography>
-            <Typography variant="body2" sx={{ color: colors.creamText, opacity: 0.9, maxWidth: 600, mx: 'auto' }}>
-              {t('wedding.rsvpNotice.text')}
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: 'rgba(245, 235, 215, 0.9)', 
+                maxWidth: 600, 
+                mx: 'auto', 
+                lineHeight: 1.7, 
+                mb: 3 
+              }}
+            >
+              {t('wedding.honeymoon.customContribution.description')}
             </Typography>
+            <Button 
+              variant="contained" 
+              onClick={handleOpenCustomModal}
+              sx={{ 
+                bgcolor: colors.terracotta, 
+                color: '#fff', 
+                borderRadius: '25px', 
+                px: 4, 
+                py: 1.2,
+                fontWeight: 600,
+                '&:hover': { bgcolor: colors.terracottaDark } 
+              }}
+            >
+              {t('wedding.honeymoon.customContribution.button')}
+            </Button>
           </Box>
+
+          <Typography 
+            variant="caption" 
+            display="block" 
+            sx={{ textAlign: 'center', mt: 4, color: '#777', fontStyle: 'italic' }}
+          >
+            {t('wedding.honeymoon.currencyNote')}
+          </Typography>
+
         </Container>
       </Box>
 
@@ -1052,111 +1125,157 @@ const Wedding = () => {
             </Alert>
           )}
 
-          <TextField 
-            fullWidth 
-            label={t('wedding.honeymoon.modal.nameLabel')} 
-            variant="outlined" 
-            margin="normal"
-            size="small"
-            value={formData.nombre}
-            onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-            placeholder="Ex: John & Sarah Smith"
-          />
-
-          <TextField 
-            fullWidth 
-            label={t('wedding.honeymoon.modal.emailLabel')} 
-            variant="outlined" 
-            margin="normal"
-            size="small"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="john.smith@example.com"
-          />
-
-          {/* Selector de Moneda */}
-          <FormControl component="fieldset" sx={{ mt: 2, width: '100%' }}>
-            <FormLabel component="legend" sx={{ fontSize: '0.75rem', fontWeight: 600, color: colors.forestGreen }}>
-              {i18n.language.startsWith('en') ? 'Preferred Currency' : i18n.language.startsWith('fr') ? 'Devise' : 'Moneda'}
-            </FormLabel>
-            <RadioGroup 
-              row 
-              value={formData.moneda} 
-              onChange={(e) => setFormData({ ...formData, moneda: e.target.value })}
+          {clientSecret && stripePromise ? (
+            <Elements
+              stripe={stripePromise}
+              options={{
+                clientSecret,
+                appearance: {
+                  theme: 'flat',
+                  variables: {
+                    colorPrimary: colors.terracotta,
+                    colorBackground: '#faf6ef',
+                    colorText: '#222222',
+                    borderRadius: '8px',
+                  },
+                },
+              }}
             >
-              <FormControlLabel value="usd" control={<Radio size="small" />} label="USD ($)" />
-              <FormControlLabel value="cad" control={<Radio size="small" />} label="CAD ($)" />
-            </RadioGroup>
-          </FormControl>
-
-          {/* Cantidad de Cuotas o Monto Libre */}
-          {!checkoutModal.isCustom ? (
-            <Box sx={{ mt: 2 }}>
-              <TextField 
-                fullWidth 
-                label={t('wedding.honeymoon.modal.quantityLabel')} 
-                type="number"
-                variant="outlined"
-                size="small"
-                inputProps={{ min: 1, max: 20 }}
-                value={formData.cantidad}
-                onChange={(e) => setFormData({ ...formData, cantidad: Math.max(1, parseInt(e.target.value) || 1) })}
+              <StripePaymentForm
+                totalAmount={
+                  checkoutModal.isCustom
+                    ? parseInt(formData.montoLibre) || 50
+                    : (formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad
+                }
+                currency={formData.moneda}
+                colors={colors}
+                onCancel={() => setClientSecret('')}
+                onSuccess={() => {
+                  setCheckoutModal({ ...checkoutModal, open: false });
+                  setClientSecret('');
+                  setToast({
+                    open: true,
+                    message: i18n.language.startsWith('en') 
+                      ? "Thank you so much for contributing to our Honeymoon! ❤️✈️" 
+                      : i18n.language.startsWith('fr')
+                      ? "Merci infiniment pour votre participation à notre lune de miel ! ❤️✈️"
+                      : "¡Muchísimas gracias por tu contribución a nuestra luna de miel! ❤️✈️",
+                    severity: 'success'
+                  });
+                }}
               />
-              <Typography variant="body2" sx={{ mt: 1, color: '#666', textAlign: 'right', fontWeight: 600 }}>
-                {t('wedding.honeymoon.modal.totalLabel')}: {' '}
-                <span style={{ color: colors.terracotta, fontSize: '1.2rem' }}>
-                  ${(formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad}{' '}
-                  {formData.moneda.toUpperCase()}
-                </span>
-              </Typography>
-            </Box>
+            </Elements>
           ) : (
-            <Box sx={{ mt: 2 }}>
+            <>
               <TextField 
                 fullWidth 
-                label="Monto / Amount" 
-                type="number"
-                variant="outlined"
+                label={t('wedding.honeymoon.modal.nameLabel')} 
+                variant="outlined" 
+                margin="normal" 
                 size="small"
-                inputProps={{ min: 5 }}
-                value={formData.montoLibre}
-                onChange={(e) => setFormData({ ...formData, montoLibre: e.target.value })}
+                value={formData.nombre}
+                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                placeholder="Ex: John & Sarah Smith"
               />
-              <Typography variant="body2" sx={{ mt: 1, color: '#666', textAlign: 'right', fontWeight: 600 }}>
-                {t('wedding.honeymoon.modal.totalLabel')}: {' '}
-                <span style={{ color: colors.terracotta, fontSize: '1.2rem' }}>
-                  ${formData.montoLibre || 0} {formData.moneda.toUpperCase()}
-                </span>
-              </Typography>
-            </Box>
+
+              <TextField 
+                fullWidth 
+                label={t('wedding.honeymoon.modal.emailLabel')} 
+                variant="outlined" 
+                margin="normal" 
+                size="small"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="john.smith@example.com"
+              />
+
+              {/* Selector de Moneda */}
+              <FormControl component="fieldset" sx={{ mt: 2, width: '100%' }}>
+                <FormLabel component="legend" sx={{ fontSize: '0.75rem', fontWeight: 600, color: colors.forestGreen }}>
+                  {i18n.language.startsWith('en') ? 'Preferred Currency' : i18n.language.startsWith('fr') ? 'Devise' : 'Moneda'}
+                </FormLabel>
+                <RadioGroup 
+                  row 
+                  value={formData.moneda} 
+                  onChange={(e) => setFormData({ ...formData, moneda: e.target.value })}
+                >
+                  <FormControlLabel value="usd" control={<Radio size="small" />} label="USD ($)" />
+                  <FormControlLabel value="cad" control={<Radio size="small" />} label="CAD ($)" />
+                </RadioGroup>
+              </FormControl>
+
+              {/* Cantidad de Cuotas o Monto Libre */}
+              {!checkoutModal.isCustom ? (
+                <Box sx={{ mt: 2 }}>
+                  <TextField 
+                    fullWidth 
+                    label={t('wedding.honeymoon.modal.quantityLabel')} 
+                    type="number"
+                    variant="outlined"
+                    size="small"
+                    inputProps={{ min: 1, max: 20 }}
+                    value={formData.cantidad}
+                    onChange={(e) => setFormData({ ...formData, cantidad: Math.max(1, parseInt(e.target.value) || 1) })}
+                  />
+                  <Typography variant="body2" sx={{ mt: 1, color: '#666', textAlign: 'right', fontWeight: 600 }}>
+                    {t('wedding.honeymoon.modal.totalLabel')}: {' '}
+                    <span style={{ color: colors.terracotta, fontSize: '1.2rem' }}>
+                      ${(formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad}{' '}
+                      {formData.moneda.toUpperCase()}
+                    </span>
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={{ mt: 2 }}>
+                  <TextField 
+                    fullWidth 
+                    label="Monto / Amount" 
+                    type="number"
+                    variant="outlined"
+                    size="small"
+                    inputProps={{ min: 5 }}
+                    value={formData.montoLibre}
+                    onChange={(e) => setFormData({ ...formData, montoLibre: e.target.value })}
+                  />
+                  <Typography variant="body2" sx={{ mt: 1, color: '#666', textAlign: 'right', fontWeight: 600 }}>
+                    {t('wedding.honeymoon.modal.totalLabel')}: {' '}
+                    <span style={{ color: colors.terracotta, fontSize: '1.2rem' }}>
+                      ${formData.montoLibre || 0} {formData.moneda.toUpperCase()}
+                    </span>
+                  </Typography>
+                </Box>
+              )}
+            </>
           )}
         </DialogContent>
 
-        <DialogActions sx={{ p: 2, pt: 0, justifyContent: 'space-between' }}>
-          <Button 
-            onClick={() => setCheckoutModal({ ...checkoutModal, open: false })} 
-            disabled={loadingPayment}
-            sx={{ color: '#888' }}
-          >
-            {t('wedding.honeymoon.modal.cancel')}
-          </Button>
-          <Button 
-            variant="contained" 
-            onClick={handleProcessPayment} 
-            disabled={loadingPayment}
-            sx={{ 
-              bgcolor: colors.forestGreen, 
-              color: '#ffffff', 
-              borderRadius: '25px', 
-              px: 3, 
-              fontWeight: 'bold',
-              '&:hover': { bgcolor: colors.forestDark } 
-            }}
-          >
-            {loadingPayment ? <CircularProgress size={22} color="inherit" /> : t('wedding.honeymoon.modal.proceedStripe')}
-          </Button>
-        </DialogActions>
+        {!clientSecret && (
+          <DialogActions sx={{ p: 2, pt: 0, justifyContent: 'space-between' }}>
+            <Button 
+              onClick={() => setCheckoutModal({ ...checkoutModal, open: false })} 
+              disabled={loadingPayment}
+              sx={{ color: '#888' }}
+            >
+              {t('wedding.honeymoon.modal.cancel')}
+            </Button>
+            <Button 
+              variant="contained" 
+              onClick={handleProcessPayment} 
+              disabled={loadingPayment}
+              sx={{ 
+                bgcolor: colors.forestGreen, 
+                color: '#ffffff', 
+                borderRadius: '25px', 
+                px: 3, 
+                fontWeight: 'bold',
+                '&:hover': { bgcolor: colors.forestDark } 
+              }}
+            >
+              {loadingPayment ? <CircularProgress size={22} color="inherit" /> : (t('wedding.honeymoon.modal.proceedStripe') || 'Pagar con Stripe')}
+            </Button>
+          </DialogActions>
+        )}
       </Dialog>
 
       {/* Snackbar Notificaciones */}

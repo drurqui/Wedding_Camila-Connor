@@ -65,6 +65,8 @@ node_modules/
 # dotenv environment variables file
 .env
 backend/.env
+.venv/
+backend/.venv/
 
 # Firebase service account keys
 backend/firebase-key.json
