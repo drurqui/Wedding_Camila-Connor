@@ -97,39 +97,38 @@ export const WeddingRsvpSection = ({ colors }) => {
   return (
     <Box id="rsvp" sx={{ bgcolor: colors.sandLight, py: { xs: 5, sm: 7 }, px: { xs: 2, sm: 3 } }}>
       <Container maxWidth="md">
-        {/* Encabezado compacto */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 3, md: 4 } }}>
+        {/* Encabezado sobrio y distinguido */}
+        <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 } }}>
           <Typography
             variant="overline"
             sx={{
-              letterSpacing: 3,
+              letterSpacing: 4,
               fontWeight: 700,
               color: colors.copper,
               fontSize: { xs: '0.75rem', sm: '0.85rem' },
               display: 'block',
-              mb: 0.5,
+              mb: 1,
             }}
           >
-            {t('wedding.rsvpForm.overline', 'CONFIRMA TU ASISTENCIA')}
+            {t('wedding.rsvpForm.overline', "RÉPONDEZ S'IL VOUS PLAÎT")}
           </Typography>
           <Typography
             variant="h2"
             sx={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: { xs: '2.1rem', sm: '2.8rem', md: '3.4rem' },
+              fontSize: { xs: '2.8rem', sm: '3.6rem', md: '4.4rem' },
               color: colors.forestGreen,
-              letterSpacing: 1.5,
-              textTransform: 'uppercase',
-              lineHeight: 1.15,
-              mb: 1,
+              letterSpacing: 4,
+              lineHeight: 1.05,
+              mb: 1.5,
             }}
           >
-            {t('wedding.rsvpForm.title')}
+            {t('wedding.rsvpForm.title', 'RSVP')}
           </Typography>
           <Typography
             sx={{
               color: colors.charcoal,
-              fontSize: { xs: '0.88rem', sm: '0.98rem' },
+              fontSize: { xs: '0.9rem', sm: '1.02rem' },
               maxWidth: 580,
               mx: 'auto',
               opacity: 0.85,
@@ -380,70 +379,79 @@ export const WeddingRsvpSection = ({ colors }) => {
                           />
                         </Grid>
 
-                        {/* Selector interactivo de Shuttle Bus */}
+                        {/* Selector interactivo de Shuttle Bus (Sin desbordamiento, 100% responsivo) */}
                         <Grid item xs={12}>
                           <Box
                             sx={{
-                              p: 2,
-                              borderRadius: 2,
+                              p: { xs: 2, sm: 2.5 },
+                              borderRadius: 2.5,
                               bgcolor: '#fbf8f3',
                               border: '1px solid #ebdccb',
                               display: 'flex',
-                              flexDirection: { xs: 'column', sm: 'row' },
-                              alignItems: { xs: 'flex-start', sm: 'center' },
-                              justifyContent: 'space-between',
+                              flexDirection: 'column',
                               gap: 1.5,
+                              width: '100%',
+                              boxSizing: 'border-box',
                             }}
                           >
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                              <DirectionsBusIcon sx={{ color: colors.copper, fontSize: 28 }} />
+                              <DirectionsBusIcon sx={{ color: colors.copper, fontSize: 28, flexShrink: 0 }} />
                               <Box>
                                 <Typography variant="body2" sx={{ fontWeight: 700, color: colors.forestGreen }}>
                                   {t('wedding.rsvpForm.shuttle')}
                                 </Typography>
-                                <Typography variant="caption" sx={{ color: '#666' }}>
+                                <Typography variant="caption" sx={{ color: '#666', display: 'block' }}>
                                   {t('wedding.rsvpForm.shuttleSubtitle', 'Transporte de ida y vuelta al lugar del evento')}
                                 </Typography>
                               </Box>
                             </Box>
-                            <Box sx={{ display: 'flex', gap: 1, width: { xs: '100%', sm: 'auto' } }}>
-                              <Button
-                                size="small"
-                                variant={formData.transporteShuttle === 'si' ? 'contained' : 'outlined'}
-                                onClick={() => handleChange('transporteShuttle', 'si')}
-                                sx={{
-                                  flex: { xs: 1, sm: 'none' },
-                                  borderRadius: '20px',
-                                  bgcolor: formData.transporteShuttle === 'si' ? colors.copper : 'transparent',
-                                  color: formData.transporteShuttle === 'si' ? '#fff' : colors.copper,
-                                  borderColor: colors.copper,
-                                  fontWeight: 600,
-                                  '&:hover': {
-                                    bgcolor: formData.transporteShuttle === 'si' ? colors.copperDark : 'rgba(199, 120, 79, 0.08)',
-                                  },
-                                }}
-                              >
-                                {t('wedding.rsvpForm.shuttleYes')}
-                              </Button>
-                              <Button
-                                size="small"
-                                variant={formData.transporteShuttle === 'no' ? 'contained' : 'outlined'}
-                                onClick={() => handleChange('transporteShuttle', 'no')}
-                                sx={{
-                                  flex: { xs: 1, sm: 'none' },
-                                  borderRadius: '20px',
-                                  bgcolor: formData.transporteShuttle === 'no' ? colors.forestGreen : 'transparent',
-                                  color: formData.transporteShuttle === 'no' ? '#fff' : colors.forestGreen,
-                                  borderColor: colors.forestGreen,
-                                  fontWeight: 600,
-                                  '&:hover': {
-                                    bgcolor: formData.transporteShuttle === 'no' ? colors.forestDark : 'rgba(30, 56, 43, 0.08)',
-                                  },
-                                }}
-                              >
-                                {t('wedding.rsvpForm.shuttleNo')}
-                              </Button>
-                            </Box>
+
+                            <Grid container spacing={1.5}>
+                              <Grid item xs={12} sm={6}>
+                                <Button
+                                  fullWidth
+                                  size="small"
+                                  variant={formData.transporteShuttle === 'si' ? 'contained' : 'outlined'}
+                                  onClick={() => handleChange('transporteShuttle', 'si')}
+                                  sx={{
+                                    borderRadius: '20px',
+                                    py: 1,
+                                    bgcolor: formData.transporteShuttle === 'si' ? colors.copper : 'transparent',
+                                    color: formData.transporteShuttle === 'si' ? '#fff' : colors.copper,
+                                    borderColor: colors.copper,
+                                    fontWeight: 600,
+                                    fontSize: '0.82rem',
+                                    '&:hover': {
+                                      bgcolor: formData.transporteShuttle === 'si' ? colors.copperDark : 'rgba(199, 120, 79, 0.08)',
+                                    },
+                                  }}
+                                >
+                                  {t('wedding.rsvpForm.shuttleYes')}
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <Button
+                                  fullWidth
+                                  size="small"
+                                  variant={formData.transporteShuttle === 'no' ? 'contained' : 'outlined'}
+                                  onClick={() => handleChange('transporteShuttle', 'no')}
+                                  sx={{
+                                    borderRadius: '20px',
+                                    py: 1,
+                                    bgcolor: formData.transporteShuttle === 'no' ? colors.forestGreen : 'transparent',
+                                    color: formData.transporteShuttle === 'no' ? '#fff' : colors.forestGreen,
+                                    borderColor: colors.forestGreen,
+                                    fontWeight: 600,
+                                    fontSize: '0.82rem',
+                                    '&:hover': {
+                                      bgcolor: formData.transporteShuttle === 'no' ? colors.forestDark : 'rgba(30, 56, 43, 0.08)',
+                                    },
+                                  }}
+                                >
+                                  {t('wedding.rsvpForm.shuttleNo')}
+                                </Button>
+                              </Grid>
+                            </Grid>
                           </Box>
                         </Grid>
 
