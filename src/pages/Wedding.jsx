@@ -472,10 +472,10 @@ const Wedding = () => {
           }}
         >
           {[
-            { label: i18n.language.startsWith('en') ? 'Days' : i18n.language.startsWith('fr') ? 'Jours' : 'Días', value: timeLeft.days },
-            { label: i18n.language.startsWith('en') ? 'Hours' : i18n.language.startsWith('fr') ? 'Heures' : 'Horas', value: timeLeft.hours },
-            { label: i18n.language.startsWith('en') ? 'Min' : i18n.language.startsWith('fr') ? 'Min' : 'Min', value: timeLeft.minutes },
-            { label: i18n.language.startsWith('en') ? 'Sec' : i18n.language.startsWith('fr') ? 'Sec' : 'Seg', value: timeLeft.seconds },
+            { label: t('wedding.hero.countdown.days', 'Días'), value: timeLeft.days },
+            { label: t('wedding.hero.countdown.hours', 'Horas'), value: timeLeft.hours },
+            { label: t('wedding.hero.countdown.minutes', 'Min'), value: timeLeft.minutes },
+            { label: t('wedding.hero.countdown.seconds', 'Seg'), value: timeLeft.seconds },
           ].map((item, idx) => (
             <Box 
               key={idx}
@@ -591,7 +591,7 @@ const Wedding = () => {
                 mb: 0.5 
               }}
             >
-              GUÍA PARA NUESTROS INVITADOS
+              {t('wedding.guide.overline', 'GUÍA PARA NUESTROS INVITADOS')}
             </Typography>
             <Typography 
               variant="h2" 
@@ -604,7 +604,7 @@ const Wedding = () => {
                 mb: 2.5 
               }}
             >
-              Detalles & Guía de Viaje
+              {t('wedding.guide.title', 'Detalles & Guía de Viaje')}
             </Typography>
 
             {/* PESTAÑAS SEGMENTADAS INTERACTIVAS (TABS CON BOTONES) */}
@@ -865,7 +865,7 @@ const Wedding = () => {
                 display: 'block' 
               }}
             >
-              REGISTRO DE REGALOS
+              {t('wedding.honeymoon.registryOverline', 'REGISTRO DE REGALOS')}
             </Typography>
 
             <Typography 
@@ -909,12 +909,13 @@ const Wedding = () => {
             </Typography>
           </Box>
 
-          {/* CUADRÍCULA DE EXPERIENCIAS (RESPONSIVA 3 COLUMNAS) */}
-          <Grid container spacing={3} justifyContent="center">
+          {/* CUADRÍCULA DE EXPERIENCIAS (RESPONSIVA 3 COLUMNAS CON ALTURA EXACTA) */}
+          <Grid container spacing={3} justifyContent="center" alignItems="stretch">
             {honeymoonCards.map((item) => (
-              <Grid item xs={12} sm={6} md={4} key={item.key}>
+              <Grid item xs={12} sm={6} md={4} key={item.key} sx={{ display: 'flex' }}>
                 <Card 
                   sx={{ 
+                    width: '100%',
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
@@ -931,8 +932,8 @@ const Wedding = () => {
                     }
                   }}
                 >
-                  {/* Imagen de la experiencia con efecto zoom */}
-                  <Box sx={{ position: 'relative', overflow: 'hidden', height: 190 }}>
+                  {/* Imagen de la experiencia con efecto zoom y altura estricta */}
+                  <Box sx={{ position: 'relative', overflow: 'hidden', height: 190, minHeight: 190, flexShrink: 0 }}>
                     <Box 
                       component="img" 
                       src={item.image} 
@@ -946,7 +947,7 @@ const Wedding = () => {
                       }} 
                     />
                     <Chip 
-                      label={`EXPÉRIENCE ${item.number}`}
+                      label={`${t('wedding.honeymoon.experiencePrefix', 'EXPERIENCIA')} ${item.number}`}
                       size="small"
                       sx={{ 
                         position: 'absolute', 
@@ -963,78 +964,79 @@ const Wedding = () => {
                   </Box>
 
                   <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center' }}>
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontFamily: "'Playfair Display', serif", 
-                        color: colors.forestGreen, 
-                        fontWeight: 700,
-                        fontSize: '1.15rem',
-                        lineHeight: 1.3,
-                        mb: 1,
-                        minHeight: 44,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      {item.title}
-                    </Typography>
+                    {/* Título bloqueado con minHeight idéntico para que ningún idioma mueva la tarjeta */}
+                    <Box sx={{ minHeight: { xs: 44, sm: 54 }, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontFamily: "'Playfair Display', serif", 
+                          color: colors.forestGreen, 
+                          fontWeight: 700,
+                          fontSize: { xs: '1.05rem', sm: '1.15rem' },
+                          lineHeight: 1.25,
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
+                    </Box>
 
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        color: '#666', 
-                        fontSize: '0.82rem', 
-                        lineHeight: 1.6, 
-                        mb: 2,
-                        flexGrow: 1,
-                        display: '-webkit-box',
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden'
-                      }}
-                    >
-                      {item.description}
-                    </Typography>
+                    {/* Descripción con minHeight idéntico para que todas las tarjetas midan exactamente lo mismo */}
+                    <Box sx={{ minHeight: { xs: 65, sm: 75 }, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          color: '#666', 
+                          fontSize: '0.82rem', 
+                          lineHeight: 1.55, 
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        {item.description}
+                      </Typography>
+                    </Box>
 
-                    <Divider sx={{ my: 1.5, borderColor: '#f0e6d6' }} />
+                    {/* Contenedor inferior SIEMPRE anclado a la base de la tarjeta (mt: 'auto') */}
+                    <Box sx={{ mt: 'auto', pt: 1.5, borderTop: '1px solid #f0e6d6' }}>
+                      <Typography 
+                        sx={{ 
+                          fontFamily: "'Montserrat', sans-serif", 
+                          fontWeight: 700, 
+                          color: colors.copper, 
+                          fontSize: '0.88rem', 
+                          letterSpacing: 0.5,
+                          mb: 0.5 
+                        }}
+                      >
+                        {item.shareText}
+                      </Typography>
 
-                    <Typography 
-                      sx={{ 
-                        fontFamily: "'Montserrat', sans-serif", 
-                        fontWeight: 700, 
-                        color: colors.copper, 
-                        fontSize: '0.88rem', 
-                        letterSpacing: 0.5,
-                        mb: 0.5 
-                      }}
-                    >
-                      {item.shareText}
-                    </Typography>
+                      <Typography variant="caption" sx={{ color: '#888', display: 'block', mb: 2 }}>
+                        {t('wedding.honeymoon.contributedCount', 'Aportadas: 0 • Meta: {{need}}', { need: item.need })}
+                      </Typography>
 
-                    <Typography variant="caption" sx={{ color: '#888', display: 'block', mb: 2 }}>
-                      HAVE 0 NEED {item.need}
-                    </Typography>
-
-                    <Button 
-                      variant="contained" 
-                      onClick={() => handleOpenGiftModal(item.key, item)}
-                      startIcon={<CardGiftcardIcon sx={{ fontSize: 18 }} />}
-                      sx={{ 
-                        bgcolor: colors.terracotta, 
-                        color: '#ffffff', 
-                        borderRadius: '25px', 
-                        py: 0.9,
-                        fontWeight: 700,
-                        fontSize: '0.82rem',
-                        letterSpacing: 0.8,
-                        boxShadow: '0 4px 12px rgba(199, 120, 79, 0.25)',
-                        '&:hover': { bgcolor: colors.terracottaDark } 
-                      }}
-                    >
-                      {t('wedding.honeymoon.addToCart')}
-                    </Button>
+                      <Button 
+                        fullWidth
+                        variant="contained" 
+                        onClick={() => handleOpenGiftModal(item.key, item)}
+                        startIcon={<CardGiftcardIcon sx={{ fontSize: 18 }} />}
+                        sx={{ 
+                          bgcolor: colors.terracotta, 
+                          color: '#ffffff', 
+                          borderRadius: '25px', 
+                          py: 1,
+                          fontWeight: 700,
+                          fontSize: '0.82rem',
+                          letterSpacing: 0.8,
+                          boxShadow: '0 4px 12px rgba(199, 120, 79, 0.25)',
+                          '&:hover': { bgcolor: colors.terracottaDark } 
+                        }}
+                      >
+                        {t('wedding.honeymoon.addToCart')}
+                      </Button>
+                    </Box>
                   </Box>
                 </Card>
               </Grid>
@@ -1140,7 +1142,7 @@ const Wedding = () => {
           maxWidth: '92vw'
         }}
       >
-        <Tooltip title="Confirmar Asistencia">
+        <Tooltip title={t('wedding.nav.rsvp', 'Confirmar Asistencia')}>
           <Button 
             onClick={() => scrollToSection('rsvp')}
             size="small"
@@ -1153,13 +1155,13 @@ const Wedding = () => {
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            💍 RSVP
+            💍 {t('wedding.nav.rsvp', 'RSVP')}
           </Button>
         </Tooltip>
 
         <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(199, 120, 79, 0.4)', height: 18, my: 'auto' }} />
 
-        <Tooltip title="Ver Guía y Detalles">
+        <Tooltip title={t('wedding.nav.guide', 'Ver Guía y Detalles')}>
           <Button 
             onClick={() => scrollToSection('guide', 0)}
             size="small"
@@ -1172,13 +1174,13 @@ const Wedding = () => {
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            📍 Guía
+            📍 {t('wedding.nav.guide', 'Guía')}
           </Button>
         </Tooltip>
 
         <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(199, 120, 79, 0.4)', height: 18, my: 'auto' }} />
 
-        <Tooltip title="Fondo de Luna de Miel">
+        <Tooltip title={t('wedding.nav.gifts', 'Fondo de Luna de Miel')}>
           <Button 
             onClick={() => scrollToSection('honeymoon')}
             size="small"
@@ -1191,7 +1193,7 @@ const Wedding = () => {
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            ✈️ Regalos
+            ✈️ {t('wedding.nav.gifts', 'Regalos')}
           </Button>
         </Tooltip>
       </Box>

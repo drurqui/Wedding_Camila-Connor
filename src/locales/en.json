@@ -200,16 +200,31 @@
       "logistics": "Travel & Logistics",
       "accommodations": "Accommodations",
       "honeymoon": "Honeymoon Fund",
+      "guide": "Guide",
+      "gifts": "Gifts",
       "engagementLink": "Engagement Celebration"
     },
     "hero": {
       "subtitle": "OUR WEDDING CELEBRATION",
       "title": "Camila & Connor",
       "date": "Saturday, August 7, 2027",
-      "venue": "Forêt • Comasagua, El Salvador"
+      "venue": "Forêt • Comasagua, El Salvador",
+      "countdown": {
+        "days": "Days",
+        "hours": "Hours",
+        "minutes": "Min",
+        "seconds": "Sec"
+      }
+    },
+    "guide": {
+      "overline": "GUEST GUIDE",
+      "title": "Details & Travel Guide"
     },
     "honeymoon": {
       "title": "THE HONEYMOON",
+      "registryOverline": "GIFT REGISTRY",
+      "experiencePrefix": "EXPERIENCE",
+      "contributedCount": "Contributed: 0 • Goal: {{need}}",
       "welcome": "Welcome to our Honeymoon fund!",
       "description": "If you must insist on gifting us something other than your presence, you're in the right place! Here you can find a list of things we are planning to do for our amazing honeymoon! You can choose different experiences for us, and pay for a part of our first adventure as a family.",
       "items": {
@@ -265,6 +280,10 @@
       "currencyNote": "Amounts displayed in USD & CAD. Checkout is processed securely through Stripe."
     },
     "rsvpForm": {
+      "overline": "CONFIRM YOUR ATTENDANCE",
+      "yesSubtitle": "I will celebrate with you this special day",
+      "noSubtitle": "I will be with you from afar",
+      "shuttleSubtitle": "Round-trip transportation to the venue",
       "title": "WEDDING RSVP",
       "subtitle": "Please kindly confirm your attendance before May 1st, 2027",
       "fullName": "Full Name",

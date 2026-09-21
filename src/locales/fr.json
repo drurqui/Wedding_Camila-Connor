@@ -200,16 +200,31 @@
       "logistics": "Voyage & Logistique",
       "accommodations": "Hébergement",
       "honeymoon": "Lune de Miel",
+      "guide": "Guide",
+      "gifts": "Cadeaux",
       "engagementLink": "Fête de Fiançailles"
     },
     "hero": {
       "subtitle": "NOTRE MARIAGE",
       "title": "Camila & Connor",
       "date": "Samedi 7 Août 2027",
-      "venue": "Forêt • Comasagua, El Salvador"
+      "venue": "Forêt • Comasagua, El Salvador",
+      "countdown": {
+        "days": "Jours",
+        "hours": "Heures",
+        "minutes": "Min",
+        "seconds": "Sec"
+      }
+    },
+    "guide": {
+      "overline": "GUIDE DES INVITÉS",
+      "title": "Détails & Guide de Voyage"
     },
     "honeymoon": {
       "title": "THE HONEYMOON",
+      "registryOverline": "LISTE DE MARIAGE",
+      "experiencePrefix": "EXPÉRIENCE",
+      "contributedCount": "Reçues : 0 • Objectif : {{need}}",
       "welcome": "Bienvenue sur notre fonds de lune de miel !",
       "description": "Si vous tenez absolument à nous offrir un cadeau en plus de votre présence, vous êtes au bon endroit ! Découvrez ici les expériences que nous rêvons de vivre lors de notre lune de miel. Vous pouvez choisir différentes aventures et financer une part de notre tout premier voyage en tant que mari et femme.",
       "items": {
@@ -265,6 +280,10 @@
       "currencyNote": "Montants affichés en USD et CAD. Les paiements sont sécurisés par Stripe."
     },
     "rsvpForm": {
+      "overline": "CONFIRMEZ VOTRE PRÉSENCE",
+      "yesSubtitle": "Je célébrerai avec vous ce jour si spécial",
+      "noSubtitle": "Je serai avec vous par la pensée",
+      "shuttleSubtitle": "Transport aller-retour vers le lieu de réception",
       "title": "CONFIRMATION DE PRÉSENCE (RSVP)",
       "subtitle": "Merci de nous confirmer votre présence avant le 1er mai 2027",
       "fullName": "Nom Complet",

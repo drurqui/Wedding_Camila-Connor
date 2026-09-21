@@ -110,7 +110,7 @@ export const WeddingRsvpSection = ({ colors }) => {
               mb: 0.5,
             }}
           >
-            CONFIRMA TU ASISTENCIA
+            {t('wedding.rsvpForm.overline', 'CONFIRMA TU ASISTENCIA')}
           </Typography>
           <Typography
             variant="h2"
@@ -270,7 +270,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                               {t('wedding.rsvpForm.yes')}
                             </Typography>
                             <Typography variant="caption" sx={{ color: '#777', display: 'block' }}>
-                              Celebraré con ustedes en Cartagena
+                              {t('wedding.rsvpForm.yesSubtitle', 'Celebraré con ustedes este día tan especial')}
                             </Typography>
                           </Box>
                         </Box>
@@ -307,7 +307,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                               {t('wedding.rsvpForm.no')}
                             </Typography>
                             <Typography variant="caption" sx={{ color: '#777', display: 'block' }}>
-                              Los acompañaré desde la distancia
+                              {t('wedding.rsvpForm.noSubtitle', 'Los acompañaré desde la distancia')}
                             </Typography>
                           </Box>
                         </Box>
@@ -402,7 +402,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                                   {t('wedding.rsvpForm.shuttle')}
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: '#666' }}>
-                                  Transporte de ida y vuelta al lugar del evento
+                                  {t('wedding.rsvpForm.shuttleSubtitle', 'Transporte de ida y vuelta al lugar del evento')}
                                 </Typography>
                               </Box>
                             </Box>
