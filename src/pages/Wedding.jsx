@@ -116,10 +116,10 @@ const Wedding = () => {
       setToast({
         open: true,
         message: i18n.language.startsWith('en') 
-          ? "Thank you so much for contributing to our Honeymoon! ❤️✈️" 
+          ? "Thank you so much for contributing to our Honeymoon!" 
           : i18n.language.startsWith('fr')
-          ? "Merci infiniment pour votre participation à notre lune de miel ! ❤️✈️"
-          : "¡Muchísimas gracias por tu contribución a nuestra luna de miel! ❤️✈️",
+          ? "Merci infiniment pour votre participation à notre lune de miel !"
+          : "¡Muchísimas gracias por tu contribución a nuestra luna de miel!",
         severity: 'success'
       });
       window.history.replaceState(null, null, window.location.pathname);
@@ -532,11 +532,12 @@ const Wedding = () => {
               py: 0.9,
               fontWeight: 700,
               fontSize: { xs: '0.82rem', sm: '0.9rem' },
+              letterSpacing: 1.2,
               boxShadow: '0 6px 20px rgba(199, 120, 79, 0.35)',
               '&:hover': { bgcolor: colors.copperDark } 
             }}
           >
-            💍 {t('wedding.nav.rsvp')}
+            {t('wedding.nav.rsvp')}
           </Button>
           <Button 
             variant="outlined" 
@@ -547,11 +548,13 @@ const Wedding = () => {
               borderRadius: '30px', 
               px: { xs: 2, sm: 3 },
               py: 0.8,
+              fontWeight: 600,
+              letterSpacing: 1.2,
               fontSize: { xs: '0.82rem', sm: '0.9rem' },
               '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
             }}
           >
-            📍 {t('wedding.nav.details')}
+            {t('wedding.nav.details')}
           </Button>
           <Button 
             variant="outlined" 
@@ -562,11 +565,13 @@ const Wedding = () => {
               borderRadius: '30px', 
               px: { xs: 2, sm: 3 },
               py: 0.8,
+              fontWeight: 600,
+              letterSpacing: 1.2,
               fontSize: { xs: '0.82rem', sm: '0.9rem' },
               '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
             }}
           >
-            ✈️ {t('wedding.nav.honeymoon')}
+            {t('wedding.nav.honeymoon')}
           </Button>
         </Box>
       </Box>
@@ -1106,7 +1111,7 @@ const Wedding = () => {
                     mb: 0.5 
                   }}
                 >
-                  ✨ {t('wedding.honeymoon.customContribution.title')}
+                  {t('wedding.honeymoon.customContribution.title')}
                 </Typography>
                 <Typography 
                   variant="body2" 
@@ -1189,12 +1194,13 @@ const Wedding = () => {
               color: colors.sandBeige, 
               fontWeight: 700, 
               fontSize: { xs: '0.75rem', sm: '0.85rem' },
+              letterSpacing: 1.2,
               borderRadius: '20px',
-              px: { xs: 1, sm: 1.5 },
+              px: { xs: 1.2, sm: 2 },
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            💍 {t('wedding.nav.rsvp', 'RSVP')}
+            {t('wedding.nav.rsvp', 'RSVP')}
           </Button>
         </Tooltip>
 
@@ -1208,12 +1214,13 @@ const Wedding = () => {
               color: colors.sandBeige, 
               fontWeight: 700, 
               fontSize: { xs: '0.75rem', sm: '0.85rem' },
+              letterSpacing: 1.2,
               borderRadius: '20px',
-              px: { xs: 1, sm: 1.5 },
+              px: { xs: 1.2, sm: 2 },
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            📍 {t('wedding.nav.guide', 'Guía')}
+            {t('wedding.nav.guide', 'Guía')}
           </Button>
         </Tooltip>
 
@@ -1227,12 +1234,13 @@ const Wedding = () => {
               color: colors.sandBeige, 
               fontWeight: 700, 
               fontSize: { xs: '0.75rem', sm: '0.85rem' },
+              letterSpacing: 1.2,
               borderRadius: '20px',
-              px: { xs: 1, sm: 1.5 },
+              px: { xs: 1.2, sm: 2 },
               '&:hover': { bgcolor: 'rgba(199, 120, 79, 0.2)' }
             }}
           >
-            ✈️ {t('wedding.nav.gifts', 'Regalos')}
+            {t('wedding.nav.gifts', 'Regalos')}
           </Button>
         </Tooltip>
       </Box>
@@ -1299,10 +1307,10 @@ const Wedding = () => {
                   setToast({
                     open: true,
                     message: i18n.language.startsWith('en') 
-                      ? "Thank you so much for contributing to our Honeymoon! ❤️✈️" 
+                      ? "Thank you so much for contributing to our Honeymoon!" 
                       : i18n.language.startsWith('fr')
-                      ? "Merci infiniment pour votre participation à notre lune de miel ! ❤️✈️"
-                      : "¡Muchísimas gracias por tu contribución a nuestra luna de miel! ❤️✈️",
+                      ? "Merci infiniment pour votre participation à notre lune de miel !"
+                      : "¡Muchísimas gracias por tu contribución a nuestra luna de miel!",
                     severity: 'success'
                   });
                 }}
