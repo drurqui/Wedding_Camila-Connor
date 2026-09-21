@@ -909,14 +909,16 @@ const Wedding = () => {
             </Typography>
           </Box>
 
-          {/* CUADRÍCULA DE EXPERIENCIAS (RESPONSIVA 3 COLUMNAS CON ALTURA EXACTA) */}
+          {/* CUADRÍCULA DE EXPERIENCIAS (TARJETAS RIGUROSAMENTE IDÉNTICAS EN ANCHO Y ALTO EN TODOS LOS IDIOMAS Y PANTALLAS) */}
           <Grid container spacing={3} justifyContent="center" alignItems="stretch">
             {honeymoonCards.map((item) => (
-              <Grid item xs={12} sm={6} md={4} key={item.key} sx={{ display: 'flex' }}>
+              <Grid item xs={12} sm={4} md={4} key={item.key} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Card 
                   sx={{ 
                     width: '100%',
-                    height: '100%',
+                    maxWidth: { xs: 380, sm: 'none' },
+                    height: { xs: 510, sm: 510 },
+                    maxHeight: { xs: 510, sm: 510 },
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: 3,
@@ -932,8 +934,8 @@ const Wedding = () => {
                     }
                   }}
                 >
-                  {/* Imagen de la experiencia con efecto zoom y altura estricta */}
-                  <Box sx={{ position: 'relative', overflow: 'hidden', height: 190, minHeight: 190, flexShrink: 0 }}>
+                  {/* Imagen fija con altura estricta */}
+                  <Box sx={{ position: 'relative', overflow: 'hidden', height: 195, minHeight: 195, maxHeight: 195, flexShrink: 0 }}>
                     <Box 
                       component="img" 
                       src={item.image} 
@@ -963,33 +965,41 @@ const Wedding = () => {
                     />
                   </Box>
 
-                  <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center' }}>
-                    {/* Título bloqueado con minHeight idéntico para que ningún idioma mueva la tarjeta */}
-                    <Box sx={{ minHeight: { xs: 44, sm: 54 }, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
+                  {/* Cuerpo de la tarjeta con flexbox y dimensiones uniformes */}
+                  <Box sx={{ p: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center', height: 'calc(510px - 195px)', boxSizing: 'border-box' }}>
+                    
+                    {/* Contenedor de Título con altura fija exacta (52px) */}
+                    <Box sx={{ height: 52, minHeight: 52, maxHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1, overflow: 'hidden', flexShrink: 0 }}>
                       <Typography 
                         variant="h6" 
                         sx={{ 
                           fontFamily: "'Playfair Display', serif", 
                           color: colors.forestGreen, 
                           fontWeight: 700,
-                          fontSize: { xs: '1.05rem', sm: '1.15rem' },
+                          fontSize: { xs: '0.95rem', sm: '1.05rem' },
                           lineHeight: 1.25,
+                          textTransform: 'uppercase',
+                          letterSpacing: 0.5,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
                         }}
                       >
                         {item.title}
                       </Typography>
                     </Box>
 
-                    {/* Descripción con minHeight idéntico para que todas las tarjetas midan exactamente lo mismo */}
-                    <Box sx={{ minHeight: { xs: 65, sm: 75 }, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                    {/* Contenedor de Descripción con altura fija exacta (80px) */}
+                    <Box sx={{ height: 80, minHeight: 80, maxHeight: 80, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5, overflow: 'hidden', flexShrink: 0 }}>
                       <Typography 
                         variant="body2" 
                         sx={{ 
                           color: '#666', 
-                          fontSize: '0.82rem', 
-                          lineHeight: 1.55, 
+                          fontSize: '0.8rem', 
+                          lineHeight: 1.45, 
                           display: '-webkit-box',
-                          WebkitLineClamp: 3,
+                          WebkitLineClamp: 4,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden'
                         }}
@@ -998,24 +1008,28 @@ const Wedding = () => {
                       </Typography>
                     </Box>
 
-                    {/* Contenedor inferior SIEMPRE anclado a la base de la tarjeta (mt: 'auto') */}
-                    <Box sx={{ mt: 'auto', pt: 1.5, borderTop: '1px solid #f0e6d6' }}>
-                      <Typography 
-                        sx={{ 
-                          fontFamily: "'Montserrat', sans-serif", 
-                          fontWeight: 700, 
-                          color: colors.copper, 
-                          fontSize: '0.88rem', 
-                          letterSpacing: 0.5,
-                          mb: 0.5 
-                        }}
-                      >
-                        {item.shareText}
-                      </Typography>
+                    {/* Contenedor inferior anclado en la misma posición (mt: 'auto') */}
+                    <Box sx={{ mt: 'auto', pt: 1.5, borderTop: '1px solid #f0e6d6', flexShrink: 0, width: '100%' }}>
+                      <Box sx={{ height: 26, minHeight: 26, maxHeight: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 0.5 }}>
+                        <Typography 
+                          sx={{ 
+                            fontFamily: "'Montserrat', sans-serif", 
+                            fontWeight: 700, 
+                            color: colors.copper, 
+                            fontSize: { xs: '0.82rem', sm: '0.86rem' }, 
+                            letterSpacing: 0.5,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {item.shareText}
+                        </Typography>
+                      </Box>
 
-                      <Typography variant="caption" sx={{ color: '#888', display: 'block', mb: 2 }}>
-                        {t('wedding.honeymoon.contributedCount', 'Aportadas: 0 • Meta: {{need}}', { need: item.need })}
-                      </Typography>
+                      <Box sx={{ height: 20, minHeight: 20, maxHeight: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+                        <Typography variant="caption" sx={{ color: '#888', display: 'block', fontSize: '0.78rem' }}>
+                          {t('wedding.honeymoon.contributedCount', 'Aportadas: 0 • Meta: {{need}}', { need: item.need })}
+                        </Typography>
+                      </Box>
 
                       <Button 
                         fullWidth
@@ -1026,7 +1040,8 @@ const Wedding = () => {
                           bgcolor: colors.terracotta, 
                           color: '#ffffff', 
                           borderRadius: '25px', 
-                          py: 1,
+                          height: 40,
+                          py: 0.8,
                           fontWeight: 700,
                           fontSize: '0.82rem',
                           letterSpacing: 0.8,
@@ -1037,6 +1052,7 @@ const Wedding = () => {
                         {t('wedding.honeymoon.addToCart')}
                       </Button>
                     </Box>
+
                   </Box>
                 </Card>
               </Grid>
