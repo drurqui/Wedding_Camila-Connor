@@ -9,7 +9,6 @@ import {
   Alert,
   Card,
   CardContent,
-  Grid,
   Collapse,
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -95,9 +94,9 @@ export const WeddingRsvpSection = ({ colors }) => {
   };
 
   return (
-    <Box id="rsvp" sx={{ bgcolor: colors.sandLight, py: { xs: 5, sm: 7 }, px: { xs: 2, sm: 3 } }}>
-      <Container maxWidth="md">
-        {/* Encabezado sobrio y distinguido */}
+    <Box id="rsvp" sx={{ bgcolor: colors.sandLight, py: { xs: 6, sm: 8 }, px: { xs: 2, sm: 3 } }}>
+      <Container maxWidth="sm" sx={{ maxWidth: '680px !important' }}>
+        {/* Encabezado Clásico y Solemne */}
         <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 } }}>
           <Typography
             variant="overline"
@@ -116,7 +115,7 @@ export const WeddingRsvpSection = ({ colors }) => {
             variant="h2"
             sx={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: { xs: '2.8rem', sm: '3.6rem', md: '4.4rem' },
+              fontSize: { xs: '2.8rem', sm: '3.8rem', md: '4.4rem' },
               color: colors.forestGreen,
               letterSpacing: 4,
               lineHeight: 1.05,
@@ -129,7 +128,7 @@ export const WeddingRsvpSection = ({ colors }) => {
             sx={{
               color: colors.charcoal,
               fontSize: { xs: '0.9rem', sm: '1.02rem' },
-              maxWidth: 580,
+              maxWidth: 500,
               mx: 'auto',
               opacity: 0.85,
               lineHeight: 1.6,
@@ -139,18 +138,16 @@ export const WeddingRsvpSection = ({ colors }) => {
           </Typography>
         </Box>
 
-        {/* Tarjeta del Formulario Interactiva */}
+        {/* Tarjeta del Formulario (Tarjeta Editorial de Boda) */}
         <Card
           sx={{
             bgcolor: '#ffffff',
-            borderRadius: { xs: 3, sm: 4 },
-            boxShadow: '0 12px 36px rgba(30, 56, 43, 0.08), 0 2px 8px rgba(0,0,0,0.04)',
-            border: `1px solid ${colors.sandBeige}`,
-            p: { xs: 2.5, sm: 4 },
-            transition: 'box-shadow 0.3s ease',
-            '&:hover': {
-              boxShadow: '0 16px 44px rgba(30, 56, 43, 0.12)',
-            },
+            borderRadius: 3.5,
+            boxShadow: '0 16px 48px rgba(30, 56, 43, 0.08), 0 2px 8px rgba(0,0,0,0.03)',
+            border: `1px solid #ebdccb`,
+            p: { xs: 3, sm: 4.5 },
+            boxSizing: 'border-box',
+            width: '100%',
           }}
         >
           <CardContent sx={{ p: 0 }}>
@@ -214,310 +211,348 @@ export const WeddingRsvpSection = ({ colors }) => {
                 </Button>
               </Box>
             ) : (
-              <Box component="form" onSubmit={handleSubmit}>
+              <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, width: '100%' }}>
                 {errorMessage && (
-                  <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>
+                  <Alert severity="error" sx={{ borderRadius: 2 }}>
                     {errorMessage}
                   </Alert>
                 )}
 
-                <Grid container spacing={{ xs: 2, sm: 2.5 }}>
-                  {/* Selector interactivo de Asistencia (Botones tipo tarjetas táctiles) */}
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="caption"
+                {/* Paso 1: Asistencia */}
+                <Box sx={{ width: '100%' }}>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      fontWeight: 700,
+                      letterSpacing: 1,
+                      color: colors.forestGreen,
+                      textTransform: 'uppercase',
+                      mb: 1.2,
+                      fontSize: '0.8rem',
+                    }}
+                  >
+                    {t('wedding.rsvpForm.attendance')} *
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                      gap: 1.5,
+                      width: '100%',
+                    }}
+                  >
+                    {/* Opción Sí */}
+                    <Box
+                      onClick={() => handleChange('asistencia', 'si')}
                       sx={{
-                        display: 'block',
-                        fontWeight: 700,
-                        letterSpacing: 1,
-                        color: colors.forestGreen,
-                        textTransform: 'uppercase',
-                        mb: 1,
-                      }}
-                    >
-                      {t('wedding.rsvpForm.attendance')} *
-                    </Typography>
-                    <Grid container spacing={1.5}>
-                      <Grid item xs={12} sm={6}>
-                        <Box
-                          onClick={() => handleChange('asistencia', 'si')}
-                          sx={{
-                            p: 2,
-                            borderRadius: 2.5,
-                            border: `2px solid ${formData.asistencia === 'si' ? colors.copper : '#e0e0e0'}`,
-                            bgcolor: formData.asistencia === 'si' ? 'rgba(199, 120, 79, 0.08)' : '#ffffff',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1.5,
-                            transition: 'all 0.25s ease',
-                            transform: formData.asistencia === 'si' ? 'scale(1.01)' : 'none',
-                            '&:hover': {
-                              borderColor: colors.copper,
-                              bgcolor: 'rgba(199, 120, 79, 0.04)',
-                            },
-                          }}
-                        >
-                          <CheckCircleOutlineIcon
-                            sx={{
-                              color: formData.asistencia === 'si' ? colors.copper : '#bbb',
-                              fontSize: 26,
-                            }}
-                          />
-                          <Box>
-                            <Typography sx={{ fontWeight: 700, color: colors.forestGreen, fontSize: '0.95rem' }}>
-                              {t('wedding.rsvpForm.yes')}
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: '#777', display: 'block' }}>
-                              {t('wedding.rsvpForm.yesSubtitle', 'Celebraré con ustedes este día tan especial')}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Grid>
-
-                      <Grid item xs={12} sm={6}>
-                        <Box
-                          onClick={() => handleChange('asistencia', 'no')}
-                          sx={{
-                            p: 2,
-                            borderRadius: 2.5,
-                            border: `2px solid ${formData.asistencia === 'no' ? colors.copper : '#e0e0e0'}`,
-                            bgcolor: formData.asistencia === 'no' ? 'rgba(199, 120, 79, 0.08)' : '#ffffff',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1.5,
-                            transition: 'all 0.25s ease',
-                            transform: formData.asistencia === 'no' ? 'scale(1.01)' : 'none',
-                            '&:hover': {
-                              borderColor: colors.copper,
-                              bgcolor: 'rgba(199, 120, 79, 0.04)',
-                            },
-                          }}
-                        >
-                          <HighlightOffIcon
-                            sx={{
-                              color: formData.asistencia === 'no' ? '#d32f2f' : '#bbb',
-                              fontSize: 26,
-                            }}
-                          />
-                          <Box>
-                            <Typography sx={{ fontWeight: 700, color: colors.charcoal, fontSize: '0.95rem' }}>
-                              {t('wedding.rsvpForm.no')}
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: '#777', display: 'block' }}>
-                              {t('wedding.rsvpForm.noSubtitle', 'Los acompañaré desde la distancia')}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  {/* Nombre y Correo en 2 columnas responsivas */}
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      required
-                      size="small"
-                      label={t('wedding.rsvpForm.fullName')}
-                      value={formData.nombre}
-                      onChange={(e) => handleChange('nombre', e.target.value)}
-                      variant="outlined"
-                      sx={{
-                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: colors.copper,
-                        },
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      required
-                      size="small"
-                      type="email"
-                      label={t('wedding.rsvpForm.email')}
-                      value={formData.email}
-                      onChange={(e) => handleChange('email', e.target.value)}
-                      variant="outlined"
-                      sx={{
-                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: colors.copper,
-                        },
-                      }}
-                    />
-                  </Grid>
-
-                  {/* Campos condicionales con animación suave de apertura */}
-                  <Grid item xs={12}>
-                    <Collapse in={formData.asistencia === 'si'}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            type="number"
-                            label={t('wedding.rsvpForm.guests')}
-                            inputProps={{ min: 1, max: 10 }}
-                            value={formData.numInvitados}
-                            onChange={(e) => handleChange('numInvitados', e.target.value)}
-                            variant="outlined"
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={8}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            label={t('wedding.rsvpForm.guestNames')}
-                            value={formData.nombresAcompanantes}
-                            onChange={(e) => handleChange('nombresAcompanantes', e.target.value)}
-                            variant="outlined"
-                            placeholder="Ej: Sofía Urquilla, Mateo Shields"
-                          />
-                        </Grid>
-
-                        {/* Selector interactivo de Shuttle Bus (Sin desbordamiento, 100% responsivo) */}
-                        <Grid item xs={12}>
-                          <Box
-                            sx={{
-                              p: { xs: 2, sm: 2.5 },
-                              borderRadius: 2.5,
-                              bgcolor: '#fbf8f3',
-                              border: '1px solid #ebdccb',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              gap: 1.5,
-                              width: '100%',
-                              boxSizing: 'border-box',
-                            }}
-                          >
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                              <DirectionsBusIcon sx={{ color: colors.copper, fontSize: 28, flexShrink: 0 }} />
-                              <Box>
-                                <Typography variant="body2" sx={{ fontWeight: 700, color: colors.forestGreen }}>
-                                  {t('wedding.rsvpForm.shuttle')}
-                                </Typography>
-                                <Typography variant="caption" sx={{ color: '#666', display: 'block' }}>
-                                  {t('wedding.rsvpForm.shuttleSubtitle', 'Transporte de ida y vuelta al lugar del evento')}
-                                </Typography>
-                              </Box>
-                            </Box>
-
-                            <Grid container spacing={1.5}>
-                              <Grid item xs={12} sm={6}>
-                                <Button
-                                  fullWidth
-                                  size="small"
-                                  variant={formData.transporteShuttle === 'si' ? 'contained' : 'outlined'}
-                                  onClick={() => handleChange('transporteShuttle', 'si')}
-                                  sx={{
-                                    borderRadius: '20px',
-                                    py: 1,
-                                    bgcolor: formData.transporteShuttle === 'si' ? colors.copper : 'transparent',
-                                    color: formData.transporteShuttle === 'si' ? '#fff' : colors.copper,
-                                    borderColor: colors.copper,
-                                    fontWeight: 600,
-                                    fontSize: '0.82rem',
-                                    '&:hover': {
-                                      bgcolor: formData.transporteShuttle === 'si' ? colors.copperDark : 'rgba(199, 120, 79, 0.08)',
-                                    },
-                                  }}
-                                >
-                                  {t('wedding.rsvpForm.shuttleYes')}
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <Button
-                                  fullWidth
-                                  size="small"
-                                  variant={formData.transporteShuttle === 'no' ? 'contained' : 'outlined'}
-                                  onClick={() => handleChange('transporteShuttle', 'no')}
-                                  sx={{
-                                    borderRadius: '20px',
-                                    py: 1,
-                                    bgcolor: formData.transporteShuttle === 'no' ? colors.forestGreen : 'transparent',
-                                    color: formData.transporteShuttle === 'no' ? '#fff' : colors.forestGreen,
-                                    borderColor: colors.forestGreen,
-                                    fontWeight: 600,
-                                    fontSize: '0.82rem',
-                                    '&:hover': {
-                                      bgcolor: formData.transporteShuttle === 'no' ? colors.forestDark : 'rgba(30, 56, 43, 0.08)',
-                                    },
-                                  }}
-                                >
-                                  {t('wedding.rsvpForm.shuttleNo')}
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Box>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            label={t('wedding.rsvpForm.dietary')}
-                            placeholder={t('wedding.rsvpForm.dietaryPlaceholder')}
-                            value={formData.dieta}
-                            onChange={(e) => handleChange('dieta', e.target.value)}
-                            variant="outlined"
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-
-                  {/* Mensaje a los novios */}
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={2}
-                      size="small"
-                      label={t('wedding.rsvpForm.notes')}
-                      placeholder={t('wedding.rsvpForm.notesPlaceholder')}
-                      value={formData.mensaje}
-                      onChange={(e) => handleChange('mensaje', e.target.value)}
-                      variant="outlined"
-                    />
-                  </Grid>
-
-                  {/* Botón de Enviar interactivo */}
-                  <Grid item xs={12} sx={{ textAlign: 'center', mt: 1 }}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      disabled={loading}
-                      endIcon={!loading && <SendIcon />}
-                      sx={{
-                        bgcolor: colors.copper,
-                        color: '#ffffff',
-                        px: { xs: 4, sm: 6 },
-                        py: 1.3,
-                        borderRadius: '30px',
-                        fontWeight: 700,
-                        fontSize: { xs: '0.9rem', sm: '1rem' },
-                        letterSpacing: 1,
-                        boxShadow: '0 6px 20px rgba(199, 120, 79, 0.3)',
-                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        p: 2,
+                        borderRadius: 2.5,
+                        border: `2px solid ${formData.asistencia === 'si' ? colors.copper : '#e8ded4'}`,
+                        bgcolor: formData.asistencia === 'si' ? 'rgba(199, 120, 79, 0.08)' : '#faf8f5',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        transition: 'all 0.25s ease',
+                        boxSizing: 'border-box',
                         '&:hover': {
-                          bgcolor: colors.copperDark,
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 24px rgba(199, 120, 79, 0.45)',
+                          borderColor: colors.copper,
+                          bgcolor: 'rgba(199, 120, 79, 0.04)',
                         },
                       }}
                     >
-                      {loading ? (
-                        <CircularProgress size={24} color="inherit" />
-                      ) : (
-                        t('wedding.rsvpForm.submit')
-                      )}
-                    </Button>
-                  </Grid>
-                </Grid>
+                      <CheckCircleOutlineIcon
+                        sx={{
+                          color: formData.asistencia === 'si' ? colors.copper : '#bbb',
+                          fontSize: 24,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Box>
+                        <Typography sx={{ fontWeight: 700, color: colors.forestGreen, fontSize: '0.92rem', lineHeight: 1.3 }}>
+                          {t('wedding.rsvpForm.yes')}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#777', display: 'block', lineHeight: 1.3, mt: 0.3 }}>
+                          {t('wedding.rsvpForm.yesSubtitle', 'Celebraré con ustedes este día tan especial')}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Opción No */}
+                    <Box
+                      onClick={() => handleChange('asistencia', 'no')}
+                      sx={{
+                        p: 2,
+                        borderRadius: 2.5,
+                        border: `2px solid ${formData.asistencia === 'no' ? colors.copper : '#e8ded4'}`,
+                        bgcolor: formData.asistencia === 'no' ? 'rgba(199, 120, 79, 0.08)' : '#faf8f5',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        transition: 'all 0.25s ease',
+                        boxSizing: 'border-box',
+                        '&:hover': {
+                          borderColor: colors.copper,
+                          bgcolor: 'rgba(199, 120, 79, 0.04)',
+                        },
+                      }}
+                    >
+                      <HighlightOffIcon
+                        sx={{
+                          color: formData.asistencia === 'no' ? '#c4513d' : '#bbb',
+                          fontSize: 24,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Box>
+                        <Typography sx={{ fontWeight: 700, color: colors.charcoal, fontSize: '0.92rem', lineHeight: 1.3 }}>
+                          {t('wedding.rsvpForm.no')}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#777', display: 'block', lineHeight: 1.3, mt: 0.3 }}>
+                          {t('wedding.rsvpForm.noSubtitle', 'Los acompañaré desde la distancia')}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* Paso 2: Datos de Contacto (2 columnas simétricas al 100% del ancho) */}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                    gap: 2,
+                    width: '100%',
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    required
+                    size="medium"
+                    label={t('wedding.rsvpForm.fullName')}
+                    value={formData.nombre}
+                    onChange={(e) => handleChange('nombre', e.target.value)}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: colors.copper,
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    required
+                    size="medium"
+                    type="email"
+                    label={t('wedding.rsvpForm.email')}
+                    value={formData.email}
+                    onChange={(e) => handleChange('email', e.target.value)}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: colors.copper,
+                      },
+                    }}
+                  />
+                </Box>
+
+                {/* Paso 3: Campos Condicionales de Asistencia */}
+                <Collapse in={formData.asistencia === 'si'} sx={{ width: '100%' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, width: '100%', pt: 0.5 }}>
+                    {/* Acompañantes */}
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: { xs: '1fr', sm: '140px 1fr' },
+                        gap: 2,
+                        width: '100%',
+                      }}
+                    >
+                      <TextField
+                        fullWidth
+                        size="medium"
+                        type="number"
+                        label={t('wedding.rsvpForm.guests')}
+                        inputProps={{ min: 1, max: 10 }}
+                        value={formData.numInvitados}
+                        onChange={(e) => handleChange('numInvitados', e.target.value)}
+                        variant="outlined"
+                        sx={{
+                          '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: colors.copper,
+                          },
+                        }}
+                      />
+                      <TextField
+                        fullWidth
+                        size="medium"
+                        label={t('wedding.rsvpForm.guestNames')}
+                        value={formData.nombresAcompanantes}
+                        onChange={(e) => handleChange('nombresAcompanantes', e.target.value)}
+                        variant="outlined"
+                        placeholder="Ej: Sofía Urquilla, Mateo Shields"
+                        sx={{
+                          '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: colors.copper,
+                          },
+                        }}
+                      />
+                    </Box>
+
+                    {/* Selector de Shuttle Bus */}
+                    <Box
+                      sx={{
+                        p: { xs: 2, sm: 2.5 },
+                        borderRadius: 2.5,
+                        bgcolor: '#faf8f5',
+                        border: '1px solid #ebdccb',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1.5,
+                        width: '100%',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <DirectionsBusIcon sx={{ color: colors.copper, fontSize: 26, flexShrink: 0 }} />
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 700, color: colors.forestGreen }}>
+                            {t('wedding.rsvpForm.shuttle')}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#666', display: 'block' }}>
+                            {t('wedding.rsvpForm.shuttleSubtitle', 'Transporte de ida y vuelta al lugar del evento')}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                          gap: 1.5,
+                          width: '100%',
+                        }}
+                      >
+                        <Button
+                          fullWidth
+                          size="medium"
+                          variant={formData.transporteShuttle === 'si' ? 'contained' : 'outlined'}
+                          onClick={() => handleChange('transporteShuttle', 'si')}
+                          sx={{
+                            borderRadius: '25px',
+                            py: 1,
+                            bgcolor: formData.transporteShuttle === 'si' ? colors.copper : 'transparent',
+                            color: formData.transporteShuttle === 'si' ? '#fff' : colors.copper,
+                            borderColor: colors.copper,
+                            fontWeight: 600,
+                            fontSize: '0.84rem',
+                            '&:hover': {
+                              bgcolor: formData.transporteShuttle === 'si' ? colors.copperDark : 'rgba(199, 120, 79, 0.08)',
+                            },
+                          }}
+                        >
+                          {t('wedding.rsvpForm.shuttleYes')}
+                        </Button>
+                        <Button
+                          fullWidth
+                          size="medium"
+                          variant={formData.transporteShuttle === 'no' ? 'contained' : 'outlined'}
+                          onClick={() => handleChange('transporteShuttle', 'no')}
+                          sx={{
+                            borderRadius: '25px',
+                            py: 1,
+                            bgcolor: formData.transporteShuttle === 'no' ? colors.forestGreen : 'transparent',
+                            color: formData.transporteShuttle === 'no' ? '#fff' : colors.forestGreen,
+                            borderColor: colors.forestGreen,
+                            fontWeight: 600,
+                            fontSize: '0.84rem',
+                            '&:hover': {
+                              bgcolor: formData.transporteShuttle === 'no' ? colors.forestDark : 'rgba(30, 56, 43, 0.08)',
+                            },
+                          }}
+                        >
+                          {t('wedding.rsvpForm.shuttleNo')}
+                        </Button>
+                      </Box>
+                    </Box>
+
+                    {/* Restricciones Dietéticas */}
+                    <TextField
+                      fullWidth
+                      size="medium"
+                      label={t('wedding.rsvpForm.dietary')}
+                      placeholder={t('wedding.rsvpForm.dietaryPlaceholder')}
+                      value={formData.dieta}
+                      onChange={(e) => handleChange('dieta', e.target.value)}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: colors.copper,
+                        },
+                      }}
+                    />
+                  </Box>
+                </Collapse>
+
+                {/* Paso 4: Mensaje */}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={3}
+                  size="medium"
+                  label={t('wedding.rsvpForm.notes')}
+                  placeholder={t('wedding.rsvpForm.notesPlaceholder')}
+                  value={formData.mensaje}
+                  onChange={(e) => handleChange('mensaje', e.target.value)}
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: colors.copper,
+                    },
+                  }}
+                />
+
+                {/* Paso 5: Botón de Enviar */}
+                <Box sx={{ textAlign: 'center', mt: 1 }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading}
+                    endIcon={!loading && <SendIcon />}
+                    sx={{
+                      bgcolor: colors.copper,
+                      color: '#ffffff',
+                      px: { xs: 4, sm: 6 },
+                      py: 1.4,
+                      borderRadius: '30px',
+                      fontWeight: 700,
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      letterSpacing: 1.5,
+                      boxShadow: '0 6px 20px rgba(199, 120, 79, 0.3)',
+                      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                      '&:hover': {
+                        bgcolor: colors.copperDark,
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 8px 24px rgba(199, 120, 79, 0.45)',
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      t('wedding.rsvpForm.submit')
+                    )}
+                  </Button>
+                </Box>
               </Box>
             )}
           </CardContent>

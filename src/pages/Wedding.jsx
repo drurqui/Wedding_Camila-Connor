@@ -1159,7 +1159,7 @@ const Wedding = () => {
       </Box>
 
       {/* FOOTER */}
-      <Box sx={{ bgcolor: colors.forestDark, color: 'rgba(255,255,255,0.7)', py: 3.5, textAlign: 'center' }}>
+      <Box sx={{ bgcolor: colors.forestDark, color: 'rgba(255,255,255,0.7)', pt: 4, pb: 10, textAlign: 'center' }}>
         <Typography variant="body2" sx={{ letterSpacing: 2, fontSize: '0.78rem' }}>
           CAMILA & CONNOR • AUGUST 7, 2027 • EL SALVADOR
         </Typography>
