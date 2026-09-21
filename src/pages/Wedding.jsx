@@ -323,7 +323,7 @@ const Wedding = () => {
       number: '03',
       title: t('wedding.honeymoon.items.lakeComo.title'),
       description: t('wedding.honeymoon.items.lakeComo.description'),
-      image: '/lake-como.jpg',
+      image: '/lake_como.jpg',
       shareText: t('wedding.honeymoon.items.lakeComo.shareText'),
       need: t('wedding.honeymoon.items.lakeComo.need'),
       shareUsd: 150,
