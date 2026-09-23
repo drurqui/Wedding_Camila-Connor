@@ -191,6 +191,46 @@
       "entree": "Entree (Plato Fuerte)",
       "allergies": "Alergias / Dieta",
       "saveButton": "Guardar Cambios RSVP"
+    },
+    "weddingTabs": {
+      "summary": "Resumen y Respuestas",
+      "masterList": "Lista Maestra Boda",
+      "menu": "Menú y Alergias",
+      "guests": "Respuestas por Invitado"
+    },
+    "weddingMaster": {
+      "title": "Lista Maestra de Invitaciones • Boda",
+      "addTitle": "Crear Invitación para la Boda",
+      "invName": "Titular de la Invitación / Familia",
+      "invPlaceholder": "Ej: Familia Urquilla, Sr. Juan Pérez...",
+      "guestsLabel": "Invitados Incluidos en esta Invitación",
+      "addGuest": "Agregar Invitado",
+      "saveInvitation": "Guardar Invitación",
+      "editTitle": "Editar Invitación de Boda",
+      "deleteConfirmTitle": "Eliminar Invitación de Boda",
+      "deleteConfirmMsg": "¿Estás seguro de que deseas eliminar permanentemente esta invitación de la lista maestra de la boda?",
+      "guestCount": "{{count}} personas",
+      "emptyList": "Aún no hay invitaciones creadas para la boda.",
+      "adult": "Adulto",
+      "child": "Niño",
+      "importButton": "Copiar Invitaciones desde Compromiso",
+      "importBannerTitle": "¿Deseas partir de la lista de Engagement?",
+      "importBannerText": "Puedes importar todas las invitaciones de la fiesta de compromiso como base independiente para la boda. No afectará en nada a la lista original de compromiso.",
+      "importConfirmTitle": "Copiar Lista Maestra desde Compromiso",
+      "importConfirmMsg": "¿Deseas copiar las invitaciones de Compromiso a la lista de la Boda? Se crearán como registros independientes y se omitirán las que ya existan.",
+      "importSuccess": "Se copiaron exitosamente {{count}} invitaciones a la lista de la Boda.",
+      "importZero": "Todas las invitaciones de Compromiso ya se encuentran en la lista de la Boda."
+    },
+    "weddingMenu": {
+      "title": "Elección de Menús y Alergias • Boda",
+      "menuSummary": "Conteo de Platos Principales",
+      "allergiesSummary": "Reporte de Alergias y Restricciones Declaradas",
+      "noAllergies": "No se han reportado restricciones o alergias.",
+      "guest": "Invitado",
+      "invitation": "Invitación",
+      "menu": "Plato Principal",
+      "allergy": "Alergia / Restricción",
+      "shuttle": "Shuttle"
     }
   },
   "wedding": {
@@ -307,7 +347,62 @@
       "anotherRsvp": "Enviar otra confirmación",
       "errorTitle": "Error al guardar confirmación",
       "nameRequired": "Por favor ingresa tu nombre completo.",
-      "emailRequired": "Por favor ingresa un correo electrónico válido."
+      "emailRequired": "Por favor ingresa un correo electrónico válido.",
+      "step1": {
+        "title": "Encuentra tu Invitación",
+        "subtitle": "Ingresa el nombre o apellido de cualquiera de los integrantes de tu invitación y tu correo electrónico.",
+        "nameLabel": "Nombre o Apellido",
+        "namePlaceholder": "Ej. Camila Urquilla, Familia Urquilla...",
+        "emailLabel": "Correo Electrónico",
+        "emailPlaceholder": "tu@correo.com",
+        "searchButton": "Buscar Invitación",
+        "searching": "Buscando invitación...",
+        "notFound": "No encontramos una invitación con esos datos. Por favor verifica tu nombre o contáctanos.",
+        "multipleFound": "Se encontraron múltiples coincidencias. Por favor escribe tu nombre completo o correo vinculado."
+      },
+      "step2": {
+        "guestLabel": "Invitación para: ",
+        "changeButton": "Cambiar invitación",
+        "welcomeTitle": "Celebración de Nuestra Boda",
+        "instructions": "Por favor indica la asistencia de cada persona incluida en la invitación, su plato principal preferido y cualquier alergia o restricción alimenticia.",
+        "attendanceQuestion": "¿Asistirá a la boda?",
+        "attendYes": "Sí, asistirá con gusto",
+        "attendNo": "No podrá asistir",
+        "childBadge": "Niño/a",
+        "adultBadge": "Adulto",
+        "menuLabel": "Selección de Plato Principal",
+        "menuPrompt": "Selecciona una opción de menú...",
+        "menuOptions": {
+          "beef": "Filete de Res en Reducción de Vino y Finas Hierbas",
+          "salmon": "Salmón Fresco al Horno con Costra de Finas Hierbas",
+          "vegetarian": "Opción Vegetariana / Vegana Gourmet",
+          "kids": "Menú Infantil Especial"
+        },
+        "allergiesLabel": "Alergias o Restricciones Alimenticias",
+        "allergiesPlaceholder": "Ej. Sin gluten (celíaco), sin lácteos, alergia a nueces o mariscos...",
+        "shuttleTitle": "Transporte Shuttle Bus",
+        "shuttleQuestion": "¿Tu grupo utilizará el servicio de transporte Shuttle de ida y vuelta (Hotel Hilton ⇄ Forêt)?",
+        "shuttleYes": "Sí, utilizaremos el transporte shuttle",
+        "shuttleNo": "No, llegaremos por cuenta propia / vehículo particular",
+        "messageTitle": "Mensaje para los Novios",
+        "messagePlaceholder": "Escribe un mensaje o bendición para Camila & Connor (opcional)...",
+        "submitButton": "Confirmar Asistencia",
+        "updateButton": "Actualizar Confirmación",
+        "submitting": "Guardando confirmación...",
+        "missingMenuWarning": "Por favor selecciona una opción de menú para {{name}}.",
+        "saveError": "Hubo un error al guardar la confirmación. Por favor intenta de nuevo."
+      },
+      "step3": {
+        "title": "¡Muchas Gracias por Confirmar!",
+        "subtitle": "Hemos registrado exitosamente tus respuestas para la boda de Camila & Connor el sábado 7 de agosto de 2027 en Forêt, Comasagua.",
+        "summaryTitle": "Resumen de Confirmación",
+        "attendingGuests": "Asistentes confirmados:",
+        "declinedGuests": "No asistirán:",
+        "shuttleStatus": "Servicio de Shuttle:",
+        "shuttleConfirmed": "Confirmado (Hotel Hilton ⇄ Forêt)",
+        "shuttleDeclined": "Transporte propio",
+        "modifyButton": "Modificar Respuestas"
+      }
     },
     "logistics": {
       "title": "VIAJE Y LOGÍSTICA",

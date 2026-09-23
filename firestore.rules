@@ -2,16 +2,27 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Lista maestra de invitaciones (Compromiso y Boda)
+    match /invitaciones/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /invitaciones_boda/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // Reglas para la fiesta de compromiso
     match /rsvps_compromiso/{document=**} {
-      allow create: if true; // Cualquiera puede enviar su confirmación
-      allow read, update, delete: if false; // Nadie público puede leer o borrar la lista
+      allow read, create, update: if true;
+      allow delete: if request.auth != null;
     }
 
     // Reglas para la boda
     match /rsvps_boda/{document=**} {
-      allow create: if true; 
-      allow read, update, delete: if false; 
+      allow read, create, update: if true;
+      allow delete: if request.auth != null;
     }
   }
 }

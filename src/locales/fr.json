@@ -191,6 +191,46 @@
       "entree": "Plat Principal",
       "allergies": "Allergies / Régime",
       "saveButton": "Enregistrer les modifications RSVP"
+    },
+    "weddingTabs": {
+      "summary": "Résumé et Réponses",
+      "masterList": "Liste Principale Mariage",
+      "menu": "Menu et Allergies",
+      "guests": "Réponses par Invité"
+    },
+    "weddingMaster": {
+      "title": "Liste Principale des Invitations • Mariage",
+      "addTitle": "Créer une Invitation pour le Mariage",
+      "invName": "Nom de Famille ou Titulaire",
+      "invPlaceholder": "Ex : Famille Urquilla, M. Jean Dupont...",
+      "guestsLabel": "Invités Inclus dans cette Invitation",
+      "addGuest": "Ajouter un Invité",
+      "saveInvitation": "Enregistrer l'Invitation",
+      "editTitle": "Modifier l'Invitation du Mariage",
+      "deleteConfirmTitle": "Supprimer l'Invitation",
+      "deleteConfirmMsg": "Êtes-vous sûr de vouloir supprimer définitivement cette invitation de la liste du mariage ?",
+      "guestCount": "{{count}} personnes",
+      "emptyList": "Aucune invitation créée pour le mariage pour le moment.",
+      "adult": "Adulte",
+      "child": "Enfant",
+      "importButton": "Copier les Invitations depuis les Fiançailles",
+      "importBannerTitle": "Souhaitez-vous partir de la liste des Fiançailles ?",
+      "importBannerText": "Vous pouvez copier toutes les invitations des fiançailles comme point de départ indépendant pour le mariage. Cela n'affectera en rien la liste d'origine.",
+      "importConfirmTitle": "Copier la Liste depuis les Fiançailles",
+      "importConfirmMsg": "Voulez-vous copier les invitations des fiançailles vers la liste du mariage ? Elles seront créées en tant que fiches indépendantes et les doublons seront ignorés.",
+      "importSuccess": "{{count}} invitations ont été copiées avec succès vers la liste du mariage.",
+      "importZero": "Toutes les invitations des fiançailles existent déjà dans la liste du mariage."
+    },
+    "weddingMenu": {
+      "title": "Choix de Menus et Allergies • Mariage",
+      "menuSummary": "Répartition des Plats Principaux",
+      "allergiesSummary": "Rapport des Régimes et Allergies Déclarés",
+      "noAllergies": "Aucune allergie ou restriction signalée.",
+      "guest": "Invité",
+      "invitation": "Invitation",
+      "menu": "Plat Principal",
+      "allergy": "Allergie / Régime",
+      "shuttle": "Navette"
     }
   },
   "wedding": {
@@ -307,7 +347,62 @@
       "anotherRsvp": "Envoyer une autre confirmation",
       "errorTitle": "Erreur lors de l'enregistrement",
       "nameRequired": "Veuillez entrer votre nom complet.",
-      "emailRequired": "Veuillez entrer une adresse email valide."
+      "emailRequired": "Veuillez entrer une adresse email valide.",
+      "step1": {
+        "title": "Trouvez votre Invitation",
+        "subtitle": "Indiquez le nom ou prénom d'un des invités de votre invitation ainsi que votre adresse e-mail.",
+        "nameLabel": "Nom ou Prénom",
+        "namePlaceholder": "Ex. Camila Urquilla, Famille Urquilla...",
+        "emailLabel": "Adresse Email",
+        "emailPlaceholder": "votre@email.com",
+        "searchButton": "Trouver mon Invitation",
+        "searching": "Recherche de l'invitation...",
+        "notFound": "Aucune invitation trouvée avec ces coordonnées. Veuillez vérifier l'orthographe ou nous contacter.",
+        "multipleFound": "Plusieurs invitations correspondent à votre recherche. Veuillez saisir votre nom complet ou votre email lié."
+      },
+      "step2": {
+        "guestLabel": "Invitation pour : ",
+        "changeButton": "Changer d'invitation",
+        "welcomeTitle": "Célébration de notre Mariage",
+        "instructions": "Veuillez indiquer la présence de chaque personne, son plat principal choisi et ses éventuelles allergies ou régimes alimentaires.",
+        "attendanceQuestion": "Sera présent(e) au mariage ?",
+        "attendYes": "Oui, sera présent(e)",
+        "attendNo": "Ne pourra pas assister",
+        "childBadge": "Enfant",
+        "adultBadge": "Adulte",
+        "menuLabel": "Choix du Plat Principal",
+        "menuPrompt": "Sélectionnez une option de menu...",
+        "menuOptions": {
+          "beef": "Filet de Bœuf au Vin Rouge et Fines Herbes",
+          "salmon": "Saumon Frais Rôti en Croûte d'Herbes",
+          "vegetarian": "Option Végétarienne / Végétalienne Gourmande",
+          "kids": "Menu Spécial Enfants"
+        },
+        "allergiesLabel": "Allergies ou Restrictions Alimentaires",
+        "allergiesPlaceholder": "Ex. Sans gluten (cœliaque), sans lactose, allergie aux noix ou fruits de mer...",
+        "shuttleTitle": "Service de Navette",
+        "shuttleQuestion": "Votre groupe utilisera-t-il le service de navette aller-retour (Hôtel Hilton ⇄ Forêt) ?",
+        "shuttleYes": "Oui, nous utiliserons la navette",
+        "shuttleNo": "Non, nous viendrons par nos propres moyens",
+        "messageTitle": "Message pour les Mariés",
+        "messagePlaceholder": "Laissez un message chaleureux pour Camila & Connor (optionnel)...",
+        "submitButton": "Confirmer la Présence",
+        "updateButton": "Mettre à jour la Présence",
+        "submitting": "Enregistrement en cours...",
+        "missingMenuWarning": "Veuillez choisir un plat principal pour {{name}}.",
+        "saveError": "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer."
+      },
+      "step3": {
+        "title": "Merci Infiniment pour votre Réponse !",
+        "subtitle": "Nous avons bien enregistré vos réponses pour le mariage de Camila & Connor le samedi 7 août 2027 à Forêt, Comasagua.",
+        "summaryTitle": "Détails de votre Confirmation",
+        "attendingGuests": "Invités confirmés :",
+        "declinedGuests": "Absents :",
+        "shuttleStatus": "Service de navette :",
+        "shuttleConfirmed": "Confirmé (Hôtel Hilton ⇄ Forêt)",
+        "shuttleDeclined": "Transport personnel",
+        "modifyButton": "Modifier mes Réponses"
+      }
     },
     "logistics": {
       "title": "VOYAGE ET LOGISTIQUE",

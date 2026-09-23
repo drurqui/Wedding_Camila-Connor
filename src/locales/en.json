@@ -191,6 +191,46 @@
       "entree": "Entree",
       "allergies": "Allergies / Diet",
       "saveButton": "Save RSVP Changes"
+    },
+    "weddingTabs": {
+      "summary": "Summary & Responses",
+      "masterList": "Wedding Master List",
+      "menu": "Menu & Allergies",
+      "guests": "Responses by Guest"
+    },
+    "weddingMaster": {
+      "title": "Master Invitation List • Wedding",
+      "addTitle": "Create Wedding Invitation",
+      "invName": "Invitation Title / Family Name",
+      "invPlaceholder": "E.g., Urquilla Family, Mr. John Doe...",
+      "guestsLabel": "Guests Included in this Invitation",
+      "addGuest": "Add Guest",
+      "saveInvitation": "Save Invitation",
+      "editTitle": "Edit Wedding Invitation",
+      "deleteConfirmTitle": "Delete Wedding Invitation",
+      "deleteConfirmMsg": "Are you sure you want to permanently delete this invitation from the wedding master list?",
+      "guestCount": "{{count}} guests",
+      "emptyList": "No wedding invitations created yet.",
+      "adult": "Adult",
+      "child": "Child",
+      "importButton": "Copy Invitations from Engagement",
+      "importBannerTitle": "Want to start from your Engagement list?",
+      "importBannerText": "You can import all invitations from the engagement party as an independent starting point for the wedding. This will not affect the original engagement list in any way.",
+      "importConfirmTitle": "Copy Master List from Engagement",
+      "importConfirmMsg": "Do you want to copy invitations from Engagement to the Wedding list? They will be created as independent records, and any existing ones will be skipped.",
+      "importSuccess": "Successfully copied {{count}} invitations to the Wedding list.",
+      "importZero": "All invitations from Engagement already exist in the Wedding list."
+    },
+    "weddingMenu": {
+      "title": "Menu Selection & Dietary Restrictions • Wedding",
+      "menuSummary": "Main Course Breakdown",
+      "allergiesSummary": "Reported Dietary Restrictions & Allergies",
+      "noAllergies": "No restrictions or allergies reported.",
+      "guest": "Guest",
+      "invitation": "Invitation",
+      "menu": "Main Course",
+      "allergy": "Allergy / Restriction",
+      "shuttle": "Shuttle"
     }
   },
   "wedding": {
@@ -307,7 +347,62 @@
       "anotherRsvp": "Submit another RSVP",
       "errorTitle": "Error saving RSVP",
       "nameRequired": "Please enter your full name.",
-      "emailRequired": "Please enter a valid email address."
+      "emailRequired": "Please enter a valid email address.",
+      "step1": {
+        "title": "Find Your Invitation",
+        "subtitle": "Enter the first or last name of any member of your party and your email address.",
+        "nameLabel": "First or Last Name",
+        "namePlaceholder": "E.g., Camila Urquilla, Urquilla Family...",
+        "emailLabel": "Email Address",
+        "emailPlaceholder": "your@email.com",
+        "searchButton": "Find Invitation",
+        "searching": "Searching invitation...",
+        "notFound": "We couldn't find an invitation matching those details. Please check your spelling or contact us.",
+        "multipleFound": "Multiple invitations found. Please enter your full name or linked email."
+      },
+      "step2": {
+        "guestLabel": "Invitation for: ",
+        "changeButton": "Change invitation",
+        "welcomeTitle": "Our Wedding Celebration",
+        "instructions": "Please indicate attendance for each person included in your invitation, their main course selection, and any dietary restrictions.",
+        "attendanceQuestion": "Will attend the wedding?",
+        "attendYes": "Joyfully accepts",
+        "attendNo": "Regretfully declines",
+        "childBadge": "Child",
+        "adultBadge": "Adult",
+        "menuLabel": "Main Course Selection",
+        "menuPrompt": "Select a menu option...",
+        "menuOptions": {
+          "beef": "Beef Tenderloin in Red Wine & Fine Herbs Reduction",
+          "salmon": "Oven-Baked Fresh Salmon with Herb Crust",
+          "vegetarian": "Gourmet Seasonal Vegetarian / Vegan Entrée",
+          "kids": "Kids Special Menu"
+        },
+        "allergiesLabel": "Allergies or Dietary Restrictions",
+        "allergiesPlaceholder": "E.g., Celiac (gluten-free), dairy-free, nut or shellfish allergy...",
+        "shuttleTitle": "Shuttle Bus Transportation",
+        "shuttleQuestion": "Will your party use the round-trip Shuttle service (Hilton Hotel ⇄ Forêt)?",
+        "shuttleYes": "Yes, we will use the shuttle transport",
+        "shuttleNo": "No, we will arrive on our own",
+        "messageTitle": "Message for the Couple",
+        "messagePlaceholder": "Leave a warm message or blessing for Camila & Connor (optional)...",
+        "submitButton": "Confirm RSVP",
+        "updateButton": "Update RSVP",
+        "submitting": "Saving RSVP...",
+        "missingMenuWarning": "Please select a main course for {{name}}.",
+        "saveError": "There was an error saving your RSVP. Please try again."
+      },
+      "step3": {
+        "title": "Thank You for Responding!",
+        "subtitle": "We have successfully recorded your response for Camila & Connor's wedding on Saturday, August 7, 2027, at Forêt, Comasagua.",
+        "summaryTitle": "RSVP Summary",
+        "attendingGuests": "Confirmed attendees:",
+        "declinedGuests": "Unable to attend:",
+        "shuttleStatus": "Shuttle Service:",
+        "shuttleConfirmed": "Confirmed (Hilton Hotel ⇄ Forêt)",
+        "shuttleDeclined": "Own transportation",
+        "modifyButton": "Modify Response"
+      }
     },
     "logistics": {
       "title": "TRAVEL AND LOGISTICS",
