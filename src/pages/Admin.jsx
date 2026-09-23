@@ -1011,48 +1011,212 @@ const Admin = () => {
             {/* PESTAÑA 0: RESUMEN Y RESPUESTAS */}
             {tabValueWedding === 0 && (
               <>
-                {/* Tarjetas de Estadísticas de la Boda */}
+                {/* Tarjetas de Estadísticas de la Boda Uniformes */}
                 <Grid container spacing={3} sx={{ mb: 5 }}>
-                  <Grid item xs={12} sm={3}>
-                    <Card sx={{ p: 3, textAlign: 'center', border: '1px solid #1e382b', bgcolor: '#fbfcfb' }}>
-                      <Typography variant="caption" sx={{ color: '#1e382b', fontWeight: 'bold' }}>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        textAlign: 'center',
+                        border: '1px solid #1e382b',
+                        bgcolor: '#ffffff',
+                        borderRadius: 2,
+                        boxShadow: 'none',
+                        height: '100%',
+                        minHeight: 140,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 700,
+                          letterSpacing: 0.8,
+                          textTransform: 'uppercase',
+                          fontSize: '0.75rem',
+                          lineHeight: 1.3,
+                          minHeight: '2.6em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
                         CONFIRMACIONES RECIBIDAS
                       </Typography>
-                      <Typography variant="h4" sx={{ color: '#1e382b', fontWeight: 'bold', mt: 1 }}>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 'bold',
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: '2.5rem',
+                          my: 0.5,
+                        }}
+                      >
                         {statsBoda.totalConfirmados}
                       </Typography>
+                      <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem', height: 18, display: 'flex', alignItems: 'center' }}>
+                        {statsBoda.totalConfirmados > 0 ? `${statsBoda.totalConfirmados} registradas` : '—'}
+                      </Typography>
                     </Card>
                   </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Card sx={{ p: 3, textAlign: 'center', border: '1px solid #c7784f', bgcolor: '#fffcfb' }}>
-                      <Typography variant="caption" sx={{ color: '#c7784f', fontWeight: 'bold' }}>
+
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        textAlign: 'center',
+                        border: '1px solid #1e382b',
+                        bgcolor: '#ffffff',
+                        borderRadius: 2,
+                        boxShadow: 'none',
+                        height: '100%',
+                        minHeight: 140,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 700,
+                          letterSpacing: 0.8,
+                          textTransform: 'uppercase',
+                          fontSize: '0.75rem',
+                          lineHeight: 1.3,
+                          minHeight: '2.6em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
                         TOTAL ASISTENTES CONFIRMADOS
                       </Typography>
-                      <Typography variant="h4" sx={{ color: '#c7784f', fontWeight: 'bold', mt: 1 }}>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 'bold',
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: '2.5rem',
+                          my: 0.5,
+                        }}
+                      >
                         {statsBoda.totalInvitados}
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#888', display: 'block', mt: 0.5 }}>
-                        {statsBoda.adultos} adultos • {statsBoda.ninos} niños
+                      <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem', height: 18, display: 'flex', alignItems: 'center' }}>
+                        {statsBoda.totalInvitados > 0 ? `${statsBoda.adultos} adultos • ${statsBoda.ninos} niños` : '—'}
                       </Typography>
                     </Card>
                   </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Card sx={{ p: 3, textAlign: 'center', border: '1px solid #dfb15b', bgcolor: '#fdfbf7' }}>
-                      <Typography variant="caption" sx={{ color: '#b08226', fontWeight: 'bold' }}>
+
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        textAlign: 'center',
+                        border: '1px solid #1e382b',
+                        bgcolor: '#ffffff',
+                        borderRadius: 2,
+                        boxShadow: 'none',
+                        height: '100%',
+                        minHeight: 140,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 700,
+                          letterSpacing: 0.8,
+                          textTransform: 'uppercase',
+                          fontSize: '0.75rem',
+                          lineHeight: 1.3,
+                          minHeight: '2.6em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
                         PASAJEROS SHUTTLE BUS
                       </Typography>
-                      <Typography variant="h4" sx={{ color: '#1e382b', fontWeight: 'bold', mt: 1, display: 'inline-flex', alignItems: 'center', gap: 1 }}>
-                        <DirectionsBusIcon sx={{ color: '#c7784f' }} /> {statsBoda.shuttle}
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 'bold',
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: '2.5rem',
+                          my: 0.5,
+                        }}
+                      >
+                        {statsBoda.shuttle}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem', height: 18, display: 'flex', alignItems: 'center' }}>
+                        {statsBoda.shuttle > 0 ? `${statsBoda.shuttle} confirmados` : '—'}
                       </Typography>
                     </Card>
                   </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Card sx={{ p: 3, textAlign: 'center', border: '1px solid #e0e0e0', bgcolor: '#ffffff' }}>
-                      <Typography variant="caption" sx={{ color: '#666', fontWeight: 'bold' }}>
+
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        textAlign: 'center',
+                        border: '1px solid #1e382b',
+                        bgcolor: '#ffffff',
+                        borderRadius: 2,
+                        boxShadow: 'none',
+                        height: '100%',
+                        minHeight: 140,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 700,
+                          letterSpacing: 0.8,
+                          textTransform: 'uppercase',
+                          fontSize: '0.75rem',
+                          lineHeight: 1.3,
+                          minHeight: '2.6em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
                         INVITACIONES REGISTRADAS
                       </Typography>
-                      <Typography variant="h4" sx={{ color: '#1e382b', fontWeight: 'bold', mt: 1 }}>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          color: '#1e382b',
+                          fontWeight: 'bold',
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: '2.5rem',
+                          my: 0.5,
+                        }}
+                      >
                         {listaMaestraBoda.length}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem', height: 18, display: 'flex', alignItems: 'center' }}>
+                        En lista maestra
                       </Typography>
                     </Card>
                   </Grid>
