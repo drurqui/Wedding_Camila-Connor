@@ -334,7 +334,14 @@
       "q2": "¿CÓMO LLEGO AL LUGAR DEL EVENTO?",
       "a2": "¡Pondremos a disposición transporte tipo shuttle de ida y vuelta entre el Hotel Hilton y Forêt el día de la boda! Solo debes presentarte en el lobby del hotel a las 2:30 pm del sábado 7 de agosto de 2027. Si prefieres manejar en tu propio vehículo, configura tu GPS a Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Habrá servicio de Valet Parking gratuito durante toda la velada.",
       "q3": "¿CUÁL ES EL CÓDIGO DE VESTIMENTA?",
-      "a3": "Formal / Etiqueta rigurosa. Damas: Vestidos largos o elegantes hasta el tobillo (¡te animamos a usar colores vibrantes o estampados botánicos!). Caballeros: Traje formal o esmoquin."
+      "a3": "Formal / Etiqueta rigurosa. Damas: Vestidos largos o elegantes hasta el tobillo (¡te animamos a usar colores vibrantes o estampados botánicos!). Caballeros: Traje formal o esmoquin.",
+      "dressCodeNoteTitle": "Colores Reservados para la Novia",
+      "dressCodeNoteText": "Por favor no vestir de blanco, ni de amarillo claro o tonos pastel. Bajo la iluminación de la noche y en fotografías, estos tonos claros se asemejan al blanco y quedan estrictamente reservados para la novia.",
+      "reservedColors": {
+        "white": "Blanco",
+        "lightYellow": "Amarillo claro",
+        "pastels": "Tonos pastel"
+      }
     },
     "rsvpNotice": {
       "title": "Confirmación para la Boda",

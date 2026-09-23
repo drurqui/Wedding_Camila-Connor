@@ -16,6 +16,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import TrainIcon from '@mui/icons-material/Train';
 import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat';
+import BlockIcon from '@mui/icons-material/Block';
 
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -704,7 +705,12 @@ const Wedding = () => {
                 {[
                   { q: t('wedding.details.q1'), a: t('wedding.details.a1'), defaultOpen: true },
                   { q: t('wedding.details.q2'), a: t('wedding.details.a2'), defaultOpen: true },
-                  { q: t('wedding.details.q3'), a: t('wedding.details.a3'), defaultOpen: true },
+                  { 
+                    q: t('wedding.details.q3'), 
+                    a: t('wedding.details.a3'), 
+                    isDressCode: true,
+                    defaultOpen: true 
+                  },
                 ].map((item, i) => (
                   <Accordion 
                     key={i} 
@@ -739,6 +745,94 @@ const Wedding = () => {
                       <Typography sx={{ color: colors.creamText, fontSize: { xs: '0.85rem', sm: '0.92rem' }, lineHeight: 1.7, opacity: 0.9 }}>
                         {item.a}
                       </Typography>
+
+                      {item.isDressCode && (
+                        <Box
+                          sx={{
+                            mt: 2.2,
+                            p: { xs: 2, sm: 2.5 },
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(199, 120, 79, 0.12)',
+                            border: '1px solid rgba(199, 120, 79, 0.45)',
+                            borderLeft: `4px solid ${colors.goldAccent}`,
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                            <BlockIcon sx={{ color: '#e57373', fontSize: 20 }} />
+                            <Typography
+                              sx={{
+                                fontFamily: "'Montserrat', sans-serif",
+                                fontWeight: 700,
+                                fontSize: { xs: '0.85rem', sm: '0.92rem' },
+                                color: colors.goldAccent,
+                                letterSpacing: 0.5,
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              {t('wedding.details.dressCodeNoteTitle')}
+                            </Typography>
+                          </Box>
+                          
+                          <Typography
+                            sx={{
+                              color: colors.creamText,
+                              fontSize: { xs: '0.82rem', sm: '0.88rem' },
+                              lineHeight: 1.6,
+                              opacity: 0.95,
+                              mb: 2,
+                            }}
+                          >
+                            {t('wedding.details.dressCodeNoteText')}
+                          </Typography>
+
+                          {/* Chips visuales de colores reservados */}
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.2 }}>
+                            {[
+                              { label: t('wedding.details.reservedColors.white'), color: '#FFFFFF' },
+                              { label: t('wedding.details.reservedColors.lightYellow'), color: '#FFF9C4' },
+                              { label: t('wedding.details.reservedColors.pastels'), color: '#FFF3E0' },
+                            ].map((swatch, sIdx) => (
+                              <Box
+                                key={sIdx}
+                                sx={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 1,
+                                  bgcolor: 'rgba(15, 31, 23, 0.7)',
+                                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                                  borderRadius: '20px',
+                                  py: 0.6,
+                                  px: 1.5,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 14,
+                                    height: 14,
+                                    borderRadius: '50%',
+                                    bgcolor: swatch.color,
+                                    border: '1px solid rgba(0,0,0,0.2)',
+                                    boxShadow: '0 0 4px rgba(255,255,255,0.4)',
+                                    display: 'inline-block',
+                                  }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: '0.78rem',
+                                    fontWeight: 600,
+                                    color: colors.sandBeige,
+                                    textDecoration: 'line-through',
+                                    textDecorationColor: '#e57373',
+                                    textDecorationThickness: '1.5px',
+                                  }}
+                                >
+                                  {swatch.label}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      )}
                     </AccordionDetails>
                   </Accordion>
                 ))}

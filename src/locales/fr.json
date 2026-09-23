@@ -334,7 +334,14 @@
       "q2": "COMMENT SE RENDRE AU LIEU DE RÉCEPTION ?",
       "a2": "Des navettes aller-retour seront mises en place entre l'Hôtel Hilton et Forêt le jour du mariage ! Rendez-vous dans le hall de l'hôtel à 14h30 le samedi 7 août 2027. Si vous préférez conduire, indiquez Forêt dans votre GPS (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Un service de voiturier (Valet Parking) gratuit sera disponible sur place.",
       "q3": "QUEL EST LE CODE VESTIMENTAIRE ?",
-      "a3": "Tenue de soirée / Formelle. Pour les dames : Robes longues ou élégantes descendant aux chevilles (couleurs vives et motifs botaniques vivement encouragés !). Pour les messieurs : Costume sombre ou smoking."
+      "a3": "Tenue de soirée / Formelle. Pour les dames : Robes longues ou élégantes descendant aux chevilles (couleurs vives et motifs botaniques vivement encouragés !). Pour les messieurs : Costume sombre ou smoking.",
+      "dressCodeNoteTitle": "Couleurs Réservées à la Mariée",
+      "dressCodeNoteText": "Merci d'éviter de porter du blanc, ainsi que du jaune clair ou des tons pastel. Sous l'éclairage de soirée et sur les photos, ces teintes claires ressortent comme du blanc et sont réservées exclusivement à la mariée.",
+      "reservedColors": {
+        "white": "Blanc",
+        "lightYellow": "Jaune clair",
+        "pastels": "Tons pastel"
+      }
     },
     "rsvpNotice": {
       "title": "RSVP pour le Mariage",

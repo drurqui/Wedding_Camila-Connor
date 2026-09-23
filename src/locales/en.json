@@ -334,7 +334,14 @@
       "q2": "HOW DO I GET TO THE VENUE?",
       "a2": "We will provide shuttles between the Hilton Hotel and the venue on the day of the wedding! You just need to be ready at the lobby of the hotel by 2:30 pm on Saturday August 7 2027. If you prefer to drive, you should set your GPS to Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506, El Salvador) Valet Parking will be provided on site throughout the evening.",
       "q3": "WHAT IS THE DRESS CODE?",
-      "a3": "For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of vibrant colors or botanical prints! For Men: Formal suits or tuxedos."
+      "a3": "For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of vibrant colors or botanical prints! For Men: Formal suits or tuxedos.",
+      "dressCodeNoteTitle": "Colors Reserved for the Bride",
+      "dressCodeNoteText": "Please refrain from wearing white, light yellow, or pastel shades. Under evening lighting and in photographs, these light shades appear white and are reserved exclusively for the bride.",
+      "reservedColors": {
+        "white": "White",
+        "lightYellow": "Light yellow",
+        "pastels": "Pastel shades"
+      }
     },
     "rsvpNotice": {
       "title": "Wedding RSVP",
