@@ -116,11 +116,6 @@ export const WeddingRsvpSection = ({ colors }) => {
       }
 
       if (match) {
-        // Si no tenía email vinculado y el usuario introdujo uno, vincularlo
-        if (inputEmail && !match.email_vinculado) {
-          await setDoc(doc(db, "invitaciones_boda", matchId), { email_vinculado: inputEmail }, { merge: true });
-        }
-
         // Consultar si ya existe un RSVP previo para esta invitación
         const rsvpRef = doc(db, "rsvps_boda", matchId);
         const rsvpSnap = await getDoc(rsvpRef);
