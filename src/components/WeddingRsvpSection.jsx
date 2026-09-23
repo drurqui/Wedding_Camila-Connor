@@ -63,8 +63,8 @@ export const WeddingRsvpSection = ({ colors }) => {
   // Búsqueda de invitación maestra en Firestore (invitaciones_boda)
   const handleSearchInvitation = async (e) => {
     if (e) e.preventDefault();
-    if (!searchData.nombre.trim() && !searchData.email.trim()) {
-      setErrorMessage(t('wedding.rsvpForm.step1.notFound'));
+    if (!searchData.nombre.trim() || !searchData.email.trim()) {
+      setErrorMessage(t('wedding.rsvpForm.step1.emptyFields', t('home.alerts.emptyFields', 'Por favor, llena ambos campos para continuar.')));
       return;
     }
 
@@ -116,6 +116,20 @@ export const WeddingRsvpSection = ({ colors }) => {
       }
 
       if (match) {
+        // Vincular inmediatamente el correo electrónico en la lista maestra (invitaciones_boda)
+        if (inputEmail && (!match.email_vinculado || match.email_vinculado.toLowerCase() !== inputEmail)) {
+          try {
+            await setDoc(doc(db, "invitaciones_boda", matchId), {
+              email_vinculado: inputEmail,
+              primer_login: match.primer_login || serverTimestamp(),
+              ultimo_login: serverTimestamp()
+            }, { merge: true });
+            match.email_vinculado = inputEmail;
+          } catch (e) {
+            console.warn("No se pudo vincular email en invitaciones_boda:", e);
+          }
+        }
+
         // Consultar si ya existe un RSVP previo para esta invitación
         const rsvpRef = doc(db, "rsvps_boda", matchId);
         const rsvpSnap = await getDoc(rsvpRef);
@@ -197,6 +211,18 @@ export const WeddingRsvpSection = ({ colors }) => {
         mensaje: message.trim(),
         actualizado_el: serverTimestamp(),
       }, { merge: true });
+
+      // Actualizar también la lista maestra (invitaciones_boda) para que quede vinculado
+      if (targetEmail) {
+        try {
+          await setDoc(doc(db, "invitaciones_boda", invitacionMaster.id), {
+            email_vinculado: targetEmail,
+            ultimo_rsvp: serverTimestamp()
+          }, { merge: true });
+        } catch (e) {
+          console.warn("No se pudo actualizar email_vinculado en invitaciones_boda:", e);
+        }
+      }
 
       // Enviar correo de confirmación con diseño nupcial vía backend
       if (targetEmail) {

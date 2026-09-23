@@ -476,6 +476,7 @@ const Admin = () => {
       const docRef = doc(db, "invitaciones_boda", editDataBoda.id);
       await updateDoc(docRef, {
         nombre_invitacion: editDataBoda.nombre_invitacion.trim(),
+        email_vinculado: (editDataBoda.email_vinculado || '').trim().toLowerCase(),
         invitados: editDataBoda.invitados
       });
       setEditDialogOpenBoda(false);
@@ -1471,13 +1472,17 @@ const Admin = () => {
                                   </Box>
                                 </TableCell>
                                 <TableCell sx={{ verticalAlign: 'top' }}>
-                                  {inv.email_vinculado ? (
-                                    <Chip label={inv.email_vinculado} size="small" variant="outlined" color="primary" />
-                                  ) : (
-                                    <Typography variant="caption" sx={{ color: '#999', fontStyle: 'italic' }}>
-                                      {t('admin.table.pendingLogin')}
-                                    </Typography>
-                                  )}
+                                  {(() => {
+                                    const rsvpAsoc = rsvpsBoda.find(r => r.id === inv.id || r.invitacion_id === inv.id);
+                                    const emailMostrar = inv.email_vinculado || rsvpAsoc?.email;
+                                    return emailMostrar ? (
+                                      <Chip label={emailMostrar} size="small" variant="outlined" color="primary" />
+                                    ) : (
+                                      <Typography variant="caption" sx={{ color: '#999', fontStyle: 'italic' }}>
+                                        {t('admin.table.pendingLogin')}
+                                      </Typography>
+                                    );
+                                  })()}
                                 </TableCell>
                                 <TableCell align="center" sx={{ verticalAlign: 'top' }}>
                                   <Tooltip title="Editar Invitación">
@@ -1764,7 +1769,16 @@ const Admin = () => {
                 label={t('admin.weddingMaster.invName')} 
                 value={editDataBoda.nombre_invitacion} 
                 onChange={(e) => setEditDataBoda({ ...editDataBoda, nombre_invitacion: e.target.value })} 
-                sx={{ my: 2 }} 
+                sx={{ my: 1.5 }} 
+              />
+              <TextField 
+                fullWidth 
+                label={t('admin.table.guestAccess', 'Correo Vinculado')} 
+                value={editDataBoda.email_vinculado || ''} 
+                placeholder="ejemplo@correo.com"
+                onChange={(e) => setEditDataBoda({ ...editDataBoda, email_vinculado: e.target.value })} 
+                sx={{ mb: 2.5 }} 
+                helperText="Si el invitado ya ingresó o confirmó, su correo aparecerá aquí. También puedes asignarlo o modificarlo."
               />
               <Typography variant="subtitle2" sx={{ color: '#1e382b', fontWeight: 'bold', mb: 1 }}>
                 {t('admin.weddingMaster.guestsLabel')}
