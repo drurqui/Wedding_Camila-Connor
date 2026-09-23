@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // --- 2. CONEXIÓN CON EL FUTURO BACKEND (CLOUD RUN) ---
 async function regalarSegmento(nombreRegalo, monto) {
-    const backendUrl = "https://api-boda-126620588755.us-central1.run.app/crear-sesion-pago"; 
+    const backendUrl = "https://api-boda-736009271165.us-central1.run.app/crear-sesion-pago"; 
     
     // Sacamos los datos de la memoria
     const nombreInvitado = localStorage.getItem('invInvitadoNombre') || "Anónimo";

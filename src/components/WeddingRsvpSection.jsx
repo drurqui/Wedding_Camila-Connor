@@ -202,7 +202,7 @@ export const WeddingRsvpSection = ({ colors }) => {
       if (targetEmail) {
         const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
           ? 'http://localhost:8080'
-          : 'https://api-boda-126620588755.us-central1.run.app';
+          : 'https://api-boda-736009271165.us-central1.run.app';
 
         fetch(`${backendBase}/enviar-confirmacion-rsvp`, {
           method: 'POST',

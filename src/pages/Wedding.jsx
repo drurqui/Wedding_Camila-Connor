@@ -88,7 +88,7 @@ const Wedding = () => {
       let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
       const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:8080'
-        : 'https://api-boda-126620588755.us-central1.run.app';
+        : 'https://api-boda-736009271165.us-central1.run.app';
 
       if (!key) {
         try {
@@ -204,7 +204,7 @@ const Wedding = () => {
 
     const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:8080'
-      : 'https://api-boda-126620588755.us-central1.run.app';
+      : 'https://api-boda-736009271165.us-central1.run.app';
 
     const finalAmount = checkoutModal.isCustom 
       ? parseInt(formData.montoLibre) || 50
