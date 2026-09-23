@@ -3,14 +3,18 @@ service cloud.firestore {
   match /databases/{database}/documents {
     
     // Lista maestra de invitaciones (Compromiso y Boda)
-    match /invitaciones/{document=**} {
+    match /invitaciones/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow update: if request.auth != null || 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email_vinculado', 'primer_login', 'ultimo_login', 'ultimo_rsvp']);
+      allow create, delete: if request.auth != null;
     }
 
-    match /invitaciones_boda/{document=**} {
+    match /invitaciones_boda/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow update: if request.auth != null || 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email_vinculado', 'primer_login', 'ultimo_login', 'ultimo_rsvp']);
+      allow create, delete: if request.auth != null;
     }
 
     // Reglas para la fiesta de compromiso

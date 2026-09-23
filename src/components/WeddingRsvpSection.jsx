@@ -51,6 +51,8 @@ export const WeddingRsvpSection = ({ colors }) => {
   const [guestList, setGuestList] = useState([]);
   const [shuttleSelection, setShuttleSelection] = useState('si');
   const [message, setMessage] = useState('');
+  const [previousRsvp, setPreviousRsvp] = useState(null);
+  const [rsvpHasChanges, setRsvpHasChanges] = useState(true);
 
   // Menús predeterminados preparados para la Boda en Forêt
   const menuOptions = [
@@ -126,7 +128,7 @@ export const WeddingRsvpSection = ({ colors }) => {
             }, { merge: true });
             match.email_vinculado = inputEmail;
           } catch (e) {
-            console.warn("No se pudo vincular email en invitaciones_boda:", e);
+            console.debug("Nota: email_vinculado registrado vía RSVP:", e);
           }
         }
 
@@ -134,6 +136,7 @@ export const WeddingRsvpSection = ({ colors }) => {
         const rsvpRef = doc(db, "rsvps_boda", matchId);
         const rsvpSnap = await getDoc(rsvpRef);
         const rsvpData = rsvpSnap.exists() ? rsvpSnap.data() : null;
+        setPreviousRsvp(rsvpData);
 
         // Mezclar invitados de la lista maestra con posibles respuestas previas
         const mergedGuests = (match.invitados || []).map(invMaster => {
@@ -200,6 +203,33 @@ export const WeddingRsvpSection = ({ colors }) => {
     try {
       const targetEmail = (invitacionMaster.email || searchData.email || '').toLowerCase().trim();
 
+      // Evaluar si hubo alguna modificación real respecto al estado previo
+      let huboCambios = true;
+      if (previousRsvp) {
+        const asistenciaIgual = (previousRsvp.asistencia || 'si') === (algunAsistente ? 'si' : 'no');
+        const shuttleIgual = (previousRsvp.shuttle || 'no') === (algunAsistente ? shuttleSelection : 'no');
+        const mensajeIgual = (previousRsvp.mensaje || '').trim() === message.trim();
+        const emailIgual = (previousRsvp.email || '').toLowerCase().trim() === targetEmail;
+
+        const prevInv = previousRsvp.invitados || [];
+        let invitadosIguales = prevInv.length === finalGuests.length;
+        if (invitadosIguales) {
+          for (let i = 0; i < finalGuests.length; i++) {
+            const fg = finalGuests[i];
+            const pg = prevInv.find(p => normalize(p.nombre) === normalize(fg.nombre)) || prevInv[i];
+            if (!pg) { invitadosIguales = false; break; }
+            if ((pg.asistencia || 'si') !== fg.asistencia) { invitadosIguales = false; break; }
+            if ((pg.menu || '') !== (fg.menu || '')) { invitadosIguales = false; break; }
+            if ((pg.alergias || '').trim() !== (fg.alergias || '').trim()) { invitadosIguales = false; break; }
+          }
+        }
+
+        if (asistenciaIgual && shuttleIgual && mensajeIgual && emailIgual && invitadosIguales) {
+          huboCambios = false;
+        }
+      }
+      setRsvpHasChanges(huboCambios);
+
       await setDoc(doc(db, "rsvps_boda", invitacionMaster.id), {
         invitacion_id: invitacionMaster.id,
         nombre_invitacion: invitacionMaster.nombre_invitacion,
@@ -220,12 +250,12 @@ export const WeddingRsvpSection = ({ colors }) => {
             ultimo_rsvp: serverTimestamp()
           }, { merge: true });
         } catch (e) {
-          console.warn("No se pudo actualizar email_vinculado en invitaciones_boda:", e);
+          console.debug("Nota: email_vinculado registrado vía RSVP:", e);
         }
       }
 
-      // Enviar correo de confirmación con diseño nupcial vía backend
-      if (targetEmail) {
+      // Enviar correo de confirmación SÓLO si es la primera vez o si hubo modificaciones
+      if (targetEmail && huboCambios) {
         const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
           ? 'http://localhost:8080'
           : 'https://api-boda-736009271165.us-central1.run.app';
@@ -244,9 +274,21 @@ export const WeddingRsvpSection = ({ colors }) => {
             idioma: i18n.language || 'es'
           })
         }).catch(emailErr => {
-          console.warn("No se pudo enviar el correo de confirmación automático:", emailErr);
+          console.debug("No se pudo enviar el correo de confirmación automático:", emailErr);
         });
       }
+
+      // Actualizar previousRsvp para futuras comparaciones en la misma sesión
+      setPreviousRsvp({
+        invitacion_id: invitacionMaster.id,
+        nombre_invitacion: invitacionMaster.nombre_invitacion,
+        email: targetEmail,
+        asistencia: algunAsistente ? 'si' : 'no',
+        total_invitados: attendingGuests.length,
+        invitados: finalGuests,
+        shuttle: algunAsistente ? shuttleSelection : 'no',
+        mensaje: message.trim(),
+      });
 
       setStep(3);
     } catch (err) {
@@ -263,6 +305,8 @@ export const WeddingRsvpSection = ({ colors }) => {
     setGuestList([]);
     setMessage('');
     setErrorMessage('');
+    setPreviousRsvp(null);
+    setRsvpHasChanges(true);
   };
 
   return (
@@ -642,18 +686,24 @@ export const WeddingRsvpSection = ({ colors }) => {
                   {t('wedding.rsvpForm.step3.title')}
                 </Typography>
 
-                <Typography
-                  sx={{
-                    color: '#555',
-                    fontSize: { xs: '0.95rem', sm: '1.05rem' },
-                    lineHeight: 1.7,
-                    maxWidth: 540,
-                    mx: 'auto',
-                    mb: 3.5,
-                  }}
-                >
-                  {t('wedding.rsvpForm.step3.subtitle')}
-                </Typography>
+                {!rsvpHasChanges ? (
+                  <Alert severity="info" sx={{ maxWidth: 520, mx: 'auto', mb: 3.5, borderRadius: 2.5, textAlign: 'left', bgcolor: '#f4f7f5', color: '#1e382b', border: '1px solid #c9d8ce' }}>
+                    Tu respuesta ya estaba confirmada sin modificaciones adicionales. Tus opciones se mantienen guardadas y no se ha enviado un correo repetido.
+                  </Alert>
+                ) : (
+                  <Typography
+                    sx={{
+                      color: '#555',
+                      fontSize: { xs: '0.95rem', sm: '1.05rem' },
+                      lineHeight: 1.7,
+                      maxWidth: 540,
+                      mx: 'auto',
+                      mb: 3.5,
+                    }}
+                  >
+                    {t('wedding.rsvpForm.step3.subtitle')}
+                  </Typography>
+                )}
 
                 {/* Resumen de Confirmación */}
                 <Box
