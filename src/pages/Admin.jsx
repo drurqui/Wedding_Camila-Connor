@@ -18,7 +18,6 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTranslation } from 'react-i18next';
 import { getAuth, signOut } from 'firebase/auth';
 
@@ -1192,54 +1191,6 @@ const Admin = () => {
             {/* PESTAÑA 1: LISTA MAESTRA DE INVITACIONES BODA */}
             {tabValueWedding === 1 && (
               <Box sx={{ mb: 6 }}>
-                {/* Banner de Importación / Copia desde Compromiso */}
-                <Paper
-                  sx={{
-                    p: { xs: 2.5, sm: 3 },
-                    mb: 4,
-                    borderRadius: 2.5,
-                    bgcolor: 'rgba(199, 120, 79, 0.08)',
-                    border: '1px solid rgba(199, 120, 79, 0.3)',
-                    display: 'flex',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    alignItems: { xs: 'flex-start', md: 'center' },
-                    justifyContent: 'space-between',
-                    gap: 2
-                  }}
-                >
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                      <ContentCopyIcon sx={{ color: '#c7784f', fontSize: 22 }} />
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#1e382b' }}>
-                        {t('admin.weddingMaster.importBannerTitle')}
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" sx={{ color: '#555', maxWidth: 650 }}>
-                      {t('admin.weddingMaster.importBannerText')}
-                    </Typography>
-                  </Box>
-                  <Button
-                    variant="outlined"
-                    startIcon={<ContentCopyIcon />}
-                    onClick={copiarInvitacionesDesdeCompromiso}
-                    sx={{
-                      color: '#1e382b',
-                      borderColor: '#1e382b',
-                      fontWeight: 700,
-                      borderRadius: '25px',
-                      px: 3,
-                      py: 1,
-                      whiteSpace: 'nowrap',
-                      '&:hover': {
-                        bgcolor: 'rgba(30, 56, 43, 0.08)',
-                        borderColor: '#15271e',
-                      }
-                    }}
-                  >
-                    {t('admin.weddingMaster.importButton')}
-                  </Button>
-                </Paper>
-
                 {/* Formulario de Creación de Invitación */}
                 <Card sx={{ p: { xs: 3, md: 4 }, mb: 4, borderRadius: 2, border: '1px solid #1e382b', boxShadow: 'none', bgcolor: '#ffffff' }}>
                   <Typography variant="h5" sx={{ color: '#1e382b', fontWeight: 'bold', fontFamily: "'Playfair Display', serif", mb: 3 }}>
