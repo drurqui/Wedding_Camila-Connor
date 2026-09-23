@@ -29,6 +29,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
 import { db } from '../config/firebase';
 import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
@@ -291,6 +292,12 @@ export const WeddingRsvpSection = ({ colors }) => {
       });
 
       setStep(3);
+      setTimeout(() => {
+        const rsvpEl = document.getElementById('rsvp');
+        if (rsvpEl) {
+          rsvpEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     } catch (err) {
       console.error("Error al guardar RSVP de boda:", err);
       setErrorMessage(t('wedding.rsvpForm.step2.saveError'));
@@ -307,6 +314,12 @@ export const WeddingRsvpSection = ({ colors }) => {
     setErrorMessage('');
     setPreviousRsvp(null);
     setRsvpHasChanges(true);
+    setTimeout(() => {
+      const rsvpEl = document.getElementById('rsvp');
+      if (rsvpEl) {
+        rsvpEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   return (
@@ -471,11 +484,11 @@ export const WeddingRsvpSection = ({ colors }) => {
                   </Box>
                   <Button
                     size="small"
-                    startIcon={<ArrowBackIcon />}
-                    onClick={() => setStep(1)}
+                    startIcon={<LogoutIcon />}
+                    onClick={handleReset}
                     sx={{ color: colors.copper, textTransform: 'none', fontWeight: 600 }}
                   >
-                    {t('wedding.rsvpForm.step2.changeButton')}
+                    {t('wedding.rsvpForm.step3.logoutButton', 'Cerrar Sesión / Salir')}
                   </Button>
                 </Box>
 
@@ -770,24 +783,52 @@ export const WeddingRsvpSection = ({ colors }) => {
                   </Box>
                 </Box>
 
-                <Button
-                  variant="outlined"
-                  onClick={() => setStep(2)}
-                  sx={{
-                    color: colors.forestGreen,
-                    borderColor: colors.copper,
-                    borderRadius: '30px',
-                    px: 3.5,
-                    py: 1,
-                    fontWeight: 600,
-                    '&:hover': {
-                      borderColor: colors.copperDark,
-                      bgcolor: 'rgba(199, 120, 79, 0.08)',
-                    },
-                  }}
-                >
-                  {t('wedding.rsvpForm.step3.modifyButton')}
-                </Button>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap', mt: 3 }}>
+                  <Button
+                    variant="contained"
+                    onClick={handleReset}
+                    startIcon={<LogoutIcon />}
+                    sx={{
+                      bgcolor: colors.forestGreen,
+                      color: '#ffffff',
+                      borderRadius: '30px',
+                      px: 4,
+                      py: 1.2,
+                      fontWeight: 600,
+                      boxShadow: '0 4px 14px rgba(30, 56, 43, 0.25)',
+                      '&:hover': {
+                        bgcolor: colors.forestGreenLight,
+                      },
+                    }}
+                  >
+                    {t('wedding.rsvpForm.step3.logoutButton', 'Cerrar Sesión / Salir')}
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      setStep(2);
+                      setTimeout(() => {
+                        const rsvpEl = document.getElementById('rsvp');
+                        if (rsvpEl) rsvpEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 100);
+                    }}
+                    sx={{
+                      color: colors.forestGreen,
+                      borderColor: colors.copper,
+                      borderRadius: '30px',
+                      px: 3.5,
+                      py: 1.2,
+                      fontWeight: 600,
+                      '&:hover': {
+                        borderColor: colors.copperDark,
+                        bgcolor: 'rgba(199, 120, 79, 0.08)',
+                      },
+                    }}
+                  >
+                    {t('wedding.rsvpForm.step3.modifyButton', 'Modificar Respuestas')}
+                  </Button>
+                </Box>
               </Box>
             )}
 

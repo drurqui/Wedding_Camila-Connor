@@ -405,7 +405,8 @@
         "shuttleStatus": "Service de navette :",
         "shuttleConfirmed": "Confirmé (Hôtel Hilton ⇄ Forêt)",
         "shuttleDeclined": "Transport personnel",
-        "modifyButton": "Modifier mes Réponses"
+        "modifyButton": "Modifier mes Réponses",
+        "logoutButton": "Se déconnecter / Quitter"
       }
     },
     "logistics": {

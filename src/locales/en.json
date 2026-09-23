@@ -405,7 +405,8 @@
         "shuttleStatus": "Shuttle Service:",
         "shuttleConfirmed": "Confirmed (Hilton Hotel ⇄ Forêt)",
         "shuttleDeclined": "Own transportation",
-        "modifyButton": "Modify Response"
+        "modifyButton": "Modify Response",
+        "logoutButton": "Log Out / Exit"
       }
     },
     "logistics": {
