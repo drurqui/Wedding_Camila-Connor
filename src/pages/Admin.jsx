@@ -492,6 +492,9 @@ const Admin = () => {
       open: true,
       title: t('admin.weddingMaster.importConfirmTitle'),
       message: t('admin.weddingMaster.importConfirmMsg'),
+      confirmText: t('admin.weddingMaster.importConfirmBtn', 'Sí, copiar'),
+      confirmColor: '#1e382b',
+      headerColor: '#1e382b',
       action: async () => {
         setConfirmModal({ ...confirmModal, open: false });
         setLoading(true);
@@ -530,13 +533,15 @@ const Admin = () => {
             setAlertModal({
               open: true,
               title: t('common.success'),
-              message: t('admin.weddingMaster.importSuccess', { count: copiedCount })
+              message: t('admin.weddingMaster.importSuccess', { count: copiedCount }),
+              headerColor: '#1e382b'
             });
           } else {
             setAlertModal({
               open: true,
               title: t('common.info', 'Información'),
-              message: t('admin.weddingMaster.importZero')
+              message: t('admin.weddingMaster.importZero'),
+              headerColor: '#1e382b'
             });
           }
 
@@ -1745,25 +1750,98 @@ const Admin = () => {
       </Dialog>
 
       {/* MODAL GLOBAL PARA AVISOS ADMIN */}
-      <Dialog open={alertModal.open} onClose={() => setAlertModal({ ...alertModal, open: false })} PaperProps={{ sx: { borderRadius: 2, border: '2px solid #dabc60', minWidth: '300px' } }}>
-        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white', fontFamily: "'Playfair Display', serif", textAlign: 'center', fontSize: '1.5rem' }}>{alertModal.title}</DialogTitle>
+      <Dialog 
+        open={alertModal.open} 
+        onClose={() => setAlertModal({ ...alertModal, open: false })} 
+        PaperProps={{ 
+          sx: { 
+            borderRadius: 2, 
+            border: `2px solid ${alertModal.headerColor === '#1e382b' ? '#2e5643' : '#dabc60'}`, 
+            minWidth: '300px' 
+          } 
+        }}
+      >
+        <DialogTitle 
+          sx={{ 
+            bgcolor: alertModal.headerColor || '#711c2e', 
+            color: 'white', 
+            fontFamily: "'Playfair Display', serif", 
+            textAlign: 'center', 
+            fontSize: '1.5rem' 
+          }}
+        >
+          {alertModal.title}
+        </DialogTitle>
         <DialogContent sx={{ p: 4, textAlign: 'center', mt: 2 }}>
           <Typography variant="body1" sx={{ color: '#5a3b45', fontWeight: 500 }}>{alertModal.message}</Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>
-          <Button onClick={() => setAlertModal({ ...alertModal, open: false })} variant="contained" sx={{ bgcolor: '#711c2e', '&:hover': { bgcolor: '#5a1524' } }}>{t('common.understood')}</Button>
+          <Button 
+            onClick={() => setAlertModal({ ...alertModal, open: false })} 
+            variant="contained" 
+            sx={{ 
+              bgcolor: alertModal.headerColor || '#711c2e', 
+              '&:hover': { bgcolor: alertModal.headerColor === '#1e382b' ? '#14271e' : '#5a1524' } 
+            }}
+          >
+            {t('common.understood')}
+          </Button>
         </DialogActions>
       </Dialog>
 
-      {/* MODAL DE CONFIRMACIÓN DE BORRADO ADMIN */}
-      <Dialog open={confirmModal.open} onClose={() => setConfirmModal({ ...confirmModal, open: false })} PaperProps={{ sx: { borderRadius: 2, border: '2px solid #dabc60', minWidth: '350px' } }}>
-        <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white', fontFamily: "'Playfair Display', serif", textAlign: 'center', fontSize: '1.5rem' }}>{confirmModal.title}</DialogTitle>
+      {/* MODAL DE CONFIRMACIÓN ADMIN */}
+      <Dialog 
+        open={confirmModal.open} 
+        onClose={() => setConfirmModal({ ...confirmModal, open: false })} 
+        PaperProps={{ 
+          sx: { 
+            borderRadius: 2, 
+            border: `2px solid ${confirmModal.headerColor === '#1e382b' ? '#2e5643' : '#dabc60'}`, 
+            minWidth: '350px' 
+          } 
+        }}
+      >
+        <DialogTitle 
+          sx={{ 
+            bgcolor: confirmModal.headerColor || '#711c2e', 
+            color: 'white', 
+            fontFamily: "'Playfair Display', serif", 
+            textAlign: 'center', 
+            fontSize: '1.5rem' 
+          }}
+        >
+          {confirmModal.title}
+        </DialogTitle>
         <DialogContent sx={{ p: 4, textAlign: 'center', mt: 2 }}>
           <Typography variant="body1" sx={{ color: '#5a3b45', fontWeight: 500 }}>{confirmModal.message}</Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', gap: 2, pb: 3 }}>
-          <Button onClick={() => setConfirmModal({ ...confirmModal, open: false })} variant="outlined" sx={{ color: '#711c2e', borderColor: '#711c2e' }}>{t('common.cancel')}</Button>
-          <Button onClick={confirmModal.action} variant="contained" sx={{ bgcolor: '#711c2e', '&:hover': { bgcolor: '#5a1524' } }}>{t('common.yesDelete')}</Button>
+          <Button 
+            onClick={() => setConfirmModal({ ...confirmModal, open: false })} 
+            variant="outlined" 
+            sx={{ 
+              color: confirmModal.confirmColor || '#711c2e', 
+              borderColor: confirmModal.confirmColor || '#711c2e',
+              '&:hover': {
+                borderColor: confirmModal.confirmColor || '#711c2e',
+                bgcolor: 'rgba(0,0,0,0.04)'
+              }
+            }}
+          >
+            {t('common.cancel')}
+          </Button>
+          <Button 
+            onClick={confirmModal.action} 
+            variant="contained" 
+            sx={{ 
+              bgcolor: confirmModal.confirmColor || '#711c2e', 
+              '&:hover': { 
+                bgcolor: confirmModal.confirmColor === '#1e382b' ? '#14271e' : '#5a1524' 
+              } 
+            }}
+          >
+            {confirmModal.confirmText || t('common.yesDelete')}
+          </Button>
         </DialogActions>
       </Dialog>
 

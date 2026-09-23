@@ -217,7 +217,8 @@
       "importBannerTitle": "Souhaitez-vous partir de la liste des Fiançailles ?",
       "importBannerText": "Vous pouvez copier toutes les invitations des fiançailles comme point de départ indépendant pour le mariage. Cela n'affectera en rien la liste d'origine.",
       "importConfirmTitle": "Copier la Liste depuis les Fiançailles",
-      "importConfirmMsg": "Voulez-vous copier les invitations des fiançailles vers la liste du mariage ? Elles seront créées en tant que fiches indépendantes et les doublons seront ignorés.",
+      "importConfirmMsg": "Voulez-vous copier les invitations des fiançailles vers la liste du mariage ? Votre liste d'origine des fiançailles restera intacte à 100 % ; cela ne fera que créer des copies indépendantes pour le mariage en ignorant les doublons.",
+      "importConfirmBtn": "Oui, copier",
       "importSuccess": "{{count}} invitations ont été copiées avec succès vers la liste du mariage.",
       "importZero": "Toutes les invitations des fiançailles existent déjà dans la liste du mariage."
     },

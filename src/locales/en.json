@@ -217,7 +217,8 @@
       "importBannerTitle": "Want to start from your Engagement list?",
       "importBannerText": "You can import all invitations from the engagement party as an independent starting point for the wedding. This will not affect the original engagement list in any way.",
       "importConfirmTitle": "Copy Master List from Engagement",
-      "importConfirmMsg": "Do you want to copy invitations from Engagement to the Wedding list? They will be created as independent records, and any existing ones will be skipped.",
+      "importConfirmMsg": "Do you want to copy invitations from Engagement to the Wedding list? Your original Engagement list will remain 100% intact; this only creates independent copies for the Wedding and skips any that already exist.",
+      "importConfirmBtn": "Yes, copy",
       "importSuccess": "Successfully copied {{count}} invitations to the Wedding list.",
       "importZero": "All invitations from Engagement already exist in the Wedding list."
     },

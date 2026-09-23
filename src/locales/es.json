@@ -217,7 +217,8 @@
       "importBannerTitle": "¿Deseas partir de la lista de Engagement?",
       "importBannerText": "Puedes importar todas las invitaciones de la fiesta de compromiso como base independiente para la boda. No afectará en nada a la lista original de compromiso.",
       "importConfirmTitle": "Copiar Lista Maestra desde Compromiso",
-      "importConfirmMsg": "¿Deseas copiar las invitaciones de Compromiso a la lista de la Boda? Se crearán como registros independientes y se omitirán las que ya existan.",
+      "importConfirmMsg": "¿Deseas copiar las invitaciones de Compromiso a la lista de la Boda? Tu lista original de Compromiso permanecerá 100% intacta; únicamente se crearán copias independientes para la Boda y se omitirán las que ya existan.",
+      "importConfirmBtn": "Sí, copiar",
       "importSuccess": "Se copiaron exitosamente {{count}} invitaciones a la lista de la Boda.",
       "importZero": "Todas las invitaciones de Compromiso ya se encuentran en la lista de la Boda."
     },
