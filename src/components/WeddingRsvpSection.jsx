@@ -36,7 +36,7 @@ import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from 'fireb
 const normalize = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
 export const WeddingRsvpSection = ({ colors }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Paso actual del flujo (1: Búsqueda, 2: Selección por Invitado, 3: Éxito)
   const [step, setStep] = useState(1);
@@ -184,10 +184,12 @@ export const WeddingRsvpSection = ({ colors }) => {
     ));
 
     try {
+      const targetEmail = (invitacionMaster.email || searchData.email || '').toLowerCase().trim();
+
       await setDoc(doc(db, "rsvps_boda", invitacionMaster.id), {
         invitacion_id: invitacionMaster.id,
         nombre_invitacion: invitacionMaster.nombre_invitacion,
-        email: (invitacionMaster.email || searchData.email || '').toLowerCase().trim(),
+        email: targetEmail,
         asistencia: algunAsistente ? 'si' : 'no',
         total_invitados: attendingGuests.length,
         invitados: finalGuests,
@@ -195,6 +197,30 @@ export const WeddingRsvpSection = ({ colors }) => {
         mensaje: message.trim(),
         actualizado_el: serverTimestamp(),
       }, { merge: true });
+
+      // Enviar correo de confirmación con diseño nupcial vía backend
+      if (targetEmail) {
+        const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://localhost:8080'
+          : 'https://api-boda-126620588755.us-central1.run.app';
+
+        fetch(`${backendBase}/enviar-confirmacion-rsvp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: targetEmail,
+            nombre_invitacion: invitacionMaster.nombre_invitacion,
+            asistencia: algunAsistente ? 'si' : 'no',
+            total_invitados: attendingGuests.length,
+            invitados: finalGuests,
+            shuttle: algunAsistente ? shuttleSelection : 'no',
+            mensaje: message.trim(),
+            idioma: i18n.language || 'es'
+          })
+        }).catch(emailErr => {
+          console.warn("No se pudo enviar el correo de confirmación automático:", emailErr);
+        });
+      }
 
       setStep(3);
     } catch (err) {
