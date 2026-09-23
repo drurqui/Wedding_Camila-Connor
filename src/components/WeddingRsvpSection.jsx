@@ -128,15 +128,14 @@ export const WeddingRsvpSection = ({ colors }) => {
             return {
               ...invMaster,
               asistencia: prevResp.asistencia || 'si',
-              menu: prevResp.menu || (invMaster.tipo === 'niño' ? t('wedding.rsvpForm.step2.menuOptions.kids') : t('wedding.rsvpForm.step2.menuOptions.beef')),
+              menu: prevResp.menu || t('wedding.rsvpForm.step2.menuPendingStatus'),
               alergias: prevResp.alergias || '',
             };
           } else {
-            const isChild = invMaster.tipo === 'niño';
             return {
               ...invMaster,
               asistencia: 'si',
-              menu: isChild ? t('wedding.rsvpForm.step2.menuOptions.kids') : t('wedding.rsvpForm.step2.menuOptions.beef'),
+              menu: t('wedding.rsvpForm.step2.menuPendingStatus'),
               alergias: '',
             };
           }
@@ -174,21 +173,14 @@ export const WeddingRsvpSection = ({ colors }) => {
     e.preventDefault();
     setErrorMessage('');
 
-    // Validar que cada asistente tenga seleccionado un menú
-    for (const g of guestList) {
-      if (g.asistencia === 'si' && !g.menu) {
-        setErrorMessage(t('wedding.rsvpForm.step2.missingMenuWarning', { name: g.nombre }));
-        window.scrollTo({ top: document.getElementById('rsvp')?.offsetTop || 0, behavior: 'smooth' });
-        return;
-      }
-    }
-
     setLoading(true);
 
     const attendingGuests = guestList.filter(g => g.asistencia === 'si');
     const algunAsistente = attendingGuests.length > 0;
     const finalGuests = guestList.map(g => (
-      g.asistencia === 'no' ? { ...g, menu: '—', alergias: '' } : g
+      g.asistencia === 'no' 
+        ? { ...g, menu: '—', alergias: '' } 
+        : { ...g, menu: g.menu || t('wedding.rsvpForm.step2.menuPendingStatus', 'Pendiente de definir') }
     ));
 
     try {
@@ -401,6 +393,30 @@ export const WeddingRsvpSection = ({ colors }) => {
                   </Alert>
                 )}
 
+                {/* Aviso informativo de Selección de Menú */}
+                <Box
+                  sx={{
+                    p: { xs: 2, sm: 2.5 },
+                    mb: 3.5,
+                    borderRadius: 2.5,
+                    bgcolor: '#f5f7f5',
+                    border: '1px solid #c9d8ce',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 1.8,
+                  }}
+                >
+                  <RestaurantMenuIcon sx={{ color: colors.forestGreen, fontSize: 26, mt: 0.2 }} />
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ color: colors.forestGreen, fontWeight: 700, fontSize: '0.98rem', mb: 0.5 }}>
+                      {t('wedding.rsvpForm.step2.menuNoticeTitle')}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#4a5b50', lineHeight: 1.6, fontSize: '0.9rem' }}>
+                      {t('wedding.rsvpForm.step2.menuNoticeText')}
+                    </Typography>
+                  </Box>
+                </Box>
+
                 {/* Tarjetas por cada Invitado */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 4 }}>
                   {guestList.map((guest, idx) => (
@@ -460,39 +476,6 @@ export const WeddingRsvpSection = ({ colors }) => {
                       {/* Campos condicionales si asiste */}
                       {guest.asistencia === 'si' && (
                         <Box sx={{ pt: 1.5, borderTop: '1px dashed #e4dcd3', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                          {/* Selección de Menú */}
-                          <FormControl fullWidth size="small">
-                            <InputLabel id={`menu-label-${idx}`}>
-                              {t('wedding.rsvpForm.step2.menuLabel')} *
-                            </InputLabel>
-                            <Select
-                              labelId={`menu-label-${idx}`}
-                              label={`${t('wedding.rsvpForm.step2.menuLabel')} *`}
-                              value={guest.menu || ''}
-                              onChange={(e) => handleGuestChange(idx, 'menu', e.target.value)}
-                            >
-                              {guest.tipo === 'niño' ? (
-                                <MenuItem value={t('wedding.rsvpForm.step2.menuOptions.kids')}>
-                                  👶 {t('wedding.rsvpForm.step2.menuOptions.kids')}
-                                </MenuItem>
-                              ) : null}
-                              <MenuItem value={t('wedding.rsvpForm.step2.menuOptions.beef')}>
-                                🥩 {t('wedding.rsvpForm.step2.menuOptions.beef')}
-                              </MenuItem>
-                              <MenuItem value={t('wedding.rsvpForm.step2.menuOptions.salmon')}>
-                                🐟 {t('wedding.rsvpForm.step2.menuOptions.salmon')}
-                              </MenuItem>
-                              <MenuItem value={t('wedding.rsvpForm.step2.menuOptions.vegetarian')}>
-                                🥗 {t('wedding.rsvpForm.step2.menuOptions.vegetarian')}
-                              </MenuItem>
-                              {guest.tipo !== 'niño' && (
-                                <MenuItem value={t('wedding.rsvpForm.step2.menuOptions.kids')}>
-                                  👶 {t('wedding.rsvpForm.step2.menuOptions.kids')}
-                                </MenuItem>
-                              )}
-                            </Select>
-                          </FormControl>
-
                           {/* Declaración de Alergias o Restricciones */}
                           <TextField
                             fullWidth

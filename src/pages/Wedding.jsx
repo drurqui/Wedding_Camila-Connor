@@ -93,12 +93,14 @@ const Wedding = () => {
       if (!key) {
         try {
           const res = await fetch(`${backendBase}/config-stripe`);
-          const data = await res.json();
-          if (data.publishableKey) {
-            key = data.publishableKey;
+          if (res.ok) {
+            const data = await res.json();
+            if (data.publishableKey) {
+              key = data.publishableKey;
+            }
           }
-        } catch (e) {
-          console.warn('No se pudo cargar la clave pública de Stripe', e);
+        } catch {
+          // Stripe opcional en caso de backend sin configurar
         }
       }
 
