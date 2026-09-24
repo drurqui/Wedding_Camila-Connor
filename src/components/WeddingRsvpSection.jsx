@@ -196,8 +196,8 @@ export const WeddingRsvpSection = ({ colors }) => {
     const attendingGuests = guestList.filter(g => g.asistencia === 'si');
     const algunAsistente = attendingGuests.length > 0;
     const finalGuests = guestList.map(g => (
-      g.asistencia === 'no' 
-        ? { ...g, menu: '—', alergias: '' } 
+      g.asistencia === 'no'
+        ? { ...g, menu: '—', alergias: '' }
         : { ...g, menu: g.menu || t('wedding.rsvpForm.step2.menuPendingStatus', 'Pendiente de definir') }
     ));
 
@@ -325,7 +325,7 @@ export const WeddingRsvpSection = ({ colors }) => {
   return (
     <Box id="rsvp" sx={{ bgcolor: colors.sandLight, py: { xs: 6, sm: 8 }, px: { xs: 2, sm: 3 } }}>
       <Container maxWidth="md" sx={{ maxWidth: '780px !important' }}>
-        
+
         {/* Encabezado Clásico y Solemne */}
         <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 } }}>
           <Typography
@@ -457,7 +457,7 @@ export const WeddingRsvpSection = ({ colors }) => {
             {/* ======================================================== */}
             {step === 2 && (
               <Box component="form" onSubmit={handleSubmitRSVP}>
-                
+
                 {/* Badge Superior de Titular */}
                 <Box
                   sx={{
@@ -701,7 +701,7 @@ export const WeddingRsvpSection = ({ colors }) => {
 
                 {!rsvpHasChanges ? (
                   <Alert severity="info" sx={{ maxWidth: 520, mx: 'auto', mb: 3.5, borderRadius: 2.5, textAlign: 'left', bgcolor: '#f4f7f5', color: '#1e382b', border: '1px solid #c9d8ce' }}>
-                    Tu respuesta ya estaba confirmada sin modificaciones adicionales. Tus opciones se mantienen guardadas y no se ha enviado un correo repetido.
+                    Tu respuesta ya estaba confirmada sin modificaciones adicionales. Tus opciones se mantienen guardadas.
                   </Alert>
                 ) : (
                   <Typography
