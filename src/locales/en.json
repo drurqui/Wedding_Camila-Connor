@@ -334,7 +334,7 @@
       "no": "Regretfully Decline",
       "guests": "Total number of attendees (including yourself)",
       "guestNames": "Names of additional guests (optional)",
-      "shuttle": "Do you need shuttle transportation (Hilton Hotel ⇄ Forêt)?",
+      "shuttle": "Do you need shuttle transportation (Sheraton Presidente Hotel ⇄ Forêt)?",
       "shuttleYes": "Yes, shuttle transport",
       "shuttleNo": "No, own transportation",
       "dietary": "Dietary restrictions or allergies",
@@ -385,7 +385,7 @@
         "allergiesLabel": "Allergies or Dietary Restrictions",
         "allergiesPlaceholder": "E.g., Celiac (gluten-free), dairy-free, nut or shellfish allergy...",
         "shuttleTitle": "Shuttle Bus Transportation",
-        "shuttleQuestion": "Will your party use the round-trip Shuttle service (Hilton Hotel ⇄ Forêt)?",
+        "shuttleQuestion": "Will your party use the round-trip Shuttle service (Sheraton Presidente Hotel ⇄ Forêt)?",
         "shuttleYes": "Yes, we will use the shuttle transport",
         "shuttleNo": "No, we will arrive on our own",
         "messageTitle": "Message for the Couple",
@@ -403,7 +403,7 @@
         "attendingGuests": "Confirmed attendees:",
         "declinedGuests": "Unable to attend:",
         "shuttleStatus": "Shuttle Service:",
-        "shuttleConfirmed": "Confirmed (Hilton Hotel ⇄ Forêt)",
+        "shuttleConfirmed": "Confirmed (Sheraton Presidente Hotel ⇄ Forêt)",
         "shuttleDeclined": "Own transportation",
         "modifyButton": "Modify Response",
         "logoutButton": "Log Out / Exit"
@@ -425,14 +425,18 @@
     "accommodations": {
       "title": "ACCOMMODATIONS",
       "q": "WHERE SHOULD I STAY?",
-      "a": "You are here early! We are preparing a block of rooms for the nights of August 6, 7, and 8 at the Hilton Hotel in San Salvador. Enter your e-mail through our RSVP page and we'll send you a message when the block has been secured."
+      "hotelName": "Sheraton Presidente San Salvador Hotel",
+      "badge": "Special Wedding Group Rate • Marriott",
+      "a": "We have arranged a special group rate for our wedding guests for the nights of August 6, 7, and 8, 2027, at the Sheraton Presidente San Salvador Hotel. We recommend booking early using our exclusive reservation link to guarantee availability and the negotiated group rate.",
+      "buttonText": "Book with Special Rate",
+      "linkNote": "Official direct Marriott reservation link for the Shields-Urquilla wedding group"
     },
     "details": {
       "title": "DETAILS FOR AUGUST 7",
       "q1": "WHEN AND WHERE IS THE WEDDING TAKING PLACE?",
       "a1": "The ceremony and reception will both be held on Saturday, August 7, 2027, at Forêt in Comasagua, El Salvador. Starting at 3:30 pm.",
       "q2": "HOW DO I GET TO THE VENUE?",
-      "a2": "We will provide shuttles between the Hilton Hotel and the venue on the day of the wedding! You just need to be ready at the lobby of the hotel by 2:30 pm on Saturday August 7 2027. If you prefer to drive, you should set your GPS to Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506, El Salvador) Valet Parking will be provided on site throughout the evening.",
+      "a2": "We will provide shuttles between the Sheraton Presidente Hotel and the venue on the day of the wedding! You just need to be ready at the lobby of the hotel by 2:30 pm on Saturday August 7 2027. If you prefer to drive, you should set your GPS to Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506, El Salvador) Valet Parking will be provided on site throughout the evening.",
       "q3": "WHAT IS THE DRESS CODE?",
       "a3": "For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of vibrant colors or botanical prints! For Men: Formal suits or tuxedos.",
       "dressCodeNoteTitle": "Colors Reserved for the Bride",

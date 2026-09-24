@@ -334,7 +334,7 @@
       "no": "Lamentablemente no podré asistir",
       "guests": "Número total de asistentes (incluyéndote)",
       "guestNames": "Nombres de los acompañantes (opcional)",
-      "shuttle": "¿Deseas utilizar el servicio de shuttle (Hotel Hilton ⇄ Forêt)?",
+      "shuttle": "¿Deseas utilizar el servicio de shuttle (Hotel Sheraton Presidente ⇄ Forêt)?",
       "shuttleYes": "Sí, transporte shuttle",
       "shuttleNo": "No, transporte propio",
       "dietary": "Restricciones alimenticias o alergias",
@@ -385,7 +385,7 @@
         "allergiesLabel": "Alergias o Restricciones Alimenticias",
         "allergiesPlaceholder": "Ej. Sin gluten (celíaco), sin lácteos, alergia a nueces o mariscos...",
         "shuttleTitle": "Transporte Shuttle Bus",
-        "shuttleQuestion": "¿Tu grupo utilizará el servicio de transporte Shuttle de ida y vuelta (Hotel Hilton ⇄ Forêt)?",
+        "shuttleQuestion": "¿Tu grupo utilizará el servicio de transporte Shuttle de ida y vuelta (Hotel Sheraton Presidente ⇄ Forêt)?",
         "shuttleYes": "Sí, utilizaremos el transporte shuttle",
         "shuttleNo": "No, llegaremos por cuenta propia / vehículo particular",
         "messageTitle": "Mensaje para los Novios",
@@ -403,7 +403,7 @@
         "attendingGuests": "Asistentes confirmados:",
         "declinedGuests": "No asistirán:",
         "shuttleStatus": "Servicio de Shuttle:",
-        "shuttleConfirmed": "Confirmado (Hotel Hilton ⇄ Forêt)",
+        "shuttleConfirmed": "Confirmado (Hotel Sheraton Presidente ⇄ Forêt)",
         "shuttleDeclined": "Transporte propio",
         "modifyButton": "Modificar Respuestas",
         "logoutButton": "Salir / Cerrar Sesión"
@@ -425,14 +425,18 @@
     "accommodations": {
       "title": "HOSPEDAJE",
       "q": "¿DÓNDE DEBO HOSPEDARME?",
-      "a": "¡Qué bueno que te prepares con tiempo! Estamos gestionando un bloque de habitaciones con tarifa preferencial para las noches del 6, 7 y 8 de agosto en el Hotel Hilton de San Salvador. Manténte atento y te compartiremos el enlace y código de reserva en cuanto esté activo."
+      "hotelName": "Hotel Sheraton Presidente San Salvador",
+      "badge": "Tarifa Especial para la Boda • Marriott",
+      "a": "Hemos coordinado una tarifa especial preferencial para los invitados a nuestra boda para las noches del 6, 7 y 8 de agosto de 2027 en el Hotel Sheraton Presidente San Salvador. Te recomendamos reservar con anticipación utilizando nuestro enlace exclusivo para garantizar la disponibilidad y tarifa de grupo.",
+      "buttonText": "Reservar con Tarifa Especial",
+      "linkNote": "Enlace directo oficial de Marriott para el grupo de la boda Shields-Urquilla"
     },
     "details": {
       "title": "DETALLES DEL 7 DE AGOSTO",
       "q1": "¿DÓNDE Y A QUÉ HORA SE LLEVARÁ A CABO LA BODA?",
       "a1": "Tanto la ceremonia como la recepción se celebrarán el sábado 7 de agosto de 2027 en Forêt en Comasagua, El Salvador, a partir de las 3:30 pm.",
       "q2": "¿CÓMO LLEGO AL LUGAR DEL EVENTO?",
-      "a2": "¡Pondremos a disposición transporte tipo shuttle de ida y vuelta entre el Hotel Hilton y Forêt el día de la boda! Solo debes presentarte en el lobby del hotel a las 2:30 pm del sábado 7 de agosto de 2027. Si prefieres manejar en tu propio vehículo, configura tu GPS a Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Habrá servicio de Valet Parking gratuito durante toda la velada.",
+      "a2": "¡Pondremos a disposición transporte tipo shuttle de ida y vuelta entre el Hotel Sheraton Presidente y Forêt el día de la boda! Solo debes presentarte en el lobby del hotel a las 2:30 pm del sábado 7 de agosto de 2027. Si prefieres manejar en tu propio vehículo, configura tu GPS a Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Habrá servicio de Valet Parking gratuito durante toda la velada.",
       "q3": "¿CUÁL ES EL CÓDIGO DE VESTIMENTA?",
       "a3": "Formal / Etiqueta rigurosa. Damas: Vestidos largos o elegantes hasta el tobillo (¡te animamos a usar colores vibrantes o estampados botánicos!). Caballeros: Traje formal o esmoquin.",
       "dressCodeNoteTitle": "Colores Reservados para la Novia",

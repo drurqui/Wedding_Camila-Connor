@@ -17,6 +17,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import TrainIcon from '@mui/icons-material/Train';
 import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat';
 import BlockIcon from '@mui/icons-material/Block';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -894,39 +895,111 @@ const Wedding = () => {
             {activeGuideTab === 2 && (
               <Box 
                 sx={{ 
-                  bgcolor: 'rgba(20, 38, 29, 0.65)',
-                  backdropFilter: 'blur(8px)',
-                  border: `1px solid rgba(199, 120, 79, 0.35)`,
-                  borderRadius: 3, 
-                  p: { xs: 3, sm: 4 }, 
-                  textAlign: 'center' 
+                  bgcolor: 'rgba(20, 38, 29, 0.75)',
+                  backdropFilter: 'blur(10px)',
+                  border: `1px solid rgba(218, 188, 96, 0.35)`,
+                  borderRadius: 3.5, 
+                  p: { xs: 3, sm: 4.5 }, 
+                  textAlign: 'center',
+                  boxShadow: '0 12px 32px rgba(0,0,0,0.25)',
                 }}
               >
-                <HotelIcon sx={{ fontSize: 44, color: colors.goldAccent, mb: 1.5 }} />
-                <Typography 
+                <Box 
                   sx={{ 
-                    fontFamily: "'Montserrat', sans-serif", 
-                    fontWeight: 700, 
-                    color: colors.goldAccent, 
-                    fontSize: { xs: '1rem', sm: '1.2rem' },
-                    letterSpacing: 1.5,
-                    textTransform: 'uppercase',
+                    width: 64, 
+                    height: 64, 
+                    borderRadius: '50%', 
+                    bgcolor: 'rgba(218, 188, 96, 0.15)', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    mx: 'auto', 
                     mb: 2 
                   }}
                 >
-                  {t('wedding.accommodations.q')}
+                  <HotelIcon sx={{ fontSize: 34, color: colors.goldAccent }} />
+                </Box>
+
+                <Chip 
+                  label={t('wedding.accommodations.badge', 'Tarifa Especial para la Boda • Marriott')} 
+                  size="small"
+                  sx={{ 
+                    bgcolor: 'rgba(218, 188, 96, 0.18)', 
+                    color: colors.goldAccent, 
+                    fontWeight: 700, 
+                    letterSpacing: 1, 
+                    fontSize: '0.75rem',
+                    mb: 2,
+                    border: '1px solid rgba(218, 188, 96, 0.4)'
+                  }} 
+                />
+
+                <Typography 
+                  variant="h4"
+                  sx={{ 
+                    fontFamily: "'Playfair Display', serif", 
+                    fontWeight: 700, 
+                    color: '#ffffff', 
+                    fontSize: { xs: '1.4rem', sm: '1.8rem' },
+                    mb: 1.5 
+                  }}
+                >
+                  {t('wedding.accommodations.hotelName', 'Hotel Sheraton Presidente San Salvador')}
                 </Typography>
+
                 <Typography 
                   sx={{ 
                     color: colors.creamText, 
-                    fontSize: { xs: '0.88rem', sm: '0.95rem' }, 
+                    fontSize: { xs: '0.9rem', sm: '1rem' }, 
                     lineHeight: 1.8, 
-                    maxWidth: 620, 
+                    maxWidth: 640, 
                     mx: 'auto',
-                    opacity: 0.95
+                    opacity: 0.95,
+                    mb: 3
                   }}
                 >
                   {t('wedding.accommodations.a')}
+                </Typography>
+
+                <Button
+                  variant="contained"
+                  component="a"
+                  href="https://www.marriott.com/es/event-reservations/reservation-link.mi?id=1790013727538&key=GRP"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  endIcon={<OpenInNewIcon />}
+                  sx={{
+                    bgcolor: colors.goldAccent,
+                    color: '#15271e',
+                    fontWeight: 700,
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                    letterSpacing: 0.5,
+                    px: { xs: 3, sm: 4.5 },
+                    py: 1.4,
+                    borderRadius: '35px',
+                    boxShadow: '0 6px 20px rgba(218, 188, 96, 0.35)',
+                    transition: 'all 0.25s ease',
+                    '&:hover': {
+                      bgcolor: '#f5d580',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 24px rgba(218, 188, 96, 0.45)',
+                    }
+                  }}
+                >
+                  {t('wedding.accommodations.buttonText', 'Reservar con Tarifa Especial')}
+                </Button>
+
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    display: 'block', 
+                    mt: 1.8, 
+                    color: colors.goldAccent, 
+                    opacity: 0.85, 
+                    fontSize: '0.78rem' 
+                  }}
+                >
+                  {t('wedding.accommodations.linkNote', 'Enlace directo oficial de Marriott para el grupo de la boda Shields-Urquilla')}
                 </Typography>
               </Box>
             )}
