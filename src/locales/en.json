@@ -257,6 +257,23 @@
         "seconds": "Sec"
       }
     },
+    "ourJourney": {
+      "overline": "OUR STORY",
+      "title": "OUR JOURNEY",
+      "subtitle": "Together",
+      "text": "Building our life together has been our favorite adventure yet. As we look back on our journey, we realize how incredibly lucky we are to have such wonderful friends and family supporting us from all over. When it came time to plan our wedding, we knew we wanted to bring everyone together in a place that holds a special piece of our hearts. We are absolutely thrilled to invite you to El Salvador next summer. Celebrating our marriage at Forêt, surrounded by lush natural beauty and all of our favorite people, is a dream come true for both of us."
+    },
+    "schedule": {
+      "title": "SCHEDULE OF EVENTS",
+      "date": "AUGUST 7, 2027",
+      "items": [
+        { "time": "3:00 PM", "title": "Guest Arrivals", "description": "Welcome to Forêt" },
+        { "time": "3:30 PM", "title": "Ceremony", "description": "Our spiritual vows and religious ceremony" },
+        { "time": "4:30 PM", "title": "Cocktail Hour", "description": "Drinks, canapés and mingling" },
+        { "time": "6:00 PM", "title": "Reception", "description": "Seated 3-course dinner & celebration" },
+        { "time": "8:30 PM", "title": "Afterparty", "description": "Dancing and celebrating under the stars" }
+      ]
+    },
     "guide": {
       "overline": "GUEST GUIDE",
       "title": "Details & Travel Guide"
@@ -271,7 +288,7 @@
       "items": {
         "airfare": {
           "title": "AIRFARE",
-          "description": "HELP COVER THE FLIGHTS TAKING US TO AND FROM CANADA TO MILAN, DOWN TO SICILY, ACROSS GREECE, AND BACK HOME.",
+          "description": "HELP COVER THE FLIGHTS TAKING US TO FROM CANADA TO MILAN, DOWN TO SICILY, ACROSS GREECE, AND BACK HOME.",
           "shareUsd": 100,
           "shareCad": 135,
           "shareText": "1 SHARE • $100 USD / $135 CAD",
@@ -287,11 +304,115 @@
         },
         "lakeComo": {
           "title": "LAKE COMO BOAT TOUR",
-          "description": "A ROMANTIC AFTERNOON ON THE WATER, EXPLORING THE HISTORIC ARCHITECTURE AND MOUNTAIN VIEWS OF LAKE COMO FROM A CLASSIC BOAT.",
+          "description": "A ROMANTIC AFTERNOON ON THE WATER, EXPLORING THE HISTORIC ARCHITECTURE AND MOUNTAIN VIEWS OF LAKE COMO FROM A CLASSIC WOODEN BOAT.",
           "shareUsd": 150,
           "shareCad": 200,
           "shareText": "1 SHARE • $150 USD / $200 CAD",
+          "need": 4
+        },
+        "lakesideBreakfast": {
+          "title": "LAKESIDE BREAKFAST",
+          "description": "FUNDING LAZY MORNINGS SOAKING IN AUTHENTIC ITALIAN ESPRESSO CULTURE BY THE WATER.",
+          "shareUsd": 30,
+          "shareCad": 40,
+          "shareText": "1 SHARE • $30 USD / $40 CAD",
+          "need": 4
+        },
+        "colosseum": {
+          "title": "ANCIENT ROME AND COLOSSEUM GUIDED TOUR",
+          "description": "A DEEP DIVE INTO MILITARY HISTORY, IMPERIAL STRATEGY, AND EPIC GLADIATOR FIGHTS.",
+          "shareUsd": 80,
+          "shareCad": 110,
+          "shareText": "1 SHARE • $80 USD / $110 CAD",
           "need": 2
+        },
+        "vatican": {
+          "title": "VATICAN MUSEUMS AND SISTINE CHAPEL EARLY ACCESS",
+          "description": "SKIP-THE-LINE TICKETS TO EXPLORE ST. PETER'S BASILICA AND THE INCREDIBLE FRESCOES WITHOUT THE HEAVY AFTERNOON CROWDS.",
+          "shareUsd": 90,
+          "shareCad": 120,
+          "shareText": "1 SHARE • $90 USD / $120 CAD",
+          "need": 2
+        },
+        "trastevereDinner": {
+          "title": "LATE NIGHT DINNER IN TRASTEVERE",
+          "description": "A ROMANTIC EVENING OUT IN ROME'S LIVELIEST NEIGHBORHOOD FOR HANDMADE PASTA AND INCREDIBLE LOCAL WINE.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 SHARE • $100 USD / $135 CAD",
+          "need": 2
+        },
+        "mountEtna": {
+          "title": "MOUNT ETNA VOLCANO EXCURSION",
+          "description": "A GUIDED JEEP TOUR UP EUROPE'S HIGHEST ACTIVE VOLCANO, COMPLETE WITH SWEEPING VIEWS OF THE EASTERN COASTLINE.",
+          "shareUsd": 120,
+          "shareCad": 160,
+          "shareText": "1 SHARE • $120 USD / $160 CAD",
+          "need": 2
+        },
+        "sicilianFood": {
+          "title": "SICILIAN STREET FOOD TASTING",
+          "description": "AN AFTERNOON TASTING ARANCINI, CANNOLI, AND FRESH LOCAL SEAFOOD IN THE VIBRANT MARKETS OF TAORMINA AND CATANIA.",
+          "shareUsd": 60,
+          "shareCad": 80,
+          "shareText": "1 SHARE • $60 USD / $80 CAD",
+          "need": 2
+        },
+        "acropolis": {
+          "title": "ACROPOLIS AND PARTHENON TICKETS",
+          "description": "ENTRY TO WALK UP THE LEGENDARY HILL IN ATHENS TO SEE THE MOST ICONIC RUINS IN GREECE.",
+          "shareUsd": 40,
+          "shareCad": 55,
+          "shareText": "1 SHARE • $40 USD / $55 CAD",
+          "need": 2
+        },
+        "catamaranCruise": {
+          "title": "CALDERA SUNSET CATAMARAN CRUISE",
+          "description": "THE ULTIMATE SANTORINI EXPERIENCE, SAILING THE VOLCANIC CALDERA IN THE LATE AFTERNOON AND ENJOYING FRESH FETA, WARM PITA, AND DRINKS WHILE THE SUN SETS.",
+          "shareUsd": 175,
+          "shareCad": 235,
+          "shareText": "1 SHARE • $175 USD / $235 CAD",
+          "need": 2
+        },
+        "hotelLakeComo": {
+          "title": "HOTEL NIGHT IN LAKE COMO",
+          "description": "A NIGHT IN HOTEL DU LAC RIGHT ON THE WATER IN THE ROMANTIC, SLIGHTLY QUIETER TOWN OF VARENNA. IT HAS A CLASSIC, OLD-WORLD ITALIAN ELEGANCE.",
+          "shareUsd": 350,
+          "shareCad": 490,
+          "shareText": "1 SHARE • $350 USD / $490 CAD",
+          "need": 4
+        },
+        "hotelTrastevere": {
+          "title": "HOTEL NIGHT IN TRASTEVERE",
+          "description": "A NIGHT IN HOTEL SANTA MARÍA; AN INTIMATE BOUTIQUE HOTEL SET IN A CONVERTED 16TH-CENTURY CLOISTER. IT FEATURES A STUNNING COURTYARD FILLED WITH ORANGE TREES.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 SHARE • $150 USD / $200 CAD",
+          "need": 5
+        },
+        "hotelSicily": {
+          "title": "A NIGHT IN SICILY",
+          "description": "A NIGHT IN HOTEL VILLA SCHULER A FAMILY-OWNED HISTORIC MANSION SURROUNDED BY LUSH TERRACED BOTANICAL GARDENS. IT OFFERS SWEEPING, UNINTERRUPTED VIEWS OF THE IONIAN SEA AND MOUNT ETNA IN THE DISTANCE.",
+          "shareUsd": 250,
+          "shareCad": 350,
+          "shareText": "1 SHARE • $250 USD / $350 CAD",
+          "need": 4
+        },
+        "hotelAthens": {
+          "title": "A NIGHT IN ATHENS",
+          "description": "A NIGHT IN HERODION HOTEL A STYLISH, MODERN BOUTIQUE HOTEL LOCATED RIGHT AT THE FOOT OF THE ACROPOLIS. IT FEATURES A ROOFTOP RESTAURANT WHERE YOU CAN LOOK DIRECTLY UP AT THE BRILLIANTLY LIT PARTHENON AT NIGHT.",
+          "shareUsd": 200,
+          "shareCad": 280,
+          "shareText": "1 SHARE • $200 USD / $280 CAD",
+          "need": 3
+        },
+        "hotelSantorini": {
+          "title": "A NIGHT IN SANTORINI",
+          "description": "A NIGHT IN ASTRA SUITES A LUXURY HOTEL THAT IS TUCKED INTO THE CLIFFS OF THE VILLAGE OF IMEROVIGLI. IT FEATURES CLASSIC WHITE CAVE ARCHITECTURE AND INCREDIBLE CALDERA SUNSET VIEWS.",
+          "shareUsd": 400,
+          "shareCad": 560,
+          "shareText": "1 SHARE • $400 USD / $560 CAD",
+          "need": 4
         }
       },
       "customContribution": {
@@ -438,13 +559,47 @@
       "q2": "HOW DO I GET TO THE VENUE?",
       "a2": "We will provide shuttles between the Sheraton Presidente Hotel and the venue on the day of the wedding! You just need to be ready at the lobby of the hotel by 2:30 pm on Saturday August 7 2027. If you prefer to drive, you should set your GPS to Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506, El Salvador) Valet Parking will be provided on site throughout the evening.",
       "q3": "WHAT IS THE DRESS CODE?",
-      "a3": "For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of vibrant colors or botanical prints! For Men: Formal suits or tuxedos.",
-      "dressCodeNoteTitle": "Colors Reserved for the Bride",
-      "dressCodeNoteText": "Please refrain from wearing white, light yellow, or pastel shades. Under evening lighting and in photographs, these light shades appear white and are reserved exclusively for the bride.",
+      "a3": "This event requires formal attire. For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of colorful outfits that show your personality! Keep in mind that Forêt is located in the mountains, so the venue features uneven natural terrain, and evenings can get a bit breezy. Block heels, platforms, or flats are highly recommended, along with a small cover or light jacket. For Men: A well-tailored suit. Feel free to explore elegant colors such as tan, brown, or go with a classic charcoal, black, or gray suit paired with a crisp light dress shirt and a necktie or bow tie. A tuxedo is entirely appropriate but not strictly required. Dress shoes are a must.",
+      "dressCodeNoteTitle": "Strict Color Restriction",
+      "dressCodeNoteText": "We prohibit the use of dresses or suits that are white or mostly white. Any person wearing inappropriate attire will be kindly asked to change.",
       "reservedColors": {
-        "white": "White",
-        "lightYellow": "Light yellow",
-        "pastels": "Pastel shades"
+        "white": "White or Mostly White"
+      }
+    },
+    "faqs": {
+      "title": "FREQUENTLY ASKED QUESTIONS",
+      "subtitle": "Everything you need to know for our wedding day",
+      "whoIsTuty": {
+        "q": "WHO IS TUTY?",
+        "a": "Tuty has been a widely accepted nickname for Camila, and many of you might know them as Tuty exclusively! Please feel free to use Tuty, Camila, or Sofía, to refer to the bride, whichever you would prefer!"
+      },
+      "dietary": {
+        "q": "WHAT IF I HAVE DIETARY RESTRICTIONS?",
+        "a": "Please complete your RSVP normally and indicate any allergies or dietary restrictions in it so our chef can make sure your food is safe and yummy!"
+      },
+      "kids": {
+        "q": "ARE KIDS INVITED?",
+        "a": "Children mentioned in your invitation are welcome at our wedding ceremony entrance; however, our reception is designed with adult guests in mind. In order to provide parents freedom to celebrate and peace of mind, children under the age of 13 will be asked to relocate to an on-site kid's tent equipped with entertainment, quiet corner, and fully bilingual nannies, once the ceremony entrance is over and everyone is seated. If your child is 13 years old or older, the option to accompany the parents during the ceremony and reception will be available. Parents are welcome to check on their children at any point. Children under the age of 4 will be provided with a one-on-one nanny."
+      },
+      "kidsFood": {
+        "q": "WHAT WILL THE CHILDREN EAT?",
+        "a": "There will be a kid's friendly buffet of fruits, veggies, and kid's favorites (pizza, chicken fingers, mac and cheese) available to all kids through the evening, as well as fresh water, soft drinks, and juice. Wedding cake will be brought to the kids by staff. Please state any allergies in your RSVP."
+      },
+      "ceremonyPhotos": {
+        "q": "CAN I TAKE PICTURES DURING THE CEREMONY?",
+        "a": "Because of the spiritual nature of our ceremony, and to avoid interfering with our hired professional photographers, please refrain from taking any pictures during and right after the ceremony. This includes cellphones or any other personal camera devices. Your attention is of utmost importance to us!"
+      },
+      "receptionPhotos": {
+        "q": "CAN I TAKE PICTURES DURING THE RECEPTION?",
+        "a": "Absolutely! Please feel free to use your phone normally after the ceremony. We only ask that you refrain from interfering with the photographers on site. Be mindful of your position in the room and please avoid blocking the view of any cameras during important moments such as speeches, first dance, and cake cutting."
+      },
+      "rsvpDeadline": {
+        "q": "WHEN IS YOUR RSVP DEADLINE?",
+        "a": "Please kindly RSVP by June 7 so we can finalize our final guest count and details. You can RSVP directly through this website on the RSVP tab. Any person who doesn't complete the RSVP prior to the deadline will be marked as 'not attending' and will not be permitted seating during our event; so make sure you reserve your spot and plate with time!"
+      },
+      "djSongs": {
+        "q": "CAN I ASK THE DJ FOR A SONG?",
+        "a": "Please refrain from approaching the DJ or music band to request songs during the event. If you have any song requests, we kindly ask you to include them in your RSVP or playlist."
       }
     },
     "rsvpNotice": {

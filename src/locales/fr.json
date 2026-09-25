@@ -257,6 +257,23 @@
         "seconds": "Sec"
       }
     },
+    "ourJourney": {
+      "overline": "NOTRE HISTOIRE",
+      "title": "NOTRE HISTOIRE",
+      "subtitle": "Ensemble",
+      "text": "Construire notre vie ensemble a été notre plus belle aventure. En repensant à notre parcours, nous mesurons l'immense chance que nous avons d'être entourés de merveilleux amis et d'une famille qui nous soutient de partout. Au moment de planifier notre mariage, nous avons immédiatement su que nous voulions réunir tout le monde dans un lieu qui occupe une place si chère dans nos cœurs. Nous sommes absolument ravis de vous inviter au Salvador l'été prochain. Célébrer notre mariage à Forêt, au cœur d'une nature luxuriante et auprès de toutes nos personnes préférées, est un rêve devenu réalité pour nous deux."
+    },
+    "schedule": {
+      "title": "PROGRAMME DES ÉVÉNEMENTS",
+      "date": "7 AOÛT 2027",
+      "items": [
+        { "time": "15h00", "title": "Arrivée des Invités", "description": "Bienvenue à Forêt" },
+        { "time": "15h30", "title": "Cérémonie Religieuse", "description": "Nos vœux et sacrement du mariage" },
+        { "time": "16h30", "title": "Cocktail", "description": "Boissons, canapés et retrouvailles" },
+        { "time": "18h00", "title": "Réception", "description": "Dîner gastronomique 3 services et toasts" },
+        { "time": "20h30", "title": "Soirée Dansante / Afterparty", "description": "Fête et danse sous les étoiles" }
+      ]
+    },
     "guide": {
       "overline": "GUIDE DES INVITÉS",
       "title": "Détails & Guide de Voyage"
@@ -287,11 +304,115 @@
         },
         "lakeComo": {
           "title": "TOUR EN BATEAU SUR LE LAC DE CÔME",
-          "description": "UNE APRÈS-MIDI ROMANTIQUE SUR L'EAU, À EXPLORER L'ARCHITECTURE HISTORIQUE ET LES VILLAS DU LAC DE CÔME À BORD D'UN BATEAU CLASSIQUE.",
+          "description": "UNE APRÈS-MIDI ROMANTIQUE SUR L'EAU, À EXPLORER L'ARCHITECTURE HISTORIQUE ET LES VILLAS DU LAC DE CÔME À BORD D'UN BATEAU CLASSIQUE EN BOIS.",
           "shareUsd": 150,
           "shareCad": 200,
           "shareText": "1 PART • $150 USD / $200 CAD",
+          "need": 4
+        },
+        "lakesideBreakfast": {
+          "title": "PETIT-DÉJEUNER AU BORD DU LAC",
+          "description": "DOUCES MATINÉES EN BORD D'EAU AU RYTHME DE L'AUTHENTIQUE CULTURE DE L'ESPRESSO ITALIEN.",
+          "shareUsd": 30,
+          "shareCad": 40,
+          "shareText": "1 PART • $30 USD / $40 CAD",
+          "need": 4
+        },
+        "colosseum": {
+          "title": "VISITE GUIDÉE DE ROME ANTIQUE ET DU COLISÉE",
+          "description": "UNE IMMERSION PASSIONNANTE DANS L'HISTOIRE MILITAIRE, LA STRATÉGIE IMPÉRIALE ET LES COMBATS ÉPIQUES DE GLADIATEURS.",
+          "shareUsd": 80,
+          "shareCad": 110,
+          "shareText": "1 PART • $80 USD / $110 CAD",
           "need": 2
+        },
+        "vatican": {
+          "title": "ACCÈS MATINAL AUX MUSÉES DU VATICAN ET CHAPELLE SIXTINE",
+          "description": "BILLETS COUPE-FILE POUR ADMIRER LA BASILIQUE SAINT-PIERRE ET LES SUBLIMES FRESQUES AVANT L'AFFLUENCE DE L'APRÈS-MIDI.",
+          "shareUsd": 90,
+          "shareCad": 120,
+          "shareText": "1 PART • $90 USD / $120 CAD",
+          "need": 2
+        },
+        "trastevereDinner": {
+          "title": "DÎNER NOCTURNE DANS LE TRASTEVERE",
+          "description": "UNE SOIRÉE ROMANTIQUE DANS LE QUARTIER LE PLUS VIVANT DE ROME AVEC DES PÂTES FRAÎCHES MAISON ET DU VIN LOCAL D'EXCEPTION.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 PART • $100 USD / $135 CAD",
+          "need": 2
+        },
+        "mountEtna": {
+          "title": "EXCURSION EN JEEP SUR LE MONT ETNA",
+          "description": "ASCENSION GUIDÉE EN JEEP DU PLUS HAUT VOLCAN ACTIF D'EUROPE AVEC DES PANORAMAS SPECTACULAIRES SUR LA CÔTE EST.",
+          "shareUsd": 120,
+          "shareCad": 160,
+          "shareText": "1 PART • $120 USD / $160 CAD",
+          "need": 2
+        },
+        "sicilianFood": {
+          "title": "DÉGUSTATION DE STREET FOOD SICILIENNE",
+          "description": "UNE APRÈS-MIDI GOURMANDE À DÉGUSTER ARANCINI, CANNOLI ET FRUITS DE MER FRAIS DANS LES MARCHÉS DE TAORMINE ET CATANE.",
+          "shareUsd": 60,
+          "shareCad": 80,
+          "shareText": "1 PART • $60 USD / $80 CAD",
+          "need": 2
+        },
+        "acropolis": {
+          "title": "BILLETS POUR L'ACROPOLE ET LE PARTHÉNON",
+          "description": "ACCÈS POUR GRAVIR LA COLLINE LÉGENDAIRE D'ATHÈNES ET DÉCOUVRIR LES MONUMENTS LES PLUS EMBLÉMATIQUES DE GRÈCE.",
+          "shareUsd": 40,
+          "shareCad": 55,
+          "shareText": "1 PART • $40 USD / $55 CAD",
+          "need": 2
+        },
+        "catamaranCruise": {
+          "title": "CROISIÈRE EN CATAMARAN AU COUCHER DU SOLEIL À SANTORIN",
+          "description": "L'EXPÉRIENCE INCONTOURNABLE DE SANTORIN : NAVIGUER DANS LA CALDEIRA AU CRÉPUSCULE EN DÉGUSTANT DE LA FÉTA FRAÎCHE, DU PAIN PITA ET DES RAFRAÎCHISSEMENTS.",
+          "shareUsd": 175,
+          "shareCad": 235,
+          "shareText": "1 PART • $175 USD / $235 CAD",
+          "need": 2
+        },
+        "hotelLakeComo": {
+          "title": "NUIT D'HÔTEL AU LAC DE CÔME",
+          "description": "UNE NUIT À L'HÔTEL DU LAC LES PIEDS DANS L'EAU DANS LE VILLAGE PAISIBLE DE VARENNA, EMPREINT D'UNE ÉLÉGANCE ITALIENNE INTEMPORELLE.",
+          "shareUsd": 350,
+          "shareCad": 490,
+          "shareText": "1 PART • $350 USD / $490 CAD",
+          "need": 4
+        },
+        "hotelTrastevere": {
+          "title": "NUIT D'HÔTEL DANS LE TRASTEVERE",
+          "description": "UNE NUIT À L'HÔTEL SANTA MARÍA ; UN HÔTEL BOUTIQUE CHARMANT DANS UN ANCIEN COUVENT DU XVIE SIÈCLE AVEC UN PATIO D'ORANGERS.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 PART • $150 USD / $200 CAD",
+          "need": 5
+        },
+        "hotelSicily": {
+          "title": "UNE NUIT EN SICILE",
+          "description": "UNE NUIT À L'HÔTEL VILLA SCHULER ; DEMEURE HISTORIQUE FAMILIALE ENTOURÉE DE JARDINS EN TERRASSE OFFRANT UNE VUE IMPRENABLE SUR LA MER IONIENNE ET L'ETNA.",
+          "shareUsd": 250,
+          "shareCad": 350,
+          "shareText": "1 PART • $250 USD / $350 CAD",
+          "need": 4
+        },
+        "hotelAthens": {
+          "title": "UNE NUIT À ATHÈNES",
+          "description": "UNE NUIT À L'HÔTEL HERODION ; ÉLÉGANT HÔTEL BOUTIQUE AU PIED DE L'ACROPOLE AVEC TOIT-TERRASSE ADMIRANT LE PARTHÉNON ILLUMINÉ DE NUIT.",
+          "shareUsd": 200,
+          "shareCad": 280,
+          "shareText": "1 PART • $200 USD / $280 CAD",
+          "need": 3
+        },
+        "hotelSantorini": {
+          "title": "UNE NUIT À SANTORIN",
+          "description": "UNE NUIT À ASTRA SUITES ; HÔTEL LUXUEUX ACCROCHÉ AUX FALAISES D'IMEROVIGLI AVEC ARCHITECTURE TROGLODYTIQUE BLANCHE ET VUE CALDEIRA.",
+          "shareUsd": 400,
+          "shareCad": 560,
+          "shareText": "1 PART • $400 USD / $560 CAD",
+          "need": 4
         }
       },
       "customContribution": {
@@ -438,13 +559,47 @@
       "q2": "COMMENT SE RENDRE AU LIEU DE RÉCEPTION ?",
       "a2": "Des navettes aller-retour seront mises en place entre l'Hôtel Sheraton Presidente et Forêt le jour du mariage ! Rendez-vous dans le hall de l'hôtel à 14h30 le samedi 7 août 2027. Si vous préférez conduire, indiquez Forêt dans votre GPS (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Un service de voiturier (Valet Parking) gratuit sera disponible sur place.",
       "q3": "QUEL EST LE CODE VESTIMENTAIRE ?",
-      "a3": "Tenue de soirée / Formelle. Pour les dames : Robes longues ou élégantes descendant aux chevilles (couleurs vives et motifs botaniques vivement encouragés !). Pour les messieurs : Costume sombre ou smoking.",
-      "dressCodeNoteTitle": "Couleurs Réservées à la Mariée",
-      "dressCodeNoteText": "Merci d'éviter de porter du blanc, ainsi que du jaune clair ou des tons pastel. Sous l'éclairage de soirée et sur les photos, ces teintes claires ressortent comme du blanc et sont réservées exclusivement à la mariée.",
+      "a3": "Cet événement exige une tenue formelle. Pour les dames : Robes longues jusqu'au sol ou élégantes descendant aux chevilles. Nous vous encourageons à porter des tenues colorées reflétant votre personnalité ! N'oubliez pas que Forêt est situé dans les montagnes, avec un terrain naturel et des soirées fraîches et venteuses. Les talons épais (block heels), plateformes ou chaussures plates sont vivement recommandés, ainsi qu'une petite veste ou étole. Pour les messieurs : Costume bien taillé. N'hésitez pas à opter pour des teintes élégantes (havane, marron, ou classique gris, anthracite ou noir) avec une chemise de soirée et cravate ou nœud papillon. Le smoking est tout à fait bienvenu mais pas obligatoire. Chaussures de ville indispensables.",
+      "dressCodeNoteTitle": "Restriction Stricte de Couleur",
+      "dressCodeNoteText": "Il est strictement interdit de porter des robes ou costumes blancs ou majoritairement blancs. Toute personne vêtue de blanc sera aimablement invitée à se changer.",
       "reservedColors": {
-        "white": "Blanc",
-        "lightYellow": "Jaune clair",
-        "pastels": "Tons pastel"
+        "white": "Blanc ou Majoritairement Blanc"
+      }
+    },
+    "faqs": {
+      "title": "FOIRE AUX QUESTIONS",
+      "subtitle": "Tout ce que vous devez savoir pour notre journée de mariage",
+      "whoIsTuty": {
+        "q": "QUI EST TUTY ?",
+        "a": "Tuty est le surnom très affectueux de Camila, et nombre d'entre vous la connaissent sous ce nom ! N'hésitez pas à l'appeler Tuty, Camila ou Sofía, selon votre préférence !"
+      },
+      "dietary": {
+        "q": "QUE FAIRE EN CAS D'ALLERGIES OU DE RÉGIME PARTICULIER ?",
+        "a": "Veuillez remplir votre confirmation RSVP normalement et y indiquer vos allergies ou restrictions afin que notre chef prépare un repas sûr et délicieux pour vous."
+      },
+      "kids": {
+        "q": "LES ENFANTS SONT-ILS INVITÉS ?",
+        "a": "Les enfants mentionnés sur votre invitation sont les bienvenus pour l'entrée de la cérémonie ; cependant, notre réception a été pensée pour les adultes. Afin d'offrir sérénité et liberté aux parents, les enfants de moins de 13 ans seront accueillis après l'entrée dans une tente dédiée sur place avec activités, espace calme et nounous bilingues. Si votre enfant a 13 ans ou plus, il peut accompagner ses parents pendant la réception (à préciser sur le RSVP). Les parents peuvent leur rendre visite à tout moment. Les enfants de moins de 4 ans bénéficieront d'une nounou individuelle dédiée."
+      },
+      "kidsFood": {
+        "q": "QUE MANGERONT LES ENFANTS ?",
+        "a": "Un buffet adapté aux enfants avec fruits, légumes et leurs plats préférés (pizza, aiguillettes de poulet, macaronis au fromage) sera disponible toute la soirée, ainsi que de l'eau fraîche et des jus. Le gâteau de mariage leur sera également servi."
+      },
+      "ceremonyPhotos": {
+        "q": "PUIS-JE PRENDRE DES PHOTOS PENDANT LA CÉRÉMONIE ?",
+        "a": "En raison de la nature spirituelle de notre cérémonie et pour ne pas gêner nos photographes professionnels, nous vous demandons gentiment de ne pas prendre de photos ni vidéos durant la cérémonie (y compris avec smartphones et appareils photo). Votre présence attentive et connectée nous est très précieuse !"
+      },
+      "receptionPhotos": {
+        "q": "PUIS-JE PRENDRE DES PHOTOS PENDANT LA RÉCEPTION ?",
+        "a": "Absolument ! Utilisez vos téléphones normalement après la cérémonie. Veillez simplement à ne pas gêner les photographes officiels lors des moments clés comme les discours, la première danse et la pièce montée."
+      },
+      "rsvpDeadline": {
+        "q": "QUELLE EST LA DATE LIMITE DE CONFIRMATION (RSVP) ?",
+        "a": "Merci de confirmer votre présence au plus tard le 7 juin afin que nous puissions finaliser le nombre d'invités et la logistique. Vous pouvez confirmer directement sur ce site via l'onglet RSVP. Les personnes non confirmées à cette date seront considérées comme absentes."
+      },
+      "djSongs": {
+        "q": "PUIS-JE DEMANDER UNE CHANSON AU DJ ?",
+        "a": "Merci de ne pas vous approcher directement du DJ ou de l'orchestre pendant la fête. Si vous avez des suggestions musicales, veuillez les indiquer sur votre formulaire RSVP ou sur notre playlist partagée."
       }
     },
     "rsvpNotice": {

@@ -18,6 +18,16 @@ import TrainIcon from '@mui/icons-material/Train';
 import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat';
 import BlockIcon from '@mui/icons-material/Block';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import ChurchIcon from '@mui/icons-material/Church';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import TerrainIcon from '@mui/icons-material/Terrain';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import SailingIcon from '@mui/icons-material/Sailing';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -295,7 +305,7 @@ const Wedding = () => {
     terracottaDark: '#a15632',
   };
 
-  // Lista de experiencias de Luna de Miel para renderizado en cuadrícula
+  // Lista de experiencias de Luna de Miel para renderizado en cuadrícula (16 experiencias completas)
   const honeymoonCards = [
     {
       key: 'airfare',
@@ -332,6 +342,162 @@ const Wedding = () => {
       need: t('wedding.honeymoon.items.lakeComo.need'),
       shareUsd: 150,
       shareCad: 200,
+    },
+    {
+      key: 'lakesideBreakfast',
+      icon: <LocalCafeIcon sx={{ color: colors.copper }} />,
+      number: '04',
+      title: t('wedding.honeymoon.items.lakesideBreakfast.title'),
+      description: t('wedding.honeymoon.items.lakesideBreakfast.description'),
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.lakesideBreakfast.shareText'),
+      need: t('wedding.honeymoon.items.lakesideBreakfast.need'),
+      shareUsd: 30,
+      shareCad: 40,
+    },
+    {
+      key: 'colosseum',
+      icon: <AccountBalanceIcon sx={{ color: colors.copper }} />,
+      number: '05',
+      title: t('wedding.honeymoon.items.colosseum.title'),
+      description: t('wedding.honeymoon.items.colosseum.description'),
+      image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.colosseum.shareText'),
+      need: t('wedding.honeymoon.items.colosseum.need'),
+      shareUsd: 80,
+      shareCad: 110,
+    },
+    {
+      key: 'vatican',
+      icon: <ChurchIcon sx={{ color: colors.copper }} />,
+      number: '06',
+      title: t('wedding.honeymoon.items.vatican.title'),
+      description: t('wedding.honeymoon.items.vatican.description'),
+      image: 'https://images.unsplash.com/photo-1543429776-2782fc8e1acd?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.vatican.shareText'),
+      need: t('wedding.honeymoon.items.vatican.need'),
+      shareUsd: 90,
+      shareCad: 120,
+    },
+    {
+      key: 'trastevereDinner',
+      icon: <RestaurantIcon sx={{ color: colors.copper }} />,
+      number: '07',
+      title: t('wedding.honeymoon.items.trastevereDinner.title'),
+      description: t('wedding.honeymoon.items.trastevereDinner.description'),
+      image: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.trastevereDinner.shareText'),
+      need: t('wedding.honeymoon.items.trastevereDinner.need'),
+      shareUsd: 100,
+      shareCad: 135,
+    },
+    {
+      key: 'mountEtna',
+      icon: <TerrainIcon sx={{ color: colors.copper }} />,
+      number: '08',
+      title: t('wedding.honeymoon.items.mountEtna.title'),
+      description: t('wedding.honeymoon.items.mountEtna.description'),
+      image: 'https://images.unsplash.com/photo-1533604195513-ab4ffb3b4f9a?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.mountEtna.shareText'),
+      need: t('wedding.honeymoon.items.mountEtna.need'),
+      shareUsd: 120,
+      shareCad: 160,
+    },
+    {
+      key: 'sicilianFood',
+      icon: <FastfoodIcon sx={{ color: colors.copper }} />,
+      number: '09',
+      title: t('wedding.honeymoon.items.sicilianFood.title'),
+      description: t('wedding.honeymoon.items.sicilianFood.description'),
+      image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.sicilianFood.shareText'),
+      need: t('wedding.honeymoon.items.sicilianFood.need'),
+      shareUsd: 60,
+      shareCad: 80,
+    },
+    {
+      key: 'acropolis',
+      icon: <AccountBalanceIcon sx={{ color: colors.copper }} />,
+      number: '10',
+      title: t('wedding.honeymoon.items.acropolis.title'),
+      description: t('wedding.honeymoon.items.acropolis.description'),
+      image: 'https://images.unsplash.com/photo-1555993539-1732916b8235?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.acropolis.shareText'),
+      need: t('wedding.honeymoon.items.acropolis.need'),
+      shareUsd: 40,
+      shareCad: 55,
+    },
+    {
+      key: 'catamaranCruise',
+      icon: <SailingIcon sx={{ color: colors.copper }} />,
+      number: '11',
+      title: t('wedding.honeymoon.items.catamaranCruise.title'),
+      description: t('wedding.honeymoon.items.catamaranCruise.description'),
+      image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.catamaranCruise.shareText'),
+      need: t('wedding.honeymoon.items.catamaranCruise.need'),
+      shareUsd: 175,
+      shareCad: 235,
+    },
+    {
+      key: 'hotelLakeComo',
+      icon: <HotelIcon sx={{ color: colors.copper }} />,
+      number: '12',
+      title: t('wedding.honeymoon.items.hotelLakeComo.title'),
+      description: t('wedding.honeymoon.items.hotelLakeComo.description'),
+      image: 'https://images.unsplash.com/photo-1580837119756-563d608dd119?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.hotelLakeComo.shareText'),
+      need: t('wedding.honeymoon.items.hotelLakeComo.need'),
+      shareUsd: 350,
+      shareCad: 490,
+    },
+    {
+      key: 'hotelTrastevere',
+      icon: <HotelIcon sx={{ color: colors.copper }} />,
+      number: '13',
+      title: t('wedding.honeymoon.items.hotelTrastevere.title'),
+      description: t('wedding.honeymoon.items.hotelTrastevere.description'),
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.hotelTrastevere.shareText'),
+      need: t('wedding.honeymoon.items.hotelTrastevere.need'),
+      shareUsd: 150,
+      shareCad: 200,
+    },
+    {
+      key: 'hotelSicily',
+      icon: <HotelIcon sx={{ color: colors.copper }} />,
+      number: '14',
+      title: t('wedding.honeymoon.items.hotelSicily.title'),
+      description: t('wedding.honeymoon.items.hotelSicily.description'),
+      image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.hotelSicily.shareText'),
+      need: t('wedding.honeymoon.items.hotelSicily.need'),
+      shareUsd: 250,
+      shareCad: 350,
+    },
+    {
+      key: 'hotelAthens',
+      icon: <HotelIcon sx={{ color: colors.copper }} />,
+      number: '15',
+      title: t('wedding.honeymoon.items.hotelAthens.title'),
+      description: t('wedding.honeymoon.items.hotelAthens.description'),
+      image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.hotelAthens.shareText'),
+      need: t('wedding.honeymoon.items.hotelAthens.need'),
+      shareUsd: 200,
+      shareCad: 280,
+    },
+    {
+      key: 'hotelSantorini',
+      icon: <HotelIcon sx={{ color: colors.copper }} />,
+      number: '16',
+      title: t('wedding.honeymoon.items.hotelSantorini.title'),
+      description: t('wedding.honeymoon.items.hotelSantorini.description'),
+      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+      shareText: t('wedding.honeymoon.items.hotelSantorini.shareText'),
+      need: t('wedding.honeymoon.items.hotelSantorini.need'),
+      shareUsd: 400,
+      shareCad: 560,
     },
   ];
 
@@ -545,12 +711,30 @@ const Wedding = () => {
           </Button>
           <Button 
             variant="outlined" 
+            onClick={() => scrollToSection('our-journey')}
+            startIcon={<AutoStoriesIcon sx={{ fontSize: 18 }} />}
+            sx={{ 
+              color: colors.sandBeige, 
+              borderColor: colors.copper, 
+              borderRadius: '30px', 
+              px: { xs: 2, sm: 2.5 },
+              py: 0.8,
+              fontWeight: 600,
+              letterSpacing: 1.2,
+              fontSize: { xs: '0.82rem', sm: '0.9rem' },
+              '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' } 
+            }}
+          >
+            {t('wedding.ourJourney.subtitle', 'Together')}
+          </Button>
+          <Button 
+            variant="outlined" 
             onClick={() => scrollToSection('guide', 0)}
             sx={{ 
               color: colors.sandBeige, 
               borderColor: colors.copper, 
               borderRadius: '30px', 
-              px: { xs: 2, sm: 3 },
+              px: { xs: 2, sm: 2.5 },
               py: 0.8,
               fontWeight: 600,
               letterSpacing: 1.2,
@@ -567,7 +751,7 @@ const Wedding = () => {
               color: colors.sandBeige, 
               borderColor: colors.copper, 
               borderRadius: '30px', 
-              px: { xs: 2, sm: 3 },
+              px: { xs: 2, sm: 2.5 },
               py: 0.8,
               fontWeight: 600,
               letterSpacing: 1.2,
@@ -578,6 +762,91 @@ const Wedding = () => {
             {t('wedding.nav.honeymoon')}
           </Button>
         </Box>
+      </Box>
+
+      {/* SECCIÓN: NUESTRA HISTORIA (OUR JOURNEY TOGETHER) */}
+      <Box 
+        id="our-journey" 
+        sx={{ 
+          bgcolor: colors.forestDark, 
+          color: colors.creamText, 
+          py: { xs: 7, md: 9 }, 
+          px: { xs: 2.5, sm: 4 },
+          borderBottom: `1px solid rgba(199, 120, 79, 0.25)`,
+          position: 'relative'
+        }}
+      >
+        <Container maxWidth="md">
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography 
+              variant="overline" 
+              sx={{ 
+                letterSpacing: 4, 
+                color: colors.goldAccent, 
+                fontWeight: 700, 
+                fontSize: { xs: '0.75rem', sm: '0.85rem' },
+                display: 'block',
+                mb: 1
+              }}
+            >
+              {t('wedding.ourJourney.overline', 'OUR STORY')}
+            </Typography>
+
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                fontFamily: "'Playfair Display', serif", 
+                fontSize: { xs: '2.2rem', sm: '3rem', md: '3.6rem' }, 
+                color: colors.sandBeige, 
+                letterSpacing: 2,
+                lineHeight: 1.1,
+                mb: 0.5
+              }}
+            >
+              {t('wedding.ourJourney.title', 'OUR JOURNEY')}
+            </Typography>
+
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                fontFamily: "'Monsieur La Doulaise', cursive", 
+                fontSize: { xs: '2.6rem', sm: '3.6rem' }, 
+                color: colors.copper, 
+                mt: -1,
+                mb: 3
+              }}
+            >
+              {t('wedding.ourJourney.subtitle', 'Together')}
+            </Typography>
+
+            <Box 
+              sx={{ 
+                maxWidth: 780, 
+                mx: 'auto', 
+                p: { xs: 3, sm: 4.5 }, 
+                borderRadius: '16px',
+                bgcolor: 'rgba(30, 56, 43, 0.55)',
+                border: `1px solid rgba(199, 120, 79, 0.35)`,
+                boxShadow: '0 12px 36px rgba(0,0,0,0.3)',
+                backdropFilter: 'blur(6px)'
+              }}
+            >
+              <Typography 
+                sx={{ 
+                  color: colors.sandBeige, 
+                  fontSize: { xs: '0.95rem', sm: '1.08rem' }, 
+                  lineHeight: 1.9, 
+                  letterSpacing: 0.3,
+                  fontWeight: 300,
+                  fontStyle: 'italic',
+                  textAlign: 'center'
+                }}
+              >
+                "{t('wedding.ourJourney.text')}"
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
       </Box>
 
       {/* SECCIÓN 1: RSVP / CONFIRMACIÓN DE ASISTENCIA (Directo y destacado) */}
@@ -696,15 +965,144 @@ const Wedding = () => {
               >
                 {t('wedding.nav.accommodations')}
               </Button>
+
+              <Button
+                id="faqs"
+                size="small"
+                startIcon={<HelpOutlineIcon sx={{ fontSize: 18 }} />}
+                onClick={() => setActiveGuideTab(3)}
+                sx={{
+                  borderRadius: '25px',
+                  px: { xs: 1.8, sm: 2.5 },
+                  py: 0.8,
+                  fontSize: { xs: '0.78rem', sm: '0.88rem' },
+                  fontWeight: 700,
+                  bgcolor: activeGuideTab === 3 ? colors.copper : 'transparent',
+                  color: activeGuideTab === 3 ? '#ffffff' : colors.sandBeige,
+                  transition: 'all 0.25s ease',
+                  '&:hover': {
+                    bgcolor: activeGuideTab === 3 ? colors.copperDark : 'rgba(199, 120, 79, 0.15)',
+                  }
+                }}
+              >
+                FAQs
+              </Button>
             </Paper>
           </Box>
 
           {/* CONTENIDO INTERACTIVO SEGÚN PESTAÑA */}
           <Box sx={{ mt: 3 }}>
             
-            {/* PESTAÑA 0: DETALLES DEL EVENTO */}
+            {/* PESTAÑA 0: DETALLES DEL EVENTO & CRONOGRAMA */}
             {activeGuideTab === 0 && (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.8 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+
+                {/* BLOQUE CRONOGRAMA ELEGANTE (SCHEDULE OF EVENTS) */}
+                <Box 
+                  sx={{
+                    p: { xs: 2.5, sm: 3.5 },
+                    borderRadius: '16px',
+                    bgcolor: 'rgba(20, 38, 29, 0.75)',
+                    backdropFilter: 'blur(8px)',
+                    border: `1px solid ${colors.copper}`,
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.25)',
+                  }}
+                >
+                  <Box sx={{ textAlign: 'center', mb: 2.5 }}>
+                    <Typography
+                      variant="overline"
+                      sx={{
+                        color: colors.goldAccent,
+                        letterSpacing: 3,
+                        fontWeight: 700,
+                        fontSize: '0.78rem',
+                      }}
+                    >
+                      {t('wedding.schedule.date', 'AUGUST 7, 2027')}
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontFamily: "'Playfair Display', serif",
+                        color: colors.sandBeige,
+                        letterSpacing: 1.5,
+                        mt: 0.5,
+                        fontSize: { xs: '1.4rem', sm: '1.8rem' }
+                      }}
+                    >
+                      {t('wedding.schedule.title', 'SCHEDULE OF EVENTS')}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                    {(() => {
+                      const scheduleItems = t('wedding.schedule.items', { returnObjects: true });
+                      const list = Array.isArray(scheduleItems) ? scheduleItems : [];
+                      return list.map((item, idx) => (
+                        <Box 
+                          key={idx}
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: { xs: 1.5, sm: 2.5 },
+                            p: { xs: 1.4, sm: 1.8 },
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(255, 255, 255, 0.04)',
+                            borderLeft: `4px solid ${colors.goldAccent}`,
+                            transition: 'all 0.25s ease',
+                            '&:hover': {
+                              bgcolor: 'rgba(199, 120, 79, 0.12)',
+                              transform: 'translateX(4px)',
+                            }
+                          }}
+                        >
+                          <Box 
+                            sx={{ 
+                              minWidth: { xs: 78, sm: 95 }, 
+                              bgcolor: 'rgba(199, 120, 79, 0.2)', 
+                              py: 0.6, 
+                              px: 1, 
+                              borderRadius: '8px', 
+                              textAlign: 'center',
+                              border: `1px solid rgba(199, 120, 79, 0.4)`
+                            }}
+                          >
+                            <Typography 
+                              sx={{ 
+                                fontWeight: 800, 
+                                color: colors.goldAccent, 
+                                fontSize: { xs: '0.8rem', sm: '0.92rem' } 
+                              }}
+                            >
+                              {item.time}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography 
+                              sx={{ 
+                                fontWeight: 700, 
+                                color: colors.sandBeige, 
+                                fontSize: { xs: '0.92rem', sm: '1.05rem' } 
+                              }}
+                            >
+                              {item.title}
+                            </Typography>
+                            <Typography 
+                              sx={{ 
+                                color: 'rgba(255,255,255,0.75)', 
+                                fontSize: { xs: '0.78rem', sm: '0.86rem' } 
+                              }}
+                            >
+                              {item.description}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ));
+                    })()}
+                  </Box>
+                </Box>
+
+                {/* ACORDEONES DE DETALLES Y CÓDIGO DE VESTIMENTA */}
                 {[
                   { q: t('wedding.details.q1'), a: t('wedding.details.a1'), defaultOpen: true },
                   { q: t('wedding.details.q2'), a: t('wedding.details.a2'), defaultOpen: true },
@@ -792,8 +1190,6 @@ const Wedding = () => {
                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.2 }}>
                             {[
                               { label: t('wedding.details.reservedColors.white'), color: '#FFFFFF' },
-                              { label: t('wedding.details.reservedColors.lightYellow'), color: '#FFF9C4' },
-                              { label: t('wedding.details.reservedColors.pastels'), color: '#FFF3E0' },
                             ].map((swatch, sIdx) => (
                               <Box
                                 key={sIdx}
@@ -1001,6 +1397,58 @@ const Wedding = () => {
                 >
                   {t('wedding.accommodations.linkNote', 'Enlace directo oficial de Marriott para el grupo de la boda Shields-Urquilla')}
                 </Typography>
+              </Box>
+            )}
+
+            {/* PESTAÑA 3: PREGUNTAS FRECUENTES (FAQS) */}
+            {activeGuideTab === 3 && (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.8 }}>
+                {[
+                  { q: t('wedding.faqs.whoIsTuty.q'), a: t('wedding.faqs.whoIsTuty.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.dietary.q'), a: t('wedding.faqs.dietary.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.kids.q'), a: t('wedding.faqs.kids.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.kidsFood.q'), a: t('wedding.faqs.kidsFood.a') },
+                  { q: t('wedding.faqs.ceremonyPhotos.q'), a: t('wedding.faqs.ceremonyPhotos.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.receptionPhotos.q'), a: t('wedding.faqs.receptionPhotos.a') },
+                  { q: t('wedding.faqs.rsvpDeadline.q'), a: t('wedding.faqs.rsvpDeadline.a') },
+                  { q: t('wedding.faqs.djSongs.q'), a: t('wedding.faqs.djSongs.a') },
+                ].map((item, i) => (
+                  <Accordion 
+                    key={i} 
+                    defaultExpanded={item.defaultOpen}
+                    sx={{
+                      bgcolor: 'rgba(20, 38, 29, 0.65)',
+                      backdropFilter: 'blur(8px)',
+                      color: colors.creamText,
+                      borderRadius: '12px !important',
+                      border: `1px solid rgba(199, 120, 79, 0.3)`,
+                      overflow: 'hidden',
+                      '&:before': { display: 'none' },
+                    }}
+                  >
+                    <AccordionSummary 
+                      expandIcon={<ExpandMoreIcon sx={{ color: colors.goldAccent }} />}
+                      sx={{ px: { xs: 2, sm: 3 } }}
+                    >
+                      <Typography 
+                        sx={{ 
+                          fontFamily: "'Montserrat', sans-serif", 
+                          fontWeight: 700, 
+                          color: colors.goldAccent, 
+                          fontSize: { xs: '0.88rem', sm: '0.98rem' },
+                          letterSpacing: 1,
+                        }}
+                      >
+                        {item.q}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ px: { xs: 2, sm: 3 }, pt: 0, pb: 2.5 }}>
+                      <Typography sx={{ color: colors.creamText, fontSize: { xs: '0.85rem', sm: '0.92rem' }, lineHeight: 1.7, opacity: 0.9 }}>
+                        {item.a}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
               </Box>
             )}
 

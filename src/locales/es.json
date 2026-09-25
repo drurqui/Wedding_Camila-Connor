@@ -257,6 +257,23 @@
         "seconds": "Seg"
       }
     },
+    "ourJourney": {
+      "overline": "NUESTRA HISTORIA",
+      "title": "NUESTRA HISTORIA",
+      "subtitle": "Juntos",
+      "text": "Construir nuestra vida juntos ha sido nuestra mayor aventura. Al mirar hacia atrás en este camino, nos damos cuenta de lo afortunados que somos por contar con el amor y apoyo incondicional de amigos y familiares de tantas partes del mundo. Cuando llegó el momento de planear nuestra boda, supimos de inmediato que queríamos reunir a todos en un lugar que guarda un espacio muy especial en nuestros corazones. Estamos sumamente emocionados de invitarlos a El Salvador el próximo verano. Celebrar nuestro matrimonio en Forêt, rodeados de exuberante belleza natural y de nuestras personas favoritas, es un sueño hecho realidad para ambos."
+    },
+    "schedule": {
+      "title": "CRONOGRAMA DEL EVENTO",
+      "date": "7 DE AGOSTO, 2027",
+      "items": [
+        { "time": "3:00 PM", "title": "Llegada de Invitados", "description": "Bienvenida en Forêt" },
+        { "time": "3:30 PM", "title": "Ceremonia Religiosa", "description": "Nuestros votos y bendición matrimonial" },
+        { "time": "4:30 PM", "title": "Hora del Cóctel", "description": "Bebidas, canapés y convivencia" },
+        { "time": "6:00 PM", "title": "Recepción", "description": "Cena servida de 3 tiempos y brindis" },
+        { "time": "8:30 PM", "title": "Fiesta / Afterparty", "description": "Música, baile y celebración bajo las estrellas" }
+      ]
+    },
     "guide": {
       "overline": "GUÍA PARA NUESTROS INVITADOS",
       "title": "Detalles & Guía de Viaje"
@@ -287,11 +304,115 @@
         },
         "lakeComo": {
           "title": "TOUR EN BOTE EN EL LAGO DE COMO",
-          "description": "UNA TARDE ROMÁNTICA EN EL AGUA, EXPLORANDO LA ARQUITECTURA HISTÓRICA Y LAS VISTAS MONTAÑOSAS DEL LAGO DE COMO A BORDO DE UN BOTE CLÁSICO.",
+          "description": "UNA TARDE ROMÁNTICA EN EL AGUA, EXPLORANDO LA ARQUITECTURA HISTÓRICA Y LAS VISTAS MONTAÑOSAS DEL LAGO DE COMO A BORDO DE UN BOTE CLÁSICO DE MADERA.",
           "shareUsd": 150,
           "shareCad": 200,
           "shareText": "1 CUOTA • $150 USD / $200 CAD",
+          "need": 4
+        },
+        "lakesideBreakfast": {
+          "title": "DESAYUNO FRENTE AL LAGO",
+          "description": "MAÑANAS TRANQUILAS DISFRUTANDO DE LA AUTÉNTICA CULTURA DEL ESPRESSO ITALIANO JUNTO AL AGUA.",
+          "shareUsd": 30,
+          "shareCad": 40,
+          "shareText": "1 CUOTA • $30 USD / $40 CAD",
+          "need": 4
+        },
+        "colosseum": {
+          "title": "ROMA ANTIGUA Y COLISEO CON GUÍA",
+          "description": "UN RECORRIDO PROFUNDO POR LA HISTORIA MILITAR, ESTRATEGIA IMPERIAL Y COMBATES ÉPICOS DE GLADIADORES.",
+          "shareUsd": 80,
+          "shareCad": 110,
+          "shareText": "1 CUOTA • $80 USD / $110 CAD",
           "need": 2
+        },
+        "vatican": {
+          "title": "MUSEOS VATICANOS Y CAPILLA SIXTINA CON ACCESO ANTICIPADO",
+          "description": "ENTRADAS SIN FILAS PARA EXPLORAR LA BASÍLICA DE SAN PEDRO Y LOS FRESCOS EXTRAORDINARIOS SIN LAS MULTITUDES DE LA TARDE.",
+          "shareUsd": 90,
+          "shareCad": 120,
+          "shareText": "1 CUOTA • $90 USD / $120 CAD",
+          "need": 2
+        },
+        "trastevereDinner": {
+          "title": "CENA NOCTURNA EN TRASTEVERE",
+          "description": "UNA VELADA ROMÁNTICA EN EL BARRIO MÁS VIBRANTE DE ROMA DEGUSTANDO PASTA ARTESANAL Y VINO LOCAL EXCEPCIONAL.",
+          "shareUsd": 100,
+          "shareCad": 135,
+          "shareText": "1 CUOTA • $100 USD / $135 CAD",
+          "need": 2
+        },
+        "mountEtna": {
+          "title": "EXCURSIÓN AL VOLCÁN MONTE ETNA",
+          "description": "TOUR GUIADO EN JEEP POR EL VOLCÁN ACTIVO MÁS ALTO DE EUROPA CON VISTAS PANORÁMICAS ESPECTACULARES DE LA COSTA ORIENTAL.",
+          "shareUsd": 120,
+          "shareCad": 160,
+          "shareText": "1 CUOTA • $120 USD / $160 CAD",
+          "need": 2
+        },
+        "sicilianFood": {
+          "title": "DEGUSTACIÓN DE COMIDA CALLEJERA SICILIANA",
+          "description": "UNA TARDE PROBANDO ARANCINI, CANNOLI Y MARISCOS LOCALES FRESCOS EN LOS MERCADOS VIBRANTES DE TAORMINA Y CATANIA.",
+          "shareUsd": 60,
+          "shareCad": 80,
+          "shareText": "1 CUOTA • $60 USD / $80 CAD",
+          "need": 2
+        },
+        "acropolis": {
+          "title": "ENTRADAS A LA ACRÓPOLIS Y EL PARTENÓN",
+          "description": "ENTRADA PARA SUBIR A LA COLINA LEGENDARIA EN ATENAS Y ADMIRAR LAS RUINAS MÁS EMBLEMÁTICAS DE GRECIA.",
+          "shareUsd": 40,
+          "shareCad": 55,
+          "shareText": "1 CUOTA • $40 USD / $55 CAD",
+          "need": 2
+        },
+        "catamaranCruise": {
+          "title": "CRUCERO EN CATAMARÁN AL ATARDECER EN SANTORINI",
+          "description": "LA EXPERIENCIA DEFINITIVA DE SANTORINI: NAVEGAR POR LA CALDERA VOLCÁNICA AL ATARDECER DISFRUTANDO QUESO FETA FRESCO, PAN PITA Y BEBIDAS.",
+          "shareUsd": 175,
+          "shareCad": 235,
+          "shareText": "1 CUOTA • $175 USD / $235 CAD",
+          "need": 2
+        },
+        "hotelLakeComo": {
+          "title": "NOCHE DE HOTEL EN EL LAGO DE COMO",
+          "description": "UNA NOCHE EN EL HOTEL DU LAC FRENTE AL AGUA EN EL ROMÁNTICO Y APACIBLE PUEBLO DE VARENNA, CON ELEGANCIA CLÁSICA ITALIANA.",
+          "shareUsd": 350,
+          "shareCad": 490,
+          "shareText": "1 CUOTA • $350 USD / $490 CAD",
+          "need": 4
+        },
+        "hotelTrastevere": {
+          "title": "NOCHE DE HOTEL EN TRASTEVERE",
+          "description": "UNA NOCHE EN HOTEL SANTA MARÍA; UN HOTEL BOUTIQUE ÍNTIMO EN UN CLAUSTRO DEL SIGLO XVI CON UN PATIO LLENO DE NARANJOS.",
+          "shareUsd": 150,
+          "shareCad": 200,
+          "shareText": "1 CUOTA • $150 USD / $200 CAD",
+          "need": 5
+        },
+        "hotelSicily": {
+          "title": "UNA NOCHE EN SICILIA",
+          "description": "UNA NOCHE EN HOTEL VILLA SCHULER; MANSIÓN HISTÓRICA FAMILIAR RODEADA DE JARDINES BOTÁNICOS EN TERRAZA CON VISTAS AL MAR JÓNICO Y AL ETNA.",
+          "shareUsd": 250,
+          "shareCad": 350,
+          "shareText": "1 CUOTA • $250 USD / $350 CAD",
+          "need": 4
+        },
+        "hotelAthens": {
+          "title": "UNA NOCHE EN ATENAS",
+          "description": "UNA NOCHE EN HERODION HOTEL; ELEGANTE Y MODERNO HOTEL BOUTIQUE AL PIE DE LA ACRÓPOLIS CON TERRAZA Y VISTAS DIRECTAS AL PARTENÓN ILUMINADO.",
+          "shareUsd": 200,
+          "shareCad": 280,
+          "shareText": "1 CUOTA • $200 USD / $280 CAD",
+          "need": 3
+        },
+        "hotelSantorini": {
+          "title": "UNA NOCHE EN SANTORINI",
+          "description": "UNA NOCHE EN ASTRA SUITES; HOTEL DE LUJO EN LOS ACANTILADOS DE IMEROVIGLI CON ARQUITECTURA BLANCA EN CUEVA Y VISTAS A LA PUESTA DE SOL.",
+          "shareUsd": 400,
+          "shareCad": 560,
+          "shareText": "1 CUOTA • $400 USD / $560 CAD",
+          "need": 4
         }
       },
       "customContribution": {
@@ -438,13 +559,47 @@
       "q2": "¿CÓMO LLEGO AL LUGAR DEL EVENTO?",
       "a2": "¡Pondremos a disposición transporte tipo shuttle de ida y vuelta entre el Hotel Sheraton Presidente y Forêt el día de la boda! Solo debes presentarte en el lobby del hotel a las 2:30 pm del sábado 7 de agosto de 2027. Si prefieres manejar en tu propio vehículo, configura tu GPS a Forêt (Desvío El Limón, Calle a Comasagua, Santa Tecla 1506). Habrá servicio de Valet Parking gratuito durante toda la velada.",
       "q3": "¿CUÁL ES EL CÓDIGO DE VESTIMENTA?",
-      "a3": "Formal / Etiqueta rigurosa. Damas: Vestidos largos o elegantes hasta el tobillo (¡te animamos a usar colores vibrantes o estampados botánicos!). Caballeros: Traje formal o esmoquin.",
-      "dressCodeNoteTitle": "Colores Reservados para la Novia",
-      "dressCodeNoteText": "Por favor no vestir de blanco, ni de amarillo claro o tonos pastel. Bajo la iluminación de la noche y en fotografías, estos tonos claros se asemejan al blanco y quedan estrictamente reservados para la novia.",
+      "a3": "Este evento requiere vestimenta formal. Damas: Vestidos largos hasta el suelo o elegantes vestidos al tobillo. ¡Las animamos a usar atuendos coloridos que reflejen su personalidad! Tengan en cuenta que Forêt está en la montaña, por lo que el lugar tiene terreno natural y las noches pueden ser frescas con brisa. Se recomiendan ampliamente tacones anchos (block heels), plataformas o zapatos planos, además de llevar un abrigo ligero o chal. Caballeros: Traje formal bien confeccionado. Siéntanse libres de elegir colores elegantes como tostado/tan, marrón, o un clásico traje gris, carbón o negro con camisa de vestir formal y corbata o corbatín. El esmoquin es bienvenido pero no obligatorio. Zapatos de vestir indispensables.",
+      "dressCodeNoteTitle": "Restricción Estricta de Color",
+      "dressCodeNoteText": "Queda estrictamente prohibido el uso de vestidos o trajes blancos o mayoritariamente blancos. A cualquier persona que vista de blanco se le solicitará amablemente cambiarse.",
       "reservedColors": {
-        "white": "Blanco",
-        "lightYellow": "Amarillo claro",
-        "pastels": "Tonos pastel"
+        "white": "Blanco o Mayoritariamente Blanco"
+      }
+    },
+    "faqs": {
+      "title": "PREGUNTAS FRECUENTES",
+      "subtitle": "Todo lo que necesitas saber para acompañarnos en nuestro gran día",
+      "whoIsTuty": {
+        "q": "¿QUIÉN ES TUTY?",
+        "a": "¡Tuty ha sido un apodo muy querido y aceptado para Camila, y muchos de ustedes la conocen exclusivamente como Tuty! Siéntanse con total libertad de llamarla Tuty, Camila o Sofía, ¡lo que prefieran!"
+      },
+      "dietary": {
+        "q": "¿QUÉ HAGO SI TENGO RESTRICCIONES ALIMENTICIAS O ALERGIAS?",
+        "a": "Por favor completa tu confirmación de RSVP normalmente e indica cualquier alergia o restricción para que nuestro chef se asegure de que tu comida sea segura y deliciosa."
+      },
+      "kids": {
+        "q": "¿ESTÁN INVITADOS LOS NIÑOS?",
+        "a": "Los niños mencionados en su invitación son bienvenidos a la entrada de nuestra ceremonia; sin embargo, nuestra recepción está pensada para adultos. Con el fin de brindar tranquilidad y libertad para celebrar a los padres, los niños menores de 13 años pasarán a una carpa infantil en el lugar equipada con entretenimiento, área de descanso y nannies bilingües, una vez finalizada la entrada de la ceremonia. Si su hijo tiene 13 años o más, tiene la opción de acompañar a los padres durante el evento (favor detallarlo en el RSVP). Los padres pueden visitarlos en cualquier momento. Los niños menores de 4 años contarán con una nanny individual dedicada."
+      },
+      "kidsFood": {
+        "q": "¿QUÉ COMERÁN LOS NIÑOS?",
+        "a": "Habrá un buffet infantil con frutas, vegetales y los favoritos de los pequeños (pizza, chicken fingers, mac and cheese) disponible durante toda la noche, además de agua fresca, jugos y refrescos. El personal también les llevará pastel de bodas. Por favor indiquen cualquier alergia en el RSVP."
+      },
+      "ceremonyPhotos": {
+        "q": "¿PUEDO TOMAR FOTOS DURANTE LA CEREMONIA?",
+        "a": "Debido a la naturaleza espiritual de nuestra ceremonia y para evitar interferir con nuestros fotógrafos profesionales contratados, les pedimos amablemente abstenerse de tomar fotos o videos durante e inmediatamente después de la ceremonia (incluyendo celulares y cámaras personales). ¡Su presencia atenta y conectada es lo más importante para nosotros!"
+      },
+      "receptionPhotos": {
+        "q": "¿PUEDO TOMAR FOTOS DURANTE LA RECEPCIÓN?",
+        "a": "¡Totalmente! Siéntanse libres de usar sus teléfonos con normalidad después de la ceremonia. Solo les pedimos evitar interferir con los fotógrafos oficiales y cuidar su ubicación para no bloquear la vista de las cámaras en momentos clave como los discursos, el primer baile y el corte del pastel."
+      },
+      "rsvpDeadline": {
+        "q": "¿CUÁNDO ES LA FECHA LÍMITE PARA CONFIRMAR (RSVP)?",
+        "a": "Por favor confirmen su asistencia a más tardar el 7 de junio para poder finalizar el conteo de invitados y la logística. Pueden confirmar directamente a través de esta página web en la sección RSVP. Quien no confirme antes de la fecha límite se considerará como 'no asistirá', ¡así que aseguren su lugar y su platillo a tiempo!"
+      },
+      "djSongs": {
+        "q": "¿PUEDO PEDIRLE CANCIONES AL DJ?",
+        "a": "Les pedimos amablemente no acercarse al DJ o grupo musical para pedir canciones durante el evento. Si tienen peticiones musicales, los invitamos a incluirlas en su confirmación RSVP o en nuestra lista compartida."
       }
     },
     "rsvpNotice": {
