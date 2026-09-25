@@ -372,7 +372,7 @@ export const WeddingRsvpSection = ({ colors }) => {
         <Card
           sx={{
             bgcolor: '#ffffff',
-            borderRadius: 3.5,
+            borderRadius: '0 28px 28px 0',
             boxShadow: '0 16px 48px rgba(30, 56, 43, 0.08), 0 2px 8px rgba(0,0,0,0.03)',
             border: `1px solid #ebdccb`,
             p: { xs: 3, sm: 4.5 },
@@ -405,7 +405,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                 </Box>
 
                 {errorMessage && (
-                  <Alert severity="warning" sx={{ mb: 3, borderRadius: 2 }}>
+                  <Alert severity="warning" sx={{ mb: 3, borderRadius: '0 10px 10px 0' }}>
                     {errorMessage}
                   </Alert>
                 )}
@@ -468,7 +468,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                     gap: 1.5,
                     bgcolor: 'rgba(30, 56, 43, 0.05)',
                     p: 2,
-                    borderRadius: 2.5,
+                    borderRadius: '0 16px 16px 0',
                     mb: 3.5,
                     border: '1px solid rgba(199, 120, 79, 0.25)',
                   }}
@@ -497,7 +497,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                 </Typography>
 
                 {errorMessage && (
-                  <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                  <Alert severity="error" sx={{ mb: 3, borderRadius: '0 10px 10px 0' }}>
                     {errorMessage}
                   </Alert>
                 )}
@@ -507,7 +507,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                   sx={{
                     p: { xs: 2, sm: 2.5 },
                     mb: 3.5,
-                    borderRadius: 2.5,
+                    borderRadius: '0 16px 16px 0',
                     bgcolor: '#f5f7f5',
                     border: '1px solid #c9d8ce',
                     display: 'flex',
@@ -533,7 +533,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                       key={idx}
                       sx={{
                         p: { xs: 2.5, sm: 3 },
-                        borderRadius: 3,
+                        borderRadius: '0 20px 20px 0',
                         border: '1px solid #e0d7cd',
                         bgcolor: guest.asistencia === 'si' ? '#fcfbf9' : '#fafafa',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
@@ -601,7 +601,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                 </Box>
 
                 {/* Preguntas Generales para la Invitación */}
-                <Box sx={{ p: 3, borderRadius: 3, bgcolor: '#fbf9f6', border: '1px solid #e8decb', mb: 4 }}>
+                <Box sx={{ p: 3, borderRadius: '0 20px 20px 0', bgcolor: '#fbf9f6', border: '1px solid #e8decb', mb: 4 }}>
                   {/* Shuttle Bus */}
                   <Typography variant="subtitle2" sx={{ color: colors.forestGreen, fontWeight: 700, mb: 1 }}>
                     🚌 {t('wedding.rsvpForm.step2.shuttleTitle')}
@@ -700,7 +700,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                 </Typography>
 
                 {!rsvpHasChanges ? (
-                  <Alert severity="info" sx={{ maxWidth: 520, mx: 'auto', mb: 3.5, borderRadius: 2.5, textAlign: 'left', bgcolor: '#f4f7f5', color: '#1e382b', border: '1px solid #c9d8ce' }}>
+                  <Alert severity="info" sx={{ maxWidth: 520, mx: 'auto', mb: 3.5, borderRadius: '0 16px 16px 0', textAlign: 'left', bgcolor: '#f4f7f5', color: '#1e382b', border: '1px solid #c9d8ce' }}>
                     Tu respuesta ya estaba confirmada sin modificaciones adicionales. Tus opciones se mantienen guardadas.
                   </Alert>
                 ) : (
@@ -724,7 +724,7 @@ export const WeddingRsvpSection = ({ colors }) => {
                     maxWidth: 500,
                     mx: 'auto',
                     p: 3,
-                    borderRadius: 3,
+                    borderRadius: '0 20px 20px 0',
                     bgcolor: '#faf8f5',
                     border: '1px solid #ebdccb',
                     textAlign: 'left',
