@@ -28,5 +28,12 @@ service cloud.firestore {
       allow read, create, update: if true;
       allow delete: if request.auth != null;
     }
+
+    // Regalos y aportes de Luna de Miel
+    match /regalos_luna_miel/{document=**} {
+      allow read: if request.auth != null;
+      allow create: if true;
+      allow update, delete: if request.auth != null;
+    }
   }
 }

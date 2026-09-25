@@ -196,7 +196,8 @@
       "summary": "Summary & Responses",
       "masterList": "Wedding Master List",
       "menu": "Menu & Allergies",
-      "guests": "Responses by Guest"
+      "guests": "Responses by Guest",
+      "gifts": "Gifts & Honeymoon"
     },
     "weddingMaster": {
       "title": "Master Invitation List • Wedding",
@@ -232,6 +233,38 @@
       "menu": "Main Course",
       "allergy": "Allergy / Restriction",
       "shuttle": "Shuttle"
+    },
+    "weddingGifts": {
+      "title": "Honeymoon Registry • Contributions",
+      "totalUsd": "TOTAL RAISED (USD)",
+      "totalCad": "TOTAL RAISED (CAD)",
+      "totalGifts": "GIFTS RECEIVED",
+      "topGift": "TOP EXPERIENCE",
+      "registerManual": "Record Manual Contribution",
+      "filterAll": "All experiences",
+      "filterItem": "Filter by experience",
+      "searchPlaceholder": "Search by donor or email...",
+      "tableDate": "Date",
+      "tableDonor": "Donor",
+      "tableItem": "Experience / Gift",
+      "tableAmount": "Amount",
+      "tableMethod": "Method",
+      "tableRef": "Reference / ID",
+      "tableMessage": "Message / Notes",
+      "tableActions": "Actions",
+      "empty": "No contributions have been recorded yet for the Honeymoon.",
+      "breakdownTitle": "Breakdown by Honeymoon Experience",
+      "dialogTitle": "Record Manual Contribution",
+      "donorName": "Donor Name",
+      "donorEmail": "Email Address (optional)",
+      "experienceLabel": "Experience or Gift",
+      "amount": "Amount",
+      "currency": "Currency",
+      "notes": "Notes or Message",
+      "saveGift": "Save Contribution",
+      "methodStripeElements": "Stripe Elements",
+      "methodCheckout": "Stripe Checkout",
+      "methodManual": "Manual / Cash"
     }
   },
   "wedding": {

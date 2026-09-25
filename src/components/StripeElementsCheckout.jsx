@@ -66,7 +66,7 @@ export const StripePaymentForm = ({ onCancel, onSuccess, totalAmount, currency, 
         </Alert>
       )}
 
-      <Box sx={{ mb: 3, p: 2, bgcolor: colors?.sandLight || '#faf6ef', borderRadius: 2, border: `1px solid ${colors?.copperLight || '#d98d68'}` }}>
+      <Box sx={{ mb: 3, p: 2, bgcolor: colors?.sandLight || '#faf6ef', borderRadius: '0 12px 12px 0', border: `1px solid ${colors?.copperLight || '#d98d68'}` }}>
         <PaymentElement />
       </Box>
 

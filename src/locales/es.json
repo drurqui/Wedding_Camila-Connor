@@ -196,7 +196,8 @@
       "summary": "Resumen y Respuestas",
       "masterList": "Lista Maestra Boda",
       "menu": "Menú y Alergias",
-      "guests": "Respuestas por Invitado"
+      "guests": "Respuestas por Invitado",
+      "gifts": "Regalos y Luna de Miel"
     },
     "weddingMaster": {
       "title": "Lista Maestra de Invitaciones • Boda",
@@ -232,6 +233,38 @@
       "menu": "Plato Principal",
       "allergy": "Alergia / Restricción",
       "shuttle": "Shuttle"
+    },
+    "weddingGifts": {
+      "title": "Control de Aportes • Luna de Miel",
+      "totalUsd": "TOTAL RECAUDADO (USD)",
+      "totalCad": "TOTAL RECAUDADO (CAD)",
+      "totalGifts": "APORTES RECIBIDOS",
+      "topGift": "EXPERIENCIA FAVORITA",
+      "registerManual": "Registrar Aporte Manual",
+      "filterAll": "Todas las experiencias",
+      "filterItem": "Filtrar por experiencia",
+      "searchPlaceholder": "Buscar por donante o correo...",
+      "tableDate": "Fecha",
+      "tableDonor": "Donante",
+      "tableItem": "Experiencia / Regalo",
+      "tableAmount": "Monto",
+      "tableMethod": "Método",
+      "tableRef": "Referencia / ID",
+      "tableMessage": "Mensaje / Nota",
+      "tableActions": "Acciones",
+      "empty": "Aún no se han registrado aportes para la Luna de Miel.",
+      "breakdownTitle": "Desglose por Experiencia de Luna de Miel",
+      "dialogTitle": "Registrar Aporte Manual",
+      "donorName": "Nombre del Donante",
+      "donorEmail": "Correo Electrónico (opcional)",
+      "experienceLabel": "Experiencia o Regalo",
+      "amount": "Monto",
+      "currency": "Moneda",
+      "notes": "Notas o Mensaje",
+      "saveGift": "Guardar Aporte",
+      "methodStripeElements": "Stripe Elements",
+      "methodCheckout": "Stripe Checkout",
+      "methodManual": "Manual / Efectivo"
     }
   },
   "wedding": {

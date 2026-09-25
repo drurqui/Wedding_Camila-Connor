@@ -165,17 +165,23 @@ async def stripe_webhook(request: Request):
         monto_total = session.get("amount_total", 0) / 100
         moneda = session.get("currency", "usd").upper()
         regalo_elegido = metadata.get("regalo", "Regalo General")
+        session_id = session.get("id")
 
-        db.collection("regalos_luna_miel").add({
+        doc_data = {
             "nombre": nombre_invitado,
             "email": email_invitado,
             "regalo": regalo_elegido,
             "monto": monto_total,
             "moneda": moneda,
-            "stripe_session_id": session.get("id"),
+            "stripe_session_id": session_id,
             "origen": "checkout_session",
             "fecha": firestore.SERVER_TIMESTAMP
-        })
+        }
+
+        if session_id:
+            db.collection("regalos_luna_miel").document(session_id).set(doc_data, merge=True)
+        else:
+            db.collection("regalos_luna_miel").add(doc_data)
         print(f"[Checkout] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
 
     elif event_type == 'payment_intent.succeeded':
@@ -191,17 +197,23 @@ async def stripe_webhook(request: Request):
         monto_total = intent.get("amount_received", intent.get("amount", 0)) / 100
         moneda = intent.get("currency", "usd").upper()
         regalo_elegido = metadata.get("regalo", "Regalo General")
+        pi_id = intent.get("id")
 
-        db.collection("regalos_luna_miel").add({
+        doc_data = {
             "nombre": nombre_invitado,
             "email": email_invitado,
             "regalo": regalo_elegido,
             "monto": monto_total,
             "moneda": moneda,
-            "payment_intent_id": intent.get("id"),
+            "payment_intent_id": pi_id,
             "origen": "stripe_elements",
             "fecha": firestore.SERVER_TIMESTAMP
-        })
+        }
+
+        if pi_id:
+            db.collection("regalos_luna_miel").document(pi_id).set(doc_data, merge=True)
+        else:
+            db.collection("regalos_luna_miel").add(doc_data)
         print(f"[Elements] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
 
     return {"status": "success"}

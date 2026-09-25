@@ -196,7 +196,8 @@
       "summary": "Résumé et Réponses",
       "masterList": "Liste Principale Mariage",
       "menu": "Menu et Allergies",
-      "guests": "Réponses par Invité"
+      "guests": "Réponses par Invité",
+      "gifts": "Cadeaux & Lune de Miel"
     },
     "weddingMaster": {
       "title": "Liste Principale des Invitations • Mariage",
@@ -232,6 +233,38 @@
       "menu": "Plat Principal",
       "allergy": "Allergie / Régime",
       "shuttle": "Navette"
+    },
+    "weddingGifts": {
+      "title": "Registre de Lune de Miel • Contributions",
+      "totalUsd": "TOTAL COLLECTÉ (USD)",
+      "totalCad": "TOTAL COLLECTÉ (CAD)",
+      "totalGifts": "DONS REÇUS",
+      "topGift": "EXPÉRIENCE LA PLUS POPULAIRE",
+      "registerManual": "Enregistrer un Don Manuel",
+      "filterAll": "Toutes les expériences",
+      "filterItem": "Filtrar par expérience",
+      "searchPlaceholder": "Rechercher par donateur ou email...",
+      "tableDate": "Date",
+      "tableDonor": "Donateur",
+      "tableItem": "Expérience / Cadeau",
+      "tableAmount": "Montant",
+      "tableMethod": "Méthode",
+      "tableRef": "Référence / ID",
+      "tableMessage": "Message / Notes",
+      "tableActions": "Actions",
+      "empty": "Aucune contribution n'a encore été enregistrée pour la lune de miel.",
+      "breakdownTitle": "Répartition par Expérience de Lune de Miel",
+      "dialogTitle": "Enregistrer un Don Manuel",
+      "donorName": "Nom du Donateur",
+      "donorEmail": "Adresse Email (optionnel)",
+      "experienceLabel": "Expérience ou Cadeau",
+      "amount": "Montant",
+      "currency": "Devise",
+      "notes": "Notes ou Message",
+      "saveGift": "Enregistrer le Don",
+      "methodStripeElements": "Stripe Elements",
+      "methodCheckout": "Stripe Checkout",
+      "methodManual": "Manuel / Espèces"
     }
   },
   "wedding": {

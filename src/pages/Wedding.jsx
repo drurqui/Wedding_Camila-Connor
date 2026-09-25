@@ -38,6 +38,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import StripePaymentForm from '../components/StripeElementsCheckout';
 import WeddingRsvpSection from '../components/WeddingRsvpSection';
+import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 const Wedding = () => {
   const { t, i18n } = useTranslation();
@@ -153,7 +155,7 @@ const Wedding = () => {
   // Inicializar Stripe
   useEffect(() => {
     const initStripe = async () => {
-      let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+      let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51T6EVzCHnY5RPhVP8UR2Q1RTS0h6mFprokulBZwMg8uhRj4llncGk8vOIE2QSEq4dLBTd6ad4qkGQfHB18bdpDA600FuWwL74l';
       const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:8080'
         : 'https://api-boda-736009271165.us-central1.run.app';
@@ -454,7 +456,7 @@ const Wedding = () => {
       number: '08',
       title: t('wedding.honeymoon.items.mountEtna.title'),
       description: t('wedding.honeymoon.items.mountEtna.description'),
-      image: 'https://images.unsplash.com/photo-1533604195513-ab4ffb3b4f9a?auto=format&fit=crop&w=800&q=80',
+      image: '/mount_etna.jpg',
       shareText: t('wedding.honeymoon.items.mountEtna.shareText'),
       need: t('wedding.honeymoon.items.mountEtna.need'),
       shareUsd: 120,
@@ -478,7 +480,7 @@ const Wedding = () => {
       number: '10',
       title: t('wedding.honeymoon.items.acropolis.title'),
       description: t('wedding.honeymoon.items.acropolis.description'),
-      image: 'https://images.unsplash.com/photo-1555993539-1732916b8235?auto=format&fit=crop&w=800&q=80',
+      image: '/acropolis.jpg',
       shareText: t('wedding.honeymoon.items.acropolis.shareText'),
       need: t('wedding.honeymoon.items.acropolis.need'),
       shareUsd: 40,
@@ -2080,7 +2082,30 @@ const Wedding = () => {
                 currency={formData.moneda}
                 colors={colors}
                 onCancel={() => setClientSecret('')}
-                onSuccess={() => {
+                onSuccess={async (paymentIntent) => {
+                  try {
+                    const giftData = {
+                      nombre: formData.nombre.trim() || 'Anónimo',
+                      email: formData.email.trim() || '',
+                      regalo: checkoutModal.title,
+                      monto: checkoutModal.isCustom
+                        ? parseInt(formData.montoLibre) || 50
+                        : (formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad,
+                      moneda: formData.moneda.toUpperCase(),
+                      cantidad: checkoutModal.isCustom ? 1 : formData.cantidad,
+                      payment_intent_id: paymentIntent?.id || '',
+                      origen: 'stripe_elements',
+                      fecha: serverTimestamp()
+                    };
+
+                    if (paymentIntent?.id) {
+                      await setDoc(doc(db, "regalos_luna_miel", paymentIntent.id), giftData, { merge: true });
+                    } else {
+                      await addDoc(collection(db, "regalos_luna_miel"), giftData);
+                    }
+                  } catch (err) {
+                    console.warn("Error guardando regalo en Firestore:", err);
+                  }
                   setCheckoutModal({ ...checkoutModal, open: false });
                   setClientSecret('');
                   setToast({

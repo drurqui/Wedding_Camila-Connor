@@ -18,6 +18,10 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import PaidIcon from '@mui/icons-material/Paid';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import { getAuth, signOut } from 'firebase/auth';
 
@@ -50,6 +54,20 @@ const Admin = () => {
   const [editDialogOpenBoda, setEditDialogOpenBoda] = useState(false);
   const [editDataBoda, setEditDataBoda] = useState(null);
   const [menuStatsBoda, setMenuStatsBoda] = useState({});
+
+  // Datos de Regalos y Luna de Miel (Wedding Honeymoon Gifts)
+  const [regalosBoda, setRegalosBoda] = useState([]);
+  const [nuevoRegaloModal, setNuevoRegaloModal] = useState(false);
+  const [nuevoRegaloData, setNuevoRegaloData] = useState({
+    nombre: '',
+    email: '',
+    regalo: '',
+    monto: '',
+    moneda: 'USD',
+    mensaje: '',
+  });
+  const [filtroRegaloItem, setFiltroRegaloItem] = useState('todos');
+  const [busquedaRegalo, setBusquedaRegalo] = useState('');
 
   // Modales Visuales Globales
   const [alertModal, setAlertModal] = useState({ open: false, title: t('common.warning'), message: '' });
@@ -199,6 +217,19 @@ const Admin = () => {
       setMenuStatsBoda(mStats);
     } catch (err) {
       console.error("Error al cargar RSVPs Boda:", err);
+    }
+
+    // 3. Cargar datos de Regalos / Luna de Miel (regalos_luna_miel)
+    try {
+      const snapRegalos = await getDocs(collection(db, "regalos_luna_miel"));
+      const dataRegalos = snapRegalos.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => {
+        const timeA = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
+        const timeB = b.fecha?.toMillis ? b.fecha.toMillis() : (b.fecha ? new Date(b.fecha).getTime() : 0);
+        return timeB - timeA;
+      });
+      setRegalosBoda(dataRegalos);
+    } catch (err) {
+      console.error("Error al cargar Regalos de Luna de Miel:", err);
     }
 
     setLoading(false);
@@ -549,6 +580,86 @@ const Admin = () => {
         } catch (error) {
           console.error("Error al copiar invitaciones de compromiso:", error);
           setAlertModal({ open: true, title: t('common.error'), message: error.message });
+        }
+        setLoading(false);
+      }
+    });
+  };
+
+  // Experiencias de Luna de Miel para dropdown y filtros
+  const listaExperienciasLunaMiel = [
+    { key: 'airfare', nombre: 'Boletos Aéreos Internacionales' },
+    { key: 'train', nombre: 'Pases de Tren de Alta Velocidad' },
+    { key: 'lakeComo', nombre: 'Paseo en Barco Clásico por Lago di Como' },
+    { key: 'lakesideBreakfast', nombre: 'Desayunos Italianos con Vista al Lago' },
+    { key: 'colosseum', nombre: 'Tour Privado Coliseo y Foro Romano' },
+    { key: 'vatican', nombre: 'Entradas VIP Museos Vaticanos y Capilla Sixtina' },
+    { key: 'trastevereDinner', nombre: 'Cena Romántica en Trastevere' },
+    { key: 'mountEtna', nombre: 'Excursión y Cata de Vinos en el Monte Etna' },
+    { key: 'sicilianFood', nombre: 'Ruta de Comida Callejera en Sicilia' },
+    { key: 'acropolis', nombre: 'Recorrido Guiado por la Acrópolis de Atenas' },
+    { key: 'catamaranCruise', nombre: 'Crucero en Catamarán al Atardecer en Santorini' },
+    { key: 'hotelLakeComo', nombre: 'Noche de Hotel en Lago di Como' },
+    { key: 'hotelTrastevere', nombre: 'Noche de Hotel Boutique en Roma (Trastevere)' },
+    { key: 'hotelSicily', nombre: 'Noche de Hotel en Sicilia' },
+    { key: 'hotelAthens', nombre: 'Noche de Hotel en Atenas' },
+    { key: 'hotelSantorini', nombre: 'Noche de Hotel en Santorini' },
+    { key: 'custom', nombre: 'Aporte Libre / General' },
+  ];
+
+  const handleCrearRegaloManual = async () => {
+    if (!nuevoRegaloData.nombre.trim() || !nuevoRegaloData.monto || Number(nuevoRegaloData.monto) <= 0) {
+      setAlertModal({
+        open: true,
+        title: t('common.warning'),
+        message: 'Por favor ingresa al menos el nombre del donante y un monto válido.'
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await addDoc(collection(db, "regalos_luna_miel"), {
+        nombre: nuevoRegaloData.nombre.trim(),
+        email: nuevoRegaloData.email.trim(),
+        regalo: nuevoRegaloData.regalo || 'Aporte General Luna de Miel',
+        monto: Number(nuevoRegaloData.monto),
+        moneda: (nuevoRegaloData.moneda || 'USD').toUpperCase(),
+        mensaje: nuevoRegaloData.mensaje.trim(),
+        origen: 'manual',
+        fecha: serverTimestamp(),
+      });
+      setNuevoRegaloModal(false);
+      setNuevoRegaloData({ nombre: '', email: '', regalo: '', monto: '', moneda: 'USD', mensaje: '' });
+      await fetchData();
+      setAlertModal({
+        open: true,
+        title: t('common.success'),
+        message: 'Aporte registrado exitosamente en el sistema.',
+        headerColor: '#1e382b'
+      });
+    } catch (error) {
+      console.error("Error al registrar aporte manual:", error);
+      setAlertModal({ open: true, title: t('common.error'), message: error.message });
+    }
+    setLoading(false);
+  };
+
+  const eliminarRegaloBoda = (id) => {
+    setConfirmModal({
+      open: true,
+      title: 'Eliminar Aporte de Luna de Miel',
+      message: '¿Estás seguro de que deseas eliminar este registro de aporte? Esta acción no se puede deshacer.',
+      confirmColor: '#1e382b',
+      confirmText: t('common.yesDelete'),
+      action: async () => {
+        setConfirmModal(prev => ({ ...prev, open: false }));
+        setLoading(true);
+        try {
+          await deleteDoc(doc(db, "regalos_luna_miel", id));
+          await fetchData();
+        } catch (error) {
+          setAlertModal({ open: true, title: t('common.error'), message: 'Error al eliminar el aporte: ' + error.message });
         }
         setLoading(false);
       }
@@ -1004,6 +1115,7 @@ const Admin = () => {
                 <Tab label={t('admin.weddingTabs.masterList')} />
                 <Tab label={t('admin.weddingTabs.menu')} />
                 <Tab label={t('admin.weddingTabs.guests')} />
+                <Tab label={t('admin.weddingTabs.gifts', 'Regalos y Luna de Miel')} />
               </Tabs>
             </Container>
           </Box>
@@ -1732,6 +1844,490 @@ const Admin = () => {
                 </Paper>
               </Box>
             )}
+
+            {/* PESTAÑA 4: REGALOS Y LUNA DE MIEL */}
+            {tabValueWedding === 4 && (
+              <Box>
+                {/* 4 Tarjetas de Resumen KPI */}
+                {(() => {
+                  const totalUsd = regalosBoda
+                    .filter(r => (r.moneda || 'USD').toUpperCase() === 'USD')
+                    .reduce((sum, r) => sum + (Number(r.monto) || 0), 0);
+                  const totalCad = regalosBoda
+                    .filter(r => (r.moneda || 'USD').toUpperCase() === 'CAD')
+                    .reduce((sum, r) => sum + (Number(r.monto) || 0), 0);
+                  
+                  const countsByItem = {};
+                  regalosBoda.forEach(r => {
+                    const key = r.regalo || 'Aporte General';
+                    countsByItem[key] = (countsByItem[key] || 0) + 1;
+                  });
+                  const topEntry = Object.entries(countsByItem).sort((a, b) => b[1] - a[1])[0];
+                  const topGiftName = topEntry ? `${topEntry[0]} (${topEntry[1]})` : '—';
+
+                  return (
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                      <Grid item xs={12} sm={6} md={3}>
+                        <Card
+                          sx={{
+                            p: 3,
+                            textAlign: 'center',
+                            border: '1px solid #1e382b',
+                            bgcolor: '#ffffff',
+                            borderRadius: '0 12px 12px 0',
+                            boxShadow: 'none',
+                            height: '100%',
+                            minHeight: 140,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 700,
+                              letterSpacing: 0.8,
+                              textTransform: 'uppercase',
+                              fontSize: '0.75rem',
+                              lineHeight: 1.3,
+                              minHeight: '2.6em',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {t('admin.weddingGifts.totalUsd', 'TOTAL RECAUDADO (USD)')}
+                          </Typography>
+                          <Typography
+                            variant="h4"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 'bold',
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '2.3rem',
+                              my: 0.5,
+                            }}
+                          >
+                            ${totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem' }}>
+                            Dólares Estadounidenses
+                          </Typography>
+                        </Card>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6} md={3}>
+                        <Card
+                          sx={{
+                            p: 3,
+                            textAlign: 'center',
+                            border: '1px solid #1e382b',
+                            bgcolor: '#ffffff',
+                            borderRadius: '0 12px 12px 0',
+                            boxShadow: 'none',
+                            height: '100%',
+                            minHeight: 140,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 700,
+                              letterSpacing: 0.8,
+                              textTransform: 'uppercase',
+                              fontSize: '0.75rem',
+                              lineHeight: 1.3,
+                              minHeight: '2.6em',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {t('admin.weddingGifts.totalCad', 'TOTAL RECAUDADO (CAD)')}
+                          </Typography>
+                          <Typography
+                            variant="h4"
+                            sx={{
+                              color: '#c7784f',
+                              fontWeight: 'bold',
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '2.3rem',
+                              my: 0.5,
+                            }}
+                          >
+                            ${totalCad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem' }}>
+                            Dólares Canadienses
+                          </Typography>
+                        </Card>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6} md={3}>
+                        <Card
+                          sx={{
+                            p: 3,
+                            textAlign: 'center',
+                            border: '1px solid #1e382b',
+                            bgcolor: '#ffffff',
+                            borderRadius: '0 12px 12px 0',
+                            boxShadow: 'none',
+                            height: '100%',
+                            minHeight: 140,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 700,
+                              letterSpacing: 0.8,
+                              textTransform: 'uppercase',
+                              fontSize: '0.75rem',
+                              lineHeight: 1.3,
+                              minHeight: '2.6em',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {t('admin.weddingGifts.totalGifts', 'APORTES RECIBIDOS')}
+                          </Typography>
+                          <Typography
+                            variant="h4"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 'bold',
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '2.3rem',
+                              my: 0.5,
+                            }}
+                          >
+                            {regalosBoda.length}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem' }}>
+                            {regalosBoda.length > 0 ? `${regalosBoda.length} aportes en base de datos` : '—'}
+                          </Typography>
+                        </Card>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6} md={3}>
+                        <Card
+                          sx={{
+                            p: 3,
+                            textAlign: 'center',
+                            border: '1px solid #1e382b',
+                            bgcolor: '#ffffff',
+                            borderRadius: '0 12px 12px 0',
+                            boxShadow: 'none',
+                            height: '100%',
+                            minHeight: 140,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 700,
+                              letterSpacing: 0.8,
+                              textTransform: 'uppercase',
+                              fontSize: '0.75rem',
+                              lineHeight: 1.3,
+                              minHeight: '2.6em',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {t('admin.weddingGifts.topGift', 'EXPERIENCIA FAVORITA')}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: '#1e382b',
+                              fontWeight: 700,
+                              fontSize: '0.95rem',
+                              my: 1,
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              lineHeight: 1.3,
+                              maxHeight: '2.6em',
+                            }}
+                            title={topGiftName}
+                          >
+                            {topGiftName}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#777', fontSize: '0.75rem' }}>
+                            Mayor número de aportes
+                          </Typography>
+                        </Card>
+                      </Grid>
+                    </Grid>
+                  );
+                })()}
+
+                {/* Barra de Filtros, Búsqueda y Botón Registrar Manual */}
+                <Paper
+                  sx={{
+                    p: 2.5,
+                    mb: 4,
+                    border: '1px solid #1e382b',
+                    borderRadius: '0 12px 12px 0',
+                    bgcolor: '#ffffff',
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 2,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', gap: 2, width: { xs: '100%', md: 'auto' }, flex: 1, flexWrap: 'wrap' }}>
+                    <TextField
+                      size="small"
+                      placeholder={t('admin.weddingGifts.searchPlaceholder', 'Buscar por donante o correo...')}
+                      value={busquedaRegalo}
+                      onChange={(e) => setBusquedaRegalo(e.target.value)}
+                      InputProps={{
+                        startAdornment: <SearchIcon sx={{ color: '#888', mr: 1, fontSize: 20 }} />,
+                      }}
+                      sx={{ minWidth: { xs: '100%', sm: 260 } }}
+                    />
+
+                    <FormControl size="small" sx={{ minWidth: { xs: '100%', sm: 260 } }}>
+                      <InputLabel>{t('admin.weddingGifts.filterItem', 'Filtrar por experiencia')}</InputLabel>
+                      <Select
+                        value={filtroRegaloItem}
+                        label={t('admin.weddingGifts.filterItem', 'Filtrar por experiencia')}
+                        onChange={(e) => setFiltroRegaloItem(e.target.value)}
+                      >
+                        <MenuItem value="todos">
+                          <em>{t('admin.weddingGifts.filterAll', 'Todas las experiencias')}</em>
+                        </MenuItem>
+                        {listaExperienciasLunaMiel.map((exp) => (
+                          <MenuItem key={exp.key} value={exp.nombre}>
+                            {exp.nombre}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    startIcon={<AddCircleOutlineIcon />}
+                    onClick={() => setNuevoRegaloModal(true)}
+                    sx={{
+                      bgcolor: '#1e382b',
+                      color: '#ffffff',
+                      borderRadius: '0 8px 8px 0',
+                      fontWeight: 700,
+                      px: 3,
+                      py: 1,
+                      textTransform: 'none',
+                      whiteSpace: 'nowrap',
+                      width: { xs: '100%', md: 'auto' },
+                      '&:hover': { bgcolor: '#14271e' },
+                    }}
+                  >
+                    {t('admin.weddingGifts.registerManual', 'Registrar Aporte Manual')}
+                  </Button>
+                </Paper>
+
+                {/* Tabla de Aportes */}
+                <Paper sx={{ borderRadius: '0 12px 12px 0', overflow: 'hidden', border: '1px solid #1e382b', boxShadow: 'none', mb: 5 }}>
+                  <Box sx={{ p: 2.5, bgcolor: '#fbfcfb', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <CardGiftcardIcon sx={{ color: '#1e382b' }} />
+                      <Typography variant="h6" sx={{ color: '#1e382b', fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>
+                        {t('admin.weddingGifts.title', 'Control de Aportes • Luna de Miel')}
+                      </Typography>
+                    </Box>
+                    <Chip 
+                      label={`${regalosBoda.length} aportes en total`} 
+                      size="small" 
+                      sx={{ bgcolor: '#1e382b', color: '#fff', fontWeight: 600 }} 
+                    />
+                  </Box>
+
+                  <Box sx={{ p: { xs: 2, md: 3 } }}>
+                    <TableContainer>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell sx={headerStyleWedding}>Fecha</TableCell>
+                            <TableCell sx={headerStyleWedding}>Donante</TableCell>
+                            <TableCell sx={headerStyleWedding}>Experiencia / Regalo</TableCell>
+                            <TableCell sx={headerStyleWedding} align="right">Monto</TableCell>
+                            <TableCell sx={headerStyleWedding} align="center">Método</TableCell>
+                            <TableCell sx={headerStyleWedding}>Ref / Transacción</TableCell>
+                            <TableCell sx={headerStyleWedding}>Mensaje / Nota</TableCell>
+                            <TableCell sx={headerStyleWedding} align="center">Acciones</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {(() => {
+                            const filtered = regalosBoda.filter((r) => {
+                              const matchItem = filtroRegaloItem === 'todos' || 
+                                r.regalo === filtroRegaloItem || 
+                                (r.regalo && r.regalo.toLowerCase().includes(filtroRegaloItem.toLowerCase()));
+                              const searchLower = busquedaRegalo.toLowerCase().trim();
+                              const matchSearch = !searchLower || 
+                                (r.nombre && r.nombre.toLowerCase().includes(searchLower)) ||
+                                (r.email && r.email.toLowerCase().includes(searchLower)) ||
+                                (r.regalo && r.regalo.toLowerCase().includes(searchLower)) ||
+                                (r.mensaje && r.mensaje.toLowerCase().includes(searchLower));
+                              return matchItem && matchSearch;
+                            });
+
+                            if (filtered.length === 0) {
+                              return (
+                                <TableRow>
+                                  <TableCell colSpan={8} align="center" sx={{ py: 6, color: '#888' }}>
+                                    {t('admin.weddingGifts.empty', 'Aún no se han registrado aportes para la Luna de Miel.')}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            }
+
+                            return filtered.map((row) => {
+                              const dateStr = row.fecha?.toMillis 
+                                ? new Date(row.fecha.toMillis()).toLocaleString()
+                                : (row.fecha ? new Date(row.fecha).toLocaleString() : '—');
+                              const moneda = (row.moneda || 'USD').toUpperCase();
+                              const montoFormatted = Number(row.monto || 0).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              });
+
+                              return (
+                                <TableRow key={row.id} hover>
+                                  <TableCell sx={{ verticalAlign: 'top', fontSize: '0.85rem', color: '#666', whiteSpace: 'nowrap' }}>
+                                    {dateStr}
+                                  </TableCell>
+
+                                  <TableCell sx={{ verticalAlign: 'top' }}>
+                                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#1e382b' }}>
+                                      {row.nombre || t('admin.table.anonymous', 'Anónimo')}
+                                    </Typography>
+                                    {row.email && (
+                                      <Typography variant="caption" sx={{ color: '#777', display: 'block' }}>
+                                        {row.email}
+                                      </Typography>
+                                    )}
+                                  </TableCell>
+
+                                  <TableCell sx={{ verticalAlign: 'top', maxWidth: 240 }}>
+                                    <Chip 
+                                      label={row.regalo || 'Aporte General'} 
+                                      size="small"
+                                      sx={{ 
+                                        bgcolor: '#f5f0eb', 
+                                        color: '#1e382b', 
+                                        fontWeight: 600,
+                                        maxWidth: '100%',
+                                        '& .MuiChip-label': { overflow: 'hidden', textOverflow: 'ellipsis' }
+                                      }} 
+                                    />
+                                  </TableCell>
+
+                                  <TableCell align="right" sx={{ verticalAlign: 'top' }}>
+                                    <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#1e382b' }}>
+                                      ${montoFormatted}
+                                    </Typography>
+                                    <Chip 
+                                      label={moneda} 
+                                      size="small" 
+                                      sx={{ 
+                                        height: 18, 
+                                        fontSize: '0.65rem', 
+                                        fontWeight: 700, 
+                                        bgcolor: moneda === 'USD' ? '#e8f5e9' : '#e3f2fd',
+                                        color: moneda === 'USD' ? '#2e7d32' : '#1565c0'
+                                      }} 
+                                    />
+                                  </TableCell>
+
+                                  <TableCell align="center" sx={{ verticalAlign: 'top' }}>
+                                    {row.origen === 'stripe_elements' ? (
+                                      <Chip 
+                                        label="Stripe Elements" 
+                                        size="small" 
+                                        sx={{ bgcolor: '#635BFF', color: '#ffffff', fontWeight: 600, fontSize: '0.7rem' }} 
+                                      />
+                                    ) : row.origen === 'checkout_session' ? (
+                                      <Chip 
+                                        label="Stripe Checkout" 
+                                        size="small" 
+                                        sx={{ bgcolor: '#008cdd', color: '#ffffff', fontWeight: 600, fontSize: '0.7rem' }} 
+                                      />
+                                    ) : (
+                                      <Chip 
+                                        label="Manual / Efectivo" 
+                                        size="small" 
+                                        variant="outlined" 
+                                        sx={{ borderColor: '#c7784f', color: '#c7784f', fontWeight: 600, fontSize: '0.7rem' }} 
+                                      />
+                                    )}
+                                  </TableCell>
+
+                                  <TableCell sx={{ verticalAlign: 'top', maxWidth: 160 }}>
+                                    {row.payment_intent_id || row.stripe_session_id ? (
+                                      <Tooltip title={row.payment_intent_id || row.stripe_session_id}>
+                                        <Typography variant="caption" sx={{ fontFamily: 'monospace', color: '#555', cursor: 'pointer' }}>
+                                          {(row.payment_intent_id || row.stripe_session_id).substring(0, 14)}...
+                                        </Typography>
+                                      </Tooltip>
+                                    ) : (
+                                      <Typography variant="caption" sx={{ color: '#aaa' }}>—</Typography>
+                                    )}
+                                  </TableCell>
+
+                                  <TableCell sx={{ verticalAlign: 'top', maxWidth: 220 }}>
+                                    {row.mensaje ? (
+                                      <Typography variant="body2" sx={{ fontStyle: 'italic', color: '#555' }}>
+                                        "{row.mensaje}"
+                                      </Typography>
+                                    ) : (
+                                      <Typography variant="caption" sx={{ color: '#aaa' }}>—</Typography>
+                                    )}
+                                  </TableCell>
+
+                                  <TableCell align="center" sx={{ verticalAlign: 'top' }}>
+                                    <Tooltip title="Eliminar registro de aporte">
+                                      <IconButton onClick={() => eliminarRegaloBoda(row.id)} size="small" color="error">
+                                        <DeleteIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            });
+                          })()}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+                </Paper>
+              </Box>
+            )}
           </Container>
         </>
       )}
@@ -1973,6 +2569,101 @@ const Admin = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* DIÁLOGO REGISTRAR APORTE MANUAL (LUNA DE MIEL) */}
+      <Dialog 
+        open={nuevoRegaloModal} 
+        onClose={() => setNuevoRegaloModal(false)} 
+        fullWidth 
+        maxWidth="sm"
+        PaperProps={{
+          sx: { borderRadius: '0 16px 16px 0', border: '2px solid #1e382b' }
+        }}
+      >
+        <DialogTitle sx={{ bgcolor: '#1e382b', color: 'white', fontFamily: "'Playfair Display', serif" }}>
+          {t('admin.weddingGifts.dialogTitle', 'Registrar Aporte Manual')}
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+            <TextField 
+              fullWidth 
+              label={t('admin.weddingGifts.donorName', 'Nombre del Donante')} 
+              value={nuevoRegaloData.nombre} 
+              onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, nombre: e.target.value })} 
+              required
+            />
+            <TextField 
+              fullWidth 
+              label={t('admin.weddingGifts.donorEmail', 'Correo Electrónico (opcional)')} 
+              value={nuevoRegaloData.email} 
+              onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, email: e.target.value })} 
+              type="email"
+            />
+            <FormControl fullWidth>
+              <InputLabel>{t('admin.weddingGifts.experienceLabel', 'Experiencia o Regalo')}</InputLabel>
+              <Select
+                value={nuevoRegaloData.regalo}
+                label={t('admin.weddingGifts.experienceLabel', 'Experiencia o Regalo')}
+                onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, regalo: e.target.value })}
+              >
+                {listaExperienciasLunaMiel.map((exp) => (
+                  <MenuItem key={exp.key} value={exp.nombre}>
+                    {exp.nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <TextField 
+                  fullWidth 
+                  label={t('admin.weddingGifts.amount', 'Monto')} 
+                  type="number" 
+                  value={nuevoRegaloData.monto} 
+                  onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, monto: e.target.value })} 
+                  required
+                  inputProps={{ min: 1, step: 'any' }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                  <InputLabel>{t('admin.weddingGifts.currency', 'Moneda')}</InputLabel>
+                  <Select
+                    value={nuevoRegaloData.moneda}
+                    label={t('admin.weddingGifts.currency', 'Moneda')}
+                    onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, moneda: e.target.value })}
+                  >
+                    <MenuItem value="USD">USD ($)</MenuItem>
+                    <MenuItem value="CAD">CAD ($)</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+            <TextField 
+              fullWidth 
+              label={t('admin.weddingGifts.notes', 'Notas o Mensaje')} 
+              value={nuevoRegaloData.mensaje} 
+              onChange={(e) => setNuevoRegaloData({ ...nuevoRegaloData, mensaje: e.target.value })} 
+              multiline 
+              rows={3} 
+              placeholder="Ej: Aporte en efectivo entregado personalmente..."
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={() => setNuevoRegaloModal(false)} sx={{ color: '#666' }}>
+            {t('common.cancel', 'Cancelar')}
+          </Button>
+          <Button 
+            onClick={handleCrearRegaloManual} 
+            variant="contained" 
+            sx={{ bgcolor: '#1e382b', borderRadius: '0 8px 8px 0', '&:hover': { bgcolor: '#15271e' } }}
+          >
+            {t('admin.weddingGifts.saveGift', 'Guardar Aporte')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
     </Box>
   );
