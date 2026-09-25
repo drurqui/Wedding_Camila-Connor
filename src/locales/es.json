@@ -261,7 +261,15 @@
       "overline": "NUESTRA HISTORIA",
       "title": "NUESTRA HISTORIA",
       "subtitle": "Juntos",
-      "text": "Construir nuestra vida juntos ha sido nuestra mayor aventura. Al mirar hacia atrás en este camino, nos damos cuenta de lo afortunados que somos por contar con el amor y apoyo incondicional de amigos y familiares de tantas partes del mundo. Cuando llegó el momento de planear nuestra boda, supimos de inmediato que queríamos reunir a todos en un lugar que guarda un espacio muy especial en nuestros corazones. Estamos sumamente emocionados de invitarlos a El Salvador el próximo verano. Celebrar nuestro matrimonio en Forêt, rodeados de exuberante belleza natural y de nuestras personas favoritas, es un sueño hecho realidad para ambos."
+      "text": "Construir nuestra vida juntos ha sido nuestra mayor aventura. Al mirar hacia atrás en este camino, nos damos cuenta de lo afortunados que somos por contar con el amor y apoyo incondicional de amigos y familiares de tantas partes del mundo. Cuando llegó el momento de planear nuestra boda, supimos de inmediato que queríamos reunir a todos en un lugar que guarda un espacio muy especial en nuestros corazones. Estamos sumamente emocionados de invitarlos a El Salvador el próximo verano. Celebrar nuestro matrimonio en Forêt, rodeados de exuberante belleza natural y de nuestras personas favoritas, es un sueño hecho realidad para ambos.",
+      "gallery": {
+        "step1": "1. El Anillo",
+        "step1Desc": "El inicio de una promesa",
+        "step2": "2. La Propuesta",
+        "step2Desc": "Una pregunta para toda la vida",
+        "step3": "3. ¡Dijo que Sí!",
+        "step3Desc": "El comienzo de nuestro para siempre"
+      }
     },
     "schedule": {
       "title": "CRONOGRAMA DEL EVENTO",

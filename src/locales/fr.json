@@ -261,7 +261,15 @@
       "overline": "NOTRE HISTOIRE",
       "title": "NOTRE HISTOIRE",
       "subtitle": "Ensemble",
-      "text": "Construire notre vie ensemble a été notre plus belle aventure. En repensant à notre parcours, nous mesurons l'immense chance que nous avons d'être entourés de merveilleux amis et d'une famille qui nous soutient de partout. Au moment de planifier notre mariage, nous avons immédiatement su que nous voulions réunir tout le monde dans un lieu qui occupe une place si chère dans nos cœurs. Nous sommes absolument ravis de vous inviter au Salvador l'été prochain. Célébrer notre mariage à Forêt, au cœur d'une nature luxuriante et auprès de toutes nos personnes préférées, est un rêve devenu réalité pour nous deux."
+      "text": "Construire notre vie ensemble a été notre plus belle aventure. En repensant à notre parcours, nous mesurons l'immense chance que nous avons d'être entourés de merveilleux amis et d'une famille qui nous soutient de partout. Au moment de planifier notre mariage, nous avons immédiatement su que nous voulions réunir tout le monde dans un lieu qui occupe une place si chère dans nos cœurs. Nous sommes absolument ravis de vous inviter au Salvador l'été prochain. Célébrer notre mariage à Forêt, au cœur d'une nature luxuriante et auprès de toutes nos personnes préférées, est un rêve devenu réalité pour nous deux.",
+      "gallery": {
+        "step1": "1. La Bague",
+        "step1Desc": "Le début d'une promesse",
+        "step2": "2. La Demande",
+        "step2Desc": "Une question pour toute une vie",
+        "step3": "3. Elle a dit Oui !",
+        "step3Desc": "Le début de notre pour toujours"
+      }
     },
     "schedule": {
       "title": "PROGRAMME DES ÉVÉNEMENTS",

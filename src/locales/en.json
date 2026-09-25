@@ -261,7 +261,15 @@
       "overline": "OUR STORY",
       "title": "OUR JOURNEY",
       "subtitle": "Together",
-      "text": "Building our life together has been our favorite adventure yet. As we look back on our journey, we realize how incredibly lucky we are to have such wonderful friends and family supporting us from all over. When it came time to plan our wedding, we knew we wanted to bring everyone together in a place that holds a special piece of our hearts. We are absolutely thrilled to invite you to El Salvador next summer. Celebrating our marriage at Forêt, surrounded by lush natural beauty and all of our favorite people, is a dream come true for both of us."
+      "text": "Building our life together has been our favorite adventure yet. As we look back on our journey, we realize how incredibly lucky we are to have such wonderful friends and family supporting us from all over. When it came time to plan our wedding, we knew we wanted to bring everyone together in a place that holds a special piece of our hearts. We are absolutely thrilled to invite you to El Salvador next summer. Celebrating our marriage at Forêt, surrounded by lush natural beauty and all of our favorite people, is a dream come true for both of us.",
+      "gallery": {
+        "step1": "1. The Ring",
+        "step1Desc": "The beginning of a promise",
+        "step2": "2. The Proposal",
+        "step2Desc": "A question for a lifetime",
+        "step3": "3. She Said Yes!",
+        "step3Desc": "The start of our forever"
+      }
     },
     "schedule": {
       "title": "SCHEDULE OF EVENTS",

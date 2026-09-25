@@ -92,6 +92,7 @@ const Wedding = () => {
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   // Inicializar Stripe
   useEffect(() => {
@@ -776,7 +777,7 @@ const Wedding = () => {
           position: 'relative'
         }}
       >
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center' }}>
             <Typography 
               variant="overline" 
@@ -821,7 +822,7 @@ const Wedding = () => {
 
             <Box 
               sx={{ 
-                maxWidth: 780, 
+                maxWidth: 820, 
                 mx: 'auto', 
                 p: { xs: 3, sm: 4.5 }, 
                 borderRadius: '0 16px 16px 0',
@@ -844,6 +845,136 @@ const Wedding = () => {
               >
                 "{t('wedding.ourJourney.text')}"
               </Typography>
+            </Box>
+
+            {/* FOTOS DEL COMPROMISO: EN ORDEN (ANILLO, PROPUESTA, ACEPTADO) */}
+            <Box sx={{ mt: { xs: 5, md: 6 } }}>
+              <Grid container spacing={{ xs: 2.5, sm: 3, md: 3.5 }} justifyContent="center">
+                {[
+                  {
+                    id: 1,
+                    stepLabel: '1',
+                    title: t('wedding.ourJourney.gallery.step1', '1. El Anillo'),
+                    subtitle: t('wedding.ourJourney.gallery.step1Desc', 'El inicio de una promesa'),
+                    img: '/engagement/1-anillo.jpg',
+                    alt: 'El Anillo de Compromiso'
+                  },
+                  {
+                    id: 2,
+                    stepLabel: '2',
+                    title: t('wedding.ourJourney.gallery.step2', '2. La Propuesta'),
+                    subtitle: t('wedding.ourJourney.gallery.step2Desc', 'Una pregunta para toda la vida'),
+                    img: '/engagement/2-propuesta.jpg',
+                    alt: 'La Propuesta de Matrimonio'
+                  },
+                  {
+                    id: 3,
+                    stepLabel: '3',
+                    title: t('wedding.ourJourney.gallery.step3', '3. ¡Dijo que Sí!'),
+                    subtitle: t('wedding.ourJourney.gallery.step3Desc', 'El comienzo de nuestro para siempre'),
+                    img: '/engagement/3-aceptado.jpg',
+                    alt: 'Compromiso Aceptado'
+                  }
+                ].map((item) => (
+                  <Grid item xs={12} sm={6} md={4} key={item.id}>
+                    <Box
+                      onClick={() => setSelectedPhoto(item)}
+                      sx={{
+                        position: 'relative',
+                        height: { xs: 340, sm: 380, md: 430 },
+                        borderRadius: '0 20px 20px 0',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        bgcolor: 'rgba(20, 38, 29, 0.8)',
+                        border: `1px solid rgba(199, 120, 79, 0.45)`,
+                        boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
+                        transition: 'transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease',
+                        '&:hover': {
+                          transform: 'translateY(-6px)',
+                          boxShadow: '0 18px 44px rgba(0,0,0,0.5)',
+                          borderColor: colors.goldAccent,
+                          '& img': {
+                            transform: 'scale(1.06)'
+                          }
+                        }
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src={item.img}
+                        alt={item.alt}
+                        sx={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: 'center',
+                          transition: 'transform 0.5s ease',
+                          display: 'block'
+                        }}
+                      />
+
+                      {/* Badge con número de paso */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 14,
+                          right: 14,
+                          bgcolor: 'rgba(20, 38, 29, 0.85)',
+                          backdropFilter: 'blur(8px)',
+                          border: `1px solid rgba(218, 188, 96, 0.6)`,
+                          borderRadius: '20px',
+                          color: colors.goldAccent,
+                          px: 1.5,
+                          py: 0.4,
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          letterSpacing: 0.5,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                        }}
+                      >
+                        {item.stepLabel} / 3
+                      </Box>
+
+                      {/* Gradiente y títulos */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          background: 'linear-gradient(to top, rgba(14, 28, 21, 0.95) 0%, rgba(14, 28, 21, 0.7) 60%, transparent 100%)',
+                          p: { xs: 2, sm: 2.5 },
+                          pt: 4,
+                          textAlign: 'left'
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontFamily: "'Playfair Display', serif",
+                            color: colors.sandBeige,
+                            fontWeight: 700,
+                            fontSize: { xs: '1.08rem', sm: '1.2rem' },
+                            lineHeight: 1.2,
+                            mb: 0.4
+                          }}
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: 'rgba(244, 240, 230, 0.82)',
+                            fontSize: '0.84rem'
+                          }}
+                        >
+                          {item.subtitle}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
             </Box>
           </Box>
         </Container>
@@ -2043,6 +2174,67 @@ const Wedding = () => {
               {loadingPayment ? <CircularProgress size={22} color="inherit" /> : (t('wedding.honeymoon.modal.proceedStripe') || 'Pagar con Stripe')}
             </Button>
           </DialogActions>
+        )}
+      </Dialog>
+
+      {/* MODAL LIGHTBOX PARA FOTOS DE COMPROMISO */}
+      <Dialog
+        open={Boolean(selectedPhoto)}
+        onClose={() => setSelectedPhoto(null)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: '0 24px 24px 0',
+            bgcolor: colors.forestDark,
+            border: `1px solid ${colors.copper}`,
+            overflow: 'hidden',
+            p: 1.5,
+            boxShadow: '0 24px 48px rgba(0,0,0,0.6)'
+          }
+        }}
+      >
+        {selectedPhoto && (
+          <>
+            <Box sx={{ position: 'relative', bgcolor: '#000', borderRadius: '0 16px 16px 0', overflow: 'hidden' }}>
+              <Box
+                component="img"
+                src={selectedPhoto.img}
+                alt={selectedPhoto.alt}
+                sx={{
+                  width: '100%',
+                  maxHeight: '75vh',
+                  objectFit: 'contain',
+                  display: 'block',
+                  mx: 'auto'
+                }}
+              />
+            </Box>
+            <DialogContent sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+              <Box>
+                <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: colors.sandBeige, fontWeight: 700 }}>
+                  {selectedPhoto.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(244, 240, 230, 0.8)' }}>
+                  {selectedPhoto.subtitle}
+                </Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                onClick={() => setSelectedPhoto(null)}
+                sx={{
+                  color: colors.sandBeige,
+                  borderColor: colors.copper,
+                  borderRadius: '25px',
+                  fontWeight: 600,
+                  px: 2.5,
+                  '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' }
+                }}
+              >
+                {t('wedding.honeymoon.modal.cancel', 'Cerrar')}
+              </Button>
+            </DialogContent>
+          </>
         )}
       </Dialog>
 
