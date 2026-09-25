@@ -1566,18 +1566,18 @@ const Wedding = () => {
             {activeGuideTab === 3 && (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.8 }}>
                 {[
-                  { q: t('wedding.faqs.whoIsTuty.q'), a: t('wedding.faqs.whoIsTuty.a'), defaultOpen: true },
-                  { q: t('wedding.faqs.dietary.q'), a: t('wedding.faqs.dietary.a'), defaultOpen: true },
-                  { q: t('wedding.faqs.kids.q'), a: t('wedding.faqs.kids.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.whoIsTuty.q'), a: t('wedding.faqs.whoIsTuty.a') },
+                  { q: t('wedding.faqs.dietary.q'), a: t('wedding.faqs.dietary.a') },
+                  { q: t('wedding.faqs.kids.q'), a: t('wedding.faqs.kids.a') },
                   { q: t('wedding.faqs.kidsFood.q'), a: t('wedding.faqs.kidsFood.a') },
-                  { q: t('wedding.faqs.ceremonyPhotos.q'), a: t('wedding.faqs.ceremonyPhotos.a'), defaultOpen: true },
+                  { q: t('wedding.faqs.ceremonyPhotos.q'), a: t('wedding.faqs.ceremonyPhotos.a') },
                   { q: t('wedding.faqs.receptionPhotos.q'), a: t('wedding.faqs.receptionPhotos.a') },
                   { q: t('wedding.faqs.rsvpDeadline.q'), a: t('wedding.faqs.rsvpDeadline.a') },
                   { q: t('wedding.faqs.djSongs.q'), a: t('wedding.faqs.djSongs.a') },
                 ].map((item, i) => (
                   <Accordion 
                     key={i} 
-                    defaultExpanded={item.defaultOpen}
+                    defaultExpanded={false}
                     sx={{
                       bgcolor: 'rgba(20, 38, 29, 0.65)',
                       backdropFilter: 'blur(8px)',
