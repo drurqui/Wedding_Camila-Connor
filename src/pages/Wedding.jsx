@@ -28,6 +28,9 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -92,7 +95,60 @@ const Wedding = () => {
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
+
+  const engagementPhotos = [
+    {
+      id: 1,
+      stepLabel: '1',
+      title: t('wedding.ourJourney.gallery.step1', '1. El Anillo'),
+      subtitle: t('wedding.ourJourney.gallery.step1Desc', 'El inicio de una promesa'),
+      img: '/engagement/1-anillo.jpg',
+      alt: 'El Anillo de Compromiso'
+    },
+    {
+      id: 2,
+      stepLabel: '2',
+      title: t('wedding.ourJourney.gallery.step2', '2. La Propuesta'),
+      subtitle: t('wedding.ourJourney.gallery.step2Desc', 'Una pregunta para toda la vida'),
+      img: '/engagement/2-propuesta.jpg',
+      alt: 'La Propuesta de Matrimonio'
+    },
+    {
+      id: 3,
+      stepLabel: '3',
+      title: t('wedding.ourJourney.gallery.step3', '3. ¡Dijo que Sí!'),
+      subtitle: t('wedding.ourJourney.gallery.step3Desc', 'El comienzo de nuestro para siempre'),
+      img: '/engagement/3-aceptado.jpg',
+      alt: 'Compromiso Aceptado'
+    }
+  ];
+
+  const handlePrevPhoto = (e) => {
+    if (e) e.stopPropagation();
+    setSelectedPhotoIndex((prev) => (prev > 0 ? prev - 1 : engagementPhotos.length - 1));
+  };
+
+  const handleNextPhoto = (e) => {
+    if (e) e.stopPropagation();
+    setSelectedPhotoIndex((prev) => (prev < engagementPhotos.length - 1 ? prev + 1 : 0));
+  };
+
+  // Navegación con teclado en el modal (flechas y escape)
+  useEffect(() => {
+    if (selectedPhotoIndex === null) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        setSelectedPhotoIndex((prev) => (prev > 0 ? prev - 1 : engagementPhotos.length - 1));
+      } else if (e.key === 'ArrowRight') {
+        setSelectedPhotoIndex((prev) => (prev < engagementPhotos.length - 1 ? prev + 1 : 0));
+      } else if (e.key === 'Escape') {
+        setSelectedPhotoIndex(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedPhotoIndex]);
 
   // Inicializar Stripe
   useEffect(() => {
@@ -850,35 +906,10 @@ const Wedding = () => {
             {/* FOTOS DEL COMPROMISO: EN ORDEN (ANILLO, PROPUESTA, ACEPTADO) */}
             <Box sx={{ mt: { xs: 5, md: 6 } }}>
               <Grid container spacing={{ xs: 2.5, sm: 3, md: 3.5 }} justifyContent="center">
-                {[
-                  {
-                    id: 1,
-                    stepLabel: '1',
-                    title: t('wedding.ourJourney.gallery.step1', '1. El Anillo'),
-                    subtitle: t('wedding.ourJourney.gallery.step1Desc', 'El inicio de una promesa'),
-                    img: '/engagement/1-anillo.jpg',
-                    alt: 'El Anillo de Compromiso'
-                  },
-                  {
-                    id: 2,
-                    stepLabel: '2',
-                    title: t('wedding.ourJourney.gallery.step2', '2. La Propuesta'),
-                    subtitle: t('wedding.ourJourney.gallery.step2Desc', 'Una pregunta para toda la vida'),
-                    img: '/engagement/2-propuesta.jpg',
-                    alt: 'La Propuesta de Matrimonio'
-                  },
-                  {
-                    id: 3,
-                    stepLabel: '3',
-                    title: t('wedding.ourJourney.gallery.step3', '3. ¡Dijo que Sí!'),
-                    subtitle: t('wedding.ourJourney.gallery.step3Desc', 'El comienzo de nuestro para siempre'),
-                    img: '/engagement/3-aceptado.jpg',
-                    alt: 'Compromiso Aceptado'
-                  }
-                ].map((item) => (
+                {engagementPhotos.map((item, idx) => (
                   <Grid item xs={12} sm={6} md={4} key={item.id}>
                     <Box
-                      onClick={() => setSelectedPhoto(item)}
+                      onClick={() => setSelectedPhotoIndex(idx)}
                       sx={{
                         position: 'relative',
                         height: { xs: 340, sm: 380, md: 430 },
@@ -2177,10 +2208,10 @@ const Wedding = () => {
         )}
       </Dialog>
 
-      {/* MODAL LIGHTBOX PARA FOTOS DE COMPROMISO */}
+      {/* MODAL LIGHTBOX PARA FOTOS DE COMPROMISO CON NAVEGACIÓN */}
       <Dialog
-        open={Boolean(selectedPhoto)}
-        onClose={() => setSelectedPhoto(null)}
+        open={selectedPhotoIndex !== null}
+        onClose={() => setSelectedPhotoIndex(null)}
         maxWidth="md"
         fullWidth
         PaperProps={{
@@ -2189,50 +2220,198 @@ const Wedding = () => {
             bgcolor: colors.forestDark,
             border: `1px solid ${colors.copper}`,
             overflow: 'hidden',
-            p: 1.5,
-            boxShadow: '0 24px 48px rgba(0,0,0,0.6)'
+            p: { xs: 1, sm: 1.5 },
+            boxShadow: '0 24px 48px rgba(0,0,0,0.6)',
+            position: 'relative'
           }
         }}
       >
-        {selectedPhoto && (
+        {selectedPhotoIndex !== null && engagementPhotos[selectedPhotoIndex] && (
           <>
-            <Box sx={{ position: 'relative', bgcolor: '#000', borderRadius: '0 16px 16px 0', overflow: 'hidden' }}>
+            {/* Botón cerrar flotante */}
+            <IconButton
+              onClick={() => setSelectedPhotoIndex(null)}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: 14,
+                right: 14,
+                zIndex: 10,
+                color: colors.sandBeige,
+                bgcolor: 'rgba(20, 38, 29, 0.75)',
+                backdropFilter: 'blur(4px)',
+                border: '1px solid rgba(199, 120, 79, 0.4)',
+                '&:hover': {
+                  bgcolor: colors.forestGreen,
+                  color: '#fff'
+                }
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+
+            {/* Contenedor de la foto con flechas laterales */}
+            <Box 
+              sx={{ 
+                position: 'relative', 
+                bgcolor: '#000', 
+                borderRadius: '0 16px 16px 0', 
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: { xs: 320, sm: 420, md: 500 }
+              }}
+            >
               <Box
                 component="img"
-                src={selectedPhoto.img}
-                alt={selectedPhoto.alt}
+                key={engagementPhotos[selectedPhotoIndex].id}
+                src={engagementPhotos[selectedPhotoIndex].img}
+                alt={engagementPhotos[selectedPhotoIndex].alt}
                 sx={{
                   width: '100%',
-                  maxHeight: '75vh',
+                  maxHeight: '72vh',
                   objectFit: 'contain',
                   display: 'block',
                   mx: 'auto'
                 }}
               />
-            </Box>
-            <DialogContent sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
-              <Box>
-                <Typography variant="h6" sx={{ fontFamily: "'Playfair Display', serif", color: colors.sandBeige, fontWeight: 700 }}>
-                  {selectedPhoto.title}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(244, 240, 230, 0.8)' }}>
-                  {selectedPhoto.subtitle}
-                </Typography>
-              </Box>
-              <Button
-                variant="outlined"
-                onClick={() => setSelectedPhoto(null)}
+
+              {/* Flecha Izquierda (Anterior) */}
+              <IconButton
+                onClick={handlePrevPhoto}
+                aria-label="Foto anterior"
                 sx={{
+                  position: 'absolute',
+                  left: { xs: 8, sm: 16 },
+                  top: '50%',
+                  transform: 'translateY(-50%)',
                   color: colors.sandBeige,
-                  borderColor: colors.copper,
-                  borderRadius: '25px',
-                  fontWeight: 600,
-                  px: 2.5,
-                  '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' }
+                  bgcolor: 'rgba(20, 38, 29, 0.82)',
+                  backdropFilter: 'blur(6px)',
+                  border: `1px solid rgba(199, 120, 79, 0.55)`,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.45)',
+                  p: { xs: 1, sm: 1.3 },
+                  '&:hover': {
+                    bgcolor: colors.forestGreen,
+                    borderColor: colors.goldAccent,
+                    color: '#fff',
+                    transform: 'translateY(-50%) scale(1.08)'
+                  },
+                  transition: 'all 0.2s ease'
                 }}
               >
-                {t('wedding.honeymoon.modal.cancel', 'Cerrar')}
-              </Button>
+                <ArrowBackIosNewIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
+              </IconButton>
+
+              {/* Flecha Derecha (Siguiente) */}
+              <IconButton
+                onClick={handleNextPhoto}
+                aria-label="Foto siguiente"
+                sx={{
+                  position: 'absolute',
+                  right: { xs: 8, sm: 16 },
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: colors.sandBeige,
+                  bgcolor: 'rgba(20, 38, 29, 0.82)',
+                  backdropFilter: 'blur(6px)',
+                  border: `1px solid rgba(199, 120, 79, 0.55)`,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.45)',
+                  p: { xs: 1, sm: 1.3 },
+                  '&:hover': {
+                    bgcolor: colors.forestGreen,
+                    borderColor: colors.goldAccent,
+                    color: '#fff',
+                    transform: 'translateY(-50%) scale(1.08)'
+                  },
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <ArrowForwardIosIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
+              </IconButton>
+            </Box>
+
+            {/* Pie del modal con textos, indicadores y botón */}
+            <DialogContent 
+              sx={{ 
+                p: { xs: 1.5, sm: 2 }, 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                flexWrap: 'wrap', 
+                gap: 1.5 
+              }}
+            >
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.3 }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontFamily: "'Playfair Display', serif", 
+                      color: colors.sandBeige, 
+                      fontWeight: 700,
+                      fontSize: { xs: '1.05rem', sm: '1.2rem' }
+                    }}
+                  >
+                    {engagementPhotos[selectedPhotoIndex].title}
+                  </Typography>
+                  <Chip
+                    label={`${selectedPhotoIndex + 1} / ${engagementPhotos.length}`}
+                    size="small"
+                    sx={{
+                      bgcolor: 'rgba(199, 120, 79, 0.25)',
+                      color: colors.sandBeige,
+                      border: '1px solid rgba(199, 120, 79, 0.4)',
+                      fontWeight: 700,
+                      fontSize: '0.72rem',
+                      height: 22
+                    }}
+                  />
+                </Box>
+                <Typography variant="body2" sx={{ color: 'rgba(244, 240, 230, 0.8)' }}>
+                  {engagementPhotos[selectedPhotoIndex].subtitle}
+                </Typography>
+              </Box>
+
+              {/* Indicadores de desplazamiento + botón cerrar */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {engagementPhotos.map((photo, idx) => (
+                  <Box
+                    key={photo.id}
+                    onClick={() => setSelectedPhotoIndex(idx)}
+                    sx={{
+                      width: idx === selectedPhotoIndex ? 26 : 10,
+                      height: 10,
+                      borderRadius: '5px',
+                      bgcolor: idx === selectedPhotoIndex ? colors.goldAccent : 'rgba(244, 240, 230, 0.3)',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s ease',
+                      '&:hover': {
+                        bgcolor: idx === selectedPhotoIndex ? colors.goldAccent : 'rgba(244, 240, 230, 0.6)'
+                      }
+                    }}
+                  />
+                ))}
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setSelectedPhotoIndex(null)}
+                  sx={{
+                    ml: 1.5,
+                    color: colors.sandBeige,
+                    borderColor: colors.copper,
+                    borderRadius: '25px',
+                    fontWeight: 600,
+                    px: 2,
+                    textTransform: 'none',
+                    '&:hover': { borderColor: colors.copperLight, bgcolor: 'rgba(199, 120, 79, 0.15)' }
+                  }}
+                >
+                  {t('wedding.honeymoon.modal.cancel', 'Cerrar')}
+                </Button>
+              </Box>
             </DialogContent>
           </>
         )}
