@@ -1046,7 +1046,7 @@ const Wedding = () => {
                             alignItems: 'center',
                             gap: { xs: 1.5, sm: 2.5 },
                             p: { xs: 1.4, sm: 1.8 },
-                            borderRadius: '12px',
+                            borderRadius: '0 12px 12px 0',
                             bgcolor: 'rgba(255, 255, 255, 0.04)',
                             borderLeft: `4px solid ${colors.goldAccent}`,
                             transition: 'all 0.25s ease',
