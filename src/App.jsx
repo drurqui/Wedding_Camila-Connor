@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Wedding from './pages/Wedding';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
 import { Box, Button, Typography, Container, Card } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -66,6 +68,15 @@ function App() {
                     <Route path="/boda" element={<Wedding />} />
                     <Route path="/mariage" element={<Wedding />} />
                     
+                    {/* Rutas de Políticas de Privacidad y Términos de Uso */}
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+                    <Route path="/privacidad" element={<PrivacyPolicy />} />
+                    <Route path="/confidentialite" element={<PrivacyPolicy />} />
+                    
+                    <Route path="/terms" element={<TermsOfUse />} />
+                    <Route path="/terminos" element={<TermsOfUse />} />
+                    <Route path="/conditions" element={<TermsOfUse />} />
+
                     {/* Rutas privadas para administradores */}
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin" element={

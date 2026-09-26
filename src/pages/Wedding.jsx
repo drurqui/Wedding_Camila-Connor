@@ -1957,10 +1957,45 @@ const Wedding = () => {
       </Box>
 
       {/* FOOTER */}
-      <Box sx={{ bgcolor: colors.forestDark, color: 'rgba(255,255,255,0.7)', pt: 4, pb: 10, textAlign: 'center' }}>
-        <Typography variant="body2" sx={{ letterSpacing: 2, fontSize: '0.78rem' }}>
+      <Box sx={{ bgcolor: colors.forestDark, color: 'rgba(255,255,255,0.7)', pt: 5, pb: 12, textAlign: 'center', borderTop: '1px solid rgba(199, 120, 79, 0.2)' }}>
+        <Typography variant="body2" sx={{ letterSpacing: 2, fontSize: '0.78rem', color: colors.sandBeige, mb: 1.5 }}>
           CAMILA & CONNOR • AUGUST 7, 2027 • EL SALVADOR
         </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Button 
+            component="a" 
+            href="/privacidad" 
+            target="_blank"
+            rel="noopener noreferrer"
+            size="small" 
+            sx={{ 
+              color: colors.terracottaLight, 
+              fontSize: '0.75rem', 
+              textTransform: 'none', 
+              letterSpacing: 0.5,
+              '&:hover': { textDecoration: 'underline', color: '#ffffff' } 
+            }}
+          >
+            {t('legal.privacy', 'Política de Privacidad')}
+          </Button>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)' }}>•</Typography>
+          <Button 
+            component="a" 
+            href="/terminos" 
+            target="_blank"
+            rel="noopener noreferrer"
+            size="small" 
+            sx={{ 
+              color: colors.terracottaLight, 
+              fontSize: '0.75rem', 
+              textTransform: 'none', 
+              letterSpacing: 0.5,
+              '&:hover': { textDecoration: 'underline', color: '#ffffff' } 
+            }}
+          >
+            {t('legal.terms', 'Términos de Uso')}
+          </Button>
+        </Box>
       </Box>
 
       {/* BARRA DE NAVEGACIÓN RÁPIDA FLOTANTE INFERIOR (ESTILO APP NATIVA MÓVIL Y DESKTOP) */}
@@ -2278,6 +2313,20 @@ const Wedding = () => {
                   </Typography>
                 </Box>
               )}
+
+              {/* Aviso Legal de Cumplimiento Stripe/Privacidad */}
+              <Box sx={{ mt: 2.5, pt: 1.5, borderTop: '1px solid #eee', textAlign: 'center' }}>
+                <Typography variant="caption" sx={{ color: '#777', fontSize: '0.73rem', display: 'block', lineHeight: 1.45 }}>
+                  {t('wedding.honeymoon.modal.legalNotice', 'Al continuar con tu aporte, aceptas nuestros')}{' '}
+                  <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: colors.terracotta, textDecoration: 'underline', fontWeight: 600 }}>
+                    {t('legal.terms', 'Términos de Uso')}
+                  </a>{' '}
+                  {t('legal.and', 'y')}{' '}
+                  <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={{ color: colors.terracotta, textDecoration: 'underline', fontWeight: 600 }}>
+                    {t('legal.privacy', 'Política de Privacidad')}
+                  </a>.
+                </Typography>
+              </Box>
             </>
           )}
         </DialogContent>

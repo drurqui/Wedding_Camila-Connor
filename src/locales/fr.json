@@ -11,6 +11,12 @@
     "success": "Succès",
     "error": "Erreur"
   },
+  "legal": {
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation",
+    "and": "et",
+    "allRightsReserved": "Tous droits réservés"
+  },
   "notFound": {
     "title": "Page non trouvée",
     "message": "Oups ! La page que vous cherchez n'existe pas ou a été déplacée.",
@@ -471,6 +477,7 @@
         "anonymousNote": "Votre don sera enregistré comme anonyme. Votre nom n'apparaîtra pas publiquement.",
         "emailHelper": "Optionnel : Entrez votre email si vous souhaitez recevoir une confirmation et un remerciement.",
         "anonymous": "Anonyme",
+        "legalNotice": "En procédant à votre don, vous acceptez nos",
         "quantityLabel": "Nombre de parts",
         "totalLabel": "Contribution Totale",
         "proceedStripe": "Payer en toute sécurité avec Stripe",

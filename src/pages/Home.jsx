@@ -222,6 +222,36 @@ const Home = () => {
             <Card sx={cardStyle}><Typography variant="h2" color="secondary" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' }, mb: 0, textAlign: 'center' }}>{t('home.step2.closingText')}</Typography></Card>
           </Box>
         )}
+
+        {/* FOOTER LEGAL */}
+        <Box sx={{ mt: 8, pb: 4, textAlign: 'center', borderTop: '1px solid rgba(113, 28, 46, 0.15)', pt: 3 }}>
+          <Typography variant="body2" sx={{ letterSpacing: 2, fontSize: '0.78rem', mb: 1.5, color: '#711c2e', fontWeight: 600 }}>
+            CAMILA & CONNOR • NIAGARA-ON-THE-LAKE & EL SALVADOR
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+            <Button 
+              component="a" 
+              href="/privacidad" 
+              target="_blank"
+              rel="noopener noreferrer"
+              size="small" 
+              sx={{ color: '#711c2e', fontSize: '0.75rem', textTransform: 'none', '&:hover': { textDecoration: 'underline' } }}
+            >
+              {t('legal.privacy', 'Política de Privacidad')}
+            </Button>
+            <Typography variant="caption" sx={{ color: '#aaa' }}>•</Typography>
+            <Button 
+              component="a" 
+              href="/terminos" 
+              target="_blank"
+              rel="noopener noreferrer"
+              size="small" 
+              sx={{ color: '#711c2e', fontSize: '0.75rem', textTransform: 'none', '&:hover': { textDecoration: 'underline' } }}
+            >
+              {t('legal.terms', 'Términos de Uso')}
+            </Button>
+          </Box>
+        </Box>
       </Container>
       <Dialog open={alertModal.open} onClose={() => setAlertModal({ ...alertModal, open: false })} PaperProps={{ sx: { borderRadius: 2, border: '2px solid #dabc60', minWidth: '300px' } }}>
         <DialogTitle sx={{ bgcolor: '#711c2e', color: 'white', fontFamily: "'Playfair Display', serif", textAlign: 'center', fontSize: '1.5rem' }}>{t('common.warning')}</DialogTitle>

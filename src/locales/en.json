@@ -11,6 +11,12 @@
     "success": "Success",
     "error": "Error"
   },
+  "legal": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "and": "and",
+    "allRightsReserved": "All rights reserved"
+  },
   "notFound": {
     "title": "Page Not Found",
     "message": "Oops! The page you are looking for does not exist or has been moved.",
@@ -471,6 +477,7 @@
         "anonymousNote": "Your contribution will be recorded as anonymous. Your name will not be shown publicly.",
         "emailHelper": "Optional: Enter your email if you wish to receive a confirmation and thank-you note.",
         "anonymous": "Anonymous",
+        "legalNotice": "By proceeding with your contribution, you agree to our",
         "quantityLabel": "Number of shares",
         "totalLabel": "Total Contribution",
         "proceedStripe": "Pay with Stripe",

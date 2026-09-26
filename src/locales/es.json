@@ -11,6 +11,12 @@
     "success": "Éxito",
     "error": "Error"
   },
+  "legal": {
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Uso",
+    "and": "y",
+    "allRightsReserved": "Todos los derechos reservados"
+  },
   "notFound": {
     "title": "Página no encontrada",
     "message": "¡Ups! La página que buscas no existe o ha sido movida.",
@@ -471,6 +477,7 @@
         "anonymousNote": "Tu aporte será registrado como anónimo. Tu nombre no aparecerá públicamente.",
         "emailHelper": "Opcional: Si ingresas tu correo, te enviaremos una hermosa confirmación y agradecimiento.",
         "anonymous": "Anónimo",
+        "legalNotice": "Al continuar con tu aporte, aceptas nuestros",
         "quantityLabel": "Cantidad de cuotas",
         "totalLabel": "Aporte Total",
         "proceedStripe": "Pagar de forma segura con Stripe",
