@@ -466,7 +466,11 @@
         "title": "Offrir une Expérience",
         "subtitle": "Vous contribuez pour",
         "nameLabel": "Votre Nom Complet",
-        "emailLabel": "Votre Email (pour le reçu)",
+        "emailLabel": "Votre Email",
+        "anonymousCheckbox": "Faire ce don de manière anonyme",
+        "anonymousNote": "Votre don sera enregistré comme anonyme. Votre nom n'apparaîtra pas publiquement.",
+        "emailHelper": "Optionnel : Entrez votre email si vous souhaitez recevoir une confirmation et un remerciement.",
+        "anonymous": "Anonyme",
         "quantityLabel": "Nombre de parts",
         "totalLabel": "Contribution Totale",
         "proceedStripe": "Payer en toute sécurité avec Stripe",
@@ -477,6 +481,15 @@
           "nameRequired": "Veuillez saisir votre nom.",
           "emailRequired": "Veuillez saisir une adresse email valide.",
           "minAmount": "Le montant minimum est de 5 $ USD."
+        },
+        "thankYou": {
+          "title": "Du fond du cœur, merci infiniment !",
+          "subtitle": "CAMILA & CONNOR • LUNE DE MIEL 2027",
+          "message": "Votre amour, votre présence et votre soutien généreux nous touchent profondément. Merci de nous aider à franchir cette première étape de notre vie à deux et de rendre notre voyage de noces inoubliable.",
+          "contributionFor": "Votre don pour :",
+          "donorPrefix": "De la part de :",
+          "closeBtn": "Retour à la fête",
+          "signature": "Avec tout notre amour, Camila & Connor"
         }
       },
       "addToCart": "Participer",

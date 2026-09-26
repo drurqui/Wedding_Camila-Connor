@@ -4,13 +4,14 @@ import {
   Divider, Dialog, DialogTitle, DialogContent, DialogActions, 
   CircularProgress, Alert, Snackbar, RadioGroup, FormControlLabel, Radio, 
   FormControl, FormLabel, Accordion, AccordionSummary, AccordionDetails,
-  Paper, IconButton, Tooltip
+  Paper, IconButton, Tooltip, Checkbox
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import HotelIcon from '@mui/icons-material/Hotel';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import LanguageIcon from '@mui/icons-material/Language';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
@@ -90,11 +91,19 @@ const Wedding = () => {
     moneda: 'usd',
     cantidad: 1,
     montoLibre: 100,
+    esAnonimo: false,
   });
 
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
+  const [thankYouModal, setThankYouModal] = useState({
+    open: false,
+    donorName: '',
+    giftTitle: '',
+    amount: '',
+    currency: 'USD',
+  });
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
@@ -186,14 +195,12 @@ const Wedding = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('pago') === 'exito') {
-      setToast({
+      setThankYouModal({
         open: true,
-        message: i18n.language.startsWith('en') 
-          ? "Thank you so much for contributing to our Honeymoon!" 
-          : i18n.language.startsWith('fr')
-          ? "Merci infiniment pour votre participation à notre lune de miel !"
-          : "¡Muchísimas gracias por tu contribución a nuestra luna de miel!",
-        severity: 'success'
+        donorName: '',
+        giftTitle: '',
+        amount: '',
+        currency: 'USD',
       });
       window.history.replaceState(null, null, window.location.pathname);
     } else if (params.get('pago') === 'cancelado') {
@@ -228,6 +235,7 @@ const Wedding = () => {
       moneda: 'usd',
       cantidad: 1,
       montoLibre: 100,
+      esAnonimo: false,
     });
     setCheckoutModal({
       open: true,
@@ -248,6 +256,7 @@ const Wedding = () => {
       moneda: 'usd',
       cantidad: 1,
       montoLibre: 50,
+      esAnonimo: false,
     });
     setCheckoutModal({
       open: true,
@@ -260,11 +269,11 @@ const Wedding = () => {
   };
 
   const handleProcessPayment = async () => {
-    if (!formData.nombre.trim()) {
+    if (!formData.esAnonimo && !formData.nombre.trim()) {
       setErrorMessage(t('wedding.honeymoon.modal.errors.nameRequired'));
       return;
     }
-    if (!formData.email.trim() || !formData.email.includes('@')) {
+    if (formData.email.trim() && !formData.email.includes('@')) {
       setErrorMessage(t('wedding.honeymoon.modal.errors.emailRequired'));
       return;
     }
@@ -280,6 +289,10 @@ const Wedding = () => {
       ? parseInt(formData.montoLibre) || 50
       : (formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad;
 
+    const nombreFinal = formData.esAnonimo 
+      ? (t('wedding.honeymoon.modal.anonymous', 'Anónimo')) 
+      : (formData.nombre.trim() || 'Anónimo');
+
     // Intento con Stripe Elements (PaymentIntent)
     try {
       const piRes = await fetch(`${backendBase}/crear-payment-intent`, {
@@ -289,8 +302,10 @@ const Wedding = () => {
           nombre_regalo: checkoutModal.title,
           monto: finalAmount,
           moneda: formData.moneda,
-          nombre_invitado: formData.nombre.trim(),
+          nombre_invitado: nombreFinal,
           email_invitado: formData.email.trim(),
+          es_anonimo: formData.esAnonimo,
+          idioma: i18n.language.substring(0, 2),
         }),
       });
 
@@ -317,8 +332,10 @@ const Wedding = () => {
           moneda: formData.moneda,
           cantidad: checkoutModal.isCustom ? 1 : Math.max(1, formData.cantidad),
           url_origen: window.location.origin + window.location.pathname,
-          nombre_invitado: formData.nombre.trim(),
+          nombre_invitado: nombreFinal,
           email_invitado: formData.email.trim(),
+          es_anonimo: formData.esAnonimo,
+          idioma: i18n.language.substring(0, 2),
         }),
       });
 
@@ -2083,15 +2100,20 @@ const Wedding = () => {
                 colors={colors}
                 onCancel={() => setClientSecret('')}
                 onSuccess={async (paymentIntent) => {
+                  const donorName = formData.nombre.trim() || '';
+                  const giftTitle = checkoutModal.title || '';
+                  const totalPaid = checkoutModal.isCustom
+                    ? parseInt(formData.montoLibre) || 50
+                    : (formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad;
+                  const chosenCurrency = formData.moneda.toUpperCase();
+
                   try {
                     const giftData = {
-                      nombre: formData.nombre.trim() || 'Anónimo',
+                      nombre: donorName || 'Anónimo',
                       email: formData.email.trim() || '',
-                      regalo: checkoutModal.title,
-                      monto: checkoutModal.isCustom
-                        ? parseInt(formData.montoLibre) || 50
-                        : (formData.moneda === 'cad' ? checkoutModal.unitCad : checkoutModal.unitUsd) * formData.cantidad,
-                      moneda: formData.moneda.toUpperCase(),
+                      regalo: giftTitle,
+                      monto: totalPaid,
+                      moneda: chosenCurrency,
                       cantidad: checkoutModal.isCustom ? 1 : formData.cantidad,
                       payment_intent_id: paymentIntent?.id || '',
                       origen: 'stripe_elements',
@@ -2106,43 +2128,98 @@ const Wedding = () => {
                   } catch (err) {
                     console.warn("Error guardando regalo en Firestore:", err);
                   }
-                  setCheckoutModal({ ...checkoutModal, open: false });
+
+                  // Enviar correo de agradecimiento si proporcionó email
+                  if (formData.email.trim() && formData.email.includes('@')) {
+                    const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                      ? 'http://localhost:8080'
+                      : 'https://api-boda-736009271165.us-central1.run.app';
+                    fetch(`${backendBase}/enviar-agradecimiento-regalo`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        email: formData.email.trim(),
+                        nombre_donante: formData.esAnonimo ? (t('wedding.honeymoon.modal.anonymous', 'Anónimo')) : donorName,
+                        regalo: giftTitle,
+                        monto: totalPaid,
+                        moneda: chosenCurrency,
+                        idioma: i18n.language.substring(0, 2),
+                        es_anonimo: formData.esAnonimo,
+                      })
+                    }).catch(e => console.warn("Error enviando email agradecimiento:", e));
+                  }
+
+                  setCheckoutModal(prev => ({ ...prev, open: false }));
                   setClientSecret('');
-                  setToast({
+                  setThankYouModal({
                     open: true,
-                    message: i18n.language.startsWith('en') 
-                      ? "Thank you so much for contributing to our Honeymoon!" 
-                      : i18n.language.startsWith('fr')
-                      ? "Merci infiniment pour votre participation à notre lune de miel !"
-                      : "¡Muchísimas gracias por tu contribución a nuestra luna de miel!",
-                    severity: 'success'
+                    donorName: formData.esAnonimo ? (t('wedding.honeymoon.modal.anonymous', 'Anónimo')) : donorName,
+                    giftTitle: giftTitle,
+                    amount: totalPaid,
+                    currency: chosenCurrency,
                   });
                 }}
               />
             </Elements>
           ) : (
             <>
-              <TextField 
-                fullWidth 
-                label={t('wedding.honeymoon.modal.nameLabel')} 
-                variant="outlined" 
-                margin="normal" 
-                size="small"
-                value={formData.nombre}
-                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                placeholder="Ex: John & Sarah Smith"
-              />
+              {/* Opción de Aporte Anónimo */}
+              <Box sx={{ mb: 1, mt: 0.5 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.esAnonimo}
+                      onChange={(e) => {
+                        const isAnon = e.target.checked;
+                        setFormData({
+                          ...formData,
+                          esAnonimo: isAnon,
+                          nombre: isAnon ? '' : formData.nombre,
+                        });
+                      }}
+                      sx={{ color: colors.copper, '&.Mui-checked': { color: colors.copper } }}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ fontSize: '0.86rem', fontWeight: 600, color: colors.forestGreen }}>
+                      {t('wedding.honeymoon.modal.anonymousCheckbox')}
+                    </Typography>
+                  }
+                />
+              </Box>
+
+              {!formData.esAnonimo && (
+                <TextField 
+                  fullWidth 
+                  label={t('wedding.honeymoon.modal.nameLabel')} 
+                  variant="outlined" 
+                  margin="dense" 
+                  size="small"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  placeholder="Ex: John & Sarah Smith"
+                />
+              )}
+
+              {formData.esAnonimo && (
+                <Box sx={{ p: 1.5, mb: 1.5, bgcolor: '#f4ede4', borderRadius: '0 8px 8px 0', borderLeft: `3px solid ${colors.copper}` }}>
+                  <Typography variant="caption" sx={{ color: colors.forestGreen, fontWeight: 600, display: 'block' }}>
+                    🔒 {t('wedding.honeymoon.modal.anonymousNote')}
+                  </Typography>
+                </Box>
+              )}
 
               <TextField 
                 fullWidth 
                 label={t('wedding.honeymoon.modal.emailLabel')} 
                 variant="outlined" 
                 margin="normal" 
-                size="small"
+                size="small" 
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="john.smith@example.com"
+                helperText={t('wedding.honeymoon.modal.emailHelper')}
               />
 
               {/* Selector de Moneda */}
@@ -2231,6 +2308,217 @@ const Wedding = () => {
             </Button>
           </DialogActions>
         )}
+      </Dialog>
+
+      {/* MODAL DE AGRADECIMIENTO ELEGANTE (LUNA DE MIEL) */}
+      <Dialog
+        open={thankYouModal.open}
+        onClose={() => setThankYouModal(prev => ({ ...prev, open: false }))}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: '0 24px 24px 0 !important',
+            borderLeft: `6px solid ${colors.copper}`,
+            borderTop: `1px solid rgba(223, 175, 116, 0.4)`,
+            borderRight: `1px solid rgba(223, 175, 116, 0.4)`,
+            borderBottom: `1px solid rgba(223, 175, 116, 0.4)`,
+            background: 'linear-gradient(145deg, #1e382b 0%, #14261d 100%)',
+            color: colors.creamText,
+            p: { xs: 3, sm: 4.5 },
+            textAlign: 'center',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
+            position: 'relative',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        {/* Fondo decorativo sutil */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -60,
+            right: -60,
+            width: 180,
+            height: 180,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(223, 175, 116, 0.15) 0%, rgba(223, 175, 116, 0) 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Botón cerrar flotante */}
+        <IconButton
+          onClick={() => setThankYouModal(prev => ({ ...prev, open: false }))}
+          sx={{
+            position: 'absolute',
+            top: 14,
+            right: 14,
+            color: colors.goldAccent,
+            bgcolor: 'rgba(255,255,255,0.06)',
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' }
+          }}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+
+        {/* Ícono de Corazón / Agradecimiento */}
+        <Box
+          sx={{
+            width: 72,
+            height: 72,
+            mx: 'auto',
+            mb: 2.5,
+            borderRadius: '50%',
+            bgcolor: 'rgba(199, 120, 79, 0.18)',
+            border: `2px solid ${colors.goldAccent}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 0 25px rgba(223, 175, 116, 0.25)',
+          }}
+        >
+          <FavoriteIcon sx={{ color: colors.copperLight, fontSize: 38 }} />
+        </Box>
+
+        {/* Subtítulo elegante con monograma */}
+        <Typography
+          sx={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '0.78rem',
+            letterSpacing: '3px',
+            textTransform: 'uppercase',
+            color: colors.goldAccent,
+            fontWeight: 700,
+            mb: 1,
+          }}
+        >
+          {t('wedding.honeymoon.modal.thankYou.subtitle')}
+        </Typography>
+
+        <Divider sx={{ width: 50, mx: 'auto', borderColor: colors.copper, mb: 2.5, borderWidth: 1 }} />
+
+        {/* Título Principal */}
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: "'Playfair Display', serif",
+            color: colors.creamText,
+            fontWeight: 700,
+            mb: 2,
+            fontSize: { xs: '1.65rem', sm: '2.05rem' },
+            lineHeight: 1.25,
+          }}
+        >
+          {t('wedding.honeymoon.modal.thankYou.title')}
+        </Typography>
+
+        {/* Tarjeta de detalle de aporte si existe nombre o regalo */}
+        {(thankYouModal.donorName || thankYouModal.giftTitle) && (
+          <Box
+            sx={{
+              borderRadius: '0 14px 14px 0',
+              bgcolor: 'rgba(246, 235, 215, 0.07)',
+              border: `1px solid rgba(223, 175, 116, 0.25)`,
+              borderLeft: `4px solid ${colors.copper}`,
+              p: 2,
+              mb: 2.5,
+              mx: 'auto',
+              maxWidth: 420,
+              textAlign: 'center',
+            }}
+          >
+            {thankYouModal.donorName && (
+              <Typography
+                sx={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontStyle: 'italic',
+                  fontSize: '1.15rem',
+                  color: colors.goldAccent,
+                  fontWeight: 600,
+                  mb: 0.5,
+                }}
+              >
+                {t('wedding.honeymoon.modal.thankYou.donorPrefix')} {thankYouModal.donorName}
+              </Typography>
+            )}
+            {thankYouModal.giftTitle && (
+              <Typography variant="body2" sx={{ color: colors.creamText, opacity: 0.95, fontSize: '0.88rem' }}>
+                {t('wedding.honeymoon.modal.thankYou.contributionFor')}{' '}
+                <strong>{thankYouModal.giftTitle}</strong>
+              </Typography>
+            )}
+            {thankYouModal.amount && (
+              <Chip
+                label={`$${Number(thankYouModal.amount).toLocaleString()} ${thankYouModal.currency}`}
+                size="small"
+                sx={{
+                  mt: 1.2,
+                  bgcolor: colors.copper,
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '0.78rem',
+                  letterSpacing: '0.5px',
+                }}
+              />
+            )}
+          </Box>
+        )}
+
+        {/* Mensaje de agradecimiento emocional */}
+        <Typography
+          sx={{
+            fontFamily: "'Montserrat', sans-serif",
+            color: colors.creamText,
+            fontSize: { xs: '0.88rem', sm: '0.95rem' },
+            lineHeight: 1.8,
+            opacity: 0.92,
+            mb: 3,
+            maxWidth: 480,
+            mx: 'auto',
+          }}
+        >
+          {t('wedding.honeymoon.modal.thankYou.message')}
+        </Typography>
+
+        {/* Firma de los novios */}
+        <Typography
+          sx={{
+            fontFamily: "'Playfair Display', serif",
+            fontStyle: 'italic',
+            color: colors.goldAccent,
+            fontSize: { xs: '1rem', sm: '1.1rem' },
+            mb: 3.5,
+          }}
+        >
+          {t('wedding.honeymoon.modal.thankYou.signature')}
+        </Typography>
+
+        {/* Botón de acción */}
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            variant="contained"
+            onClick={() => setThankYouModal(prev => ({ ...prev, open: false }))}
+            sx={{
+              bgcolor: colors.copper,
+              color: '#ffffff',
+              borderRadius: '0 12px 12px 0',
+              py: 1.3,
+              px: 4,
+              fontWeight: 700,
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              fontSize: '0.82rem',
+              boxShadow: '0 8px 20px rgba(199, 120, 79, 0.4)',
+              '&:hover': {
+                bgcolor: colors.copperDark,
+                boxShadow: '0 10px 24px rgba(199, 120, 79, 0.55)',
+              }
+            }}
+          >
+            {t('wedding.honeymoon.modal.thankYou.closeBtn')}
+          </Button>
+        </Box>
       </Dialog>
 
       {/* MODAL LIGHTBOX PARA FOTOS DE COMPROMISO CON NAVEGACIÓN */}

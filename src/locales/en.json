@@ -466,7 +466,11 @@
         "title": "Gift an Experience",
         "subtitle": "You are contributing to",
         "nameLabel": "Your Full Name",
-        "emailLabel": "Your Email (for receipt)",
+        "emailLabel": "Your Email",
+        "anonymousCheckbox": "Make this contribution anonymously",
+        "anonymousNote": "Your contribution will be recorded as anonymous. Your name will not be shown publicly.",
+        "emailHelper": "Optional: Enter your email if you wish to receive a confirmation and thank-you note.",
+        "anonymous": "Anonymous",
         "quantityLabel": "Number of shares",
         "totalLabel": "Total Contribution",
         "proceedStripe": "Pay with Stripe",
@@ -477,6 +481,15 @@
           "nameRequired": "Please enter your name.",
           "emailRequired": "Please enter a valid email address.",
           "minAmount": "Minimum contribution is $5 USD."
+        },
+        "thankYou": {
+          "title": "From the bottom of our hearts, thank you!",
+          "subtitle": "CAMILA & CONNOR • HONEYMOON 2027",
+          "message": "Your love, presence, and generous support mean the world to us. Thank you for helping us take our first steps into our forever together and making our dream honeymoon unforgettable.",
+          "contributionFor": "Your gift towards:",
+          "donorPrefix": "From:",
+          "closeBtn": "Back to Celebration",
+          "signature": "With all our love, Camila & Connor"
         }
       },
       "addToCart": "Contribute",

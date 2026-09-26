@@ -466,7 +466,11 @@
         "title": "Regalar Experiencia",
         "subtitle": "Estás aportando a",
         "nameLabel": "Tu Nombre Completo",
-        "emailLabel": "Tu Correo Electrónico (para el recibo)",
+        "emailLabel": "Tu Correo Electrónico",
+        "anonymousCheckbox": "Hacer este aporte de forma anónima",
+        "anonymousNote": "Tu aporte será registrado como anónimo. Tu nombre no aparecerá públicamente.",
+        "emailHelper": "Opcional: Si ingresas tu correo, te enviaremos una hermosa confirmación y agradecimiento.",
+        "anonymous": "Anónimo",
         "quantityLabel": "Cantidad de cuotas",
         "totalLabel": "Aporte Total",
         "proceedStripe": "Pagar de forma segura con Stripe",
@@ -477,6 +481,15 @@
           "nameRequired": "Por favor ingresa tu nombre.",
           "emailRequired": "Por favor ingresa un correo válido.",
           "minAmount": "El aporte mínimo es de $5 USD."
+        },
+        "thankYou": {
+          "title": "¡De todo corazón, muchas gracias!",
+          "subtitle": "CAMILA & CONNOR • LUNA DE MIEL 2027",
+          "message": "Tu cariño y generosidad significan el mundo para nosotros. Gracias por formar parte de este capítulo tan especial en nuestras vidas y por ayudarnos a hacer realidad este viaje que recordaremos por siempre.",
+          "contributionFor": "Tu aporte para:",
+          "donorPrefix": "De parte de:",
+          "closeBtn": "Volver a la celebración",
+          "signature": "Con todo nuestro amor, Camila & Connor"
         }
       },
       "addToCart": "Regalar",
