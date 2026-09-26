@@ -2111,9 +2111,13 @@ const Wedding = () => {
 
           {clientSecret && stripePromise ? (
             <Elements
+              key={`${clientSecret}-${(i18n.language || 'es').substring(0, 2)}`}
               stripe={stripePromise}
               options={{
                 clientSecret,
+                locale: ['es', 'en', 'fr'].includes((i18n.language || 'es').substring(0, 2))
+                  ? (i18n.language || 'es').substring(0, 2)
+                  : 'auto',
                 appearance: {
                   theme: 'flat',
                   variables: {
