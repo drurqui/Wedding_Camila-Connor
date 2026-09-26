@@ -31,7 +31,7 @@ const contentByLang = {
     subtitle: "Sitio Web y Registro de Luna de Miel • Camila & Connor",
     updated: "Última actualización: Septiembre de 2026",
     backBtn: "Volver a la Boda",
-    jurisdictionsBadge: "Canadá • Estados Unidos • El Salvador",
+    jurisdictionsBadge: "Canadá • Estados Unidos (Leyes Federales y Estatales) • El Salvador",
     intro: "Bienvenido al sitio web oficial de la celebración de matrimonio de Camila Urquilla y Connor Shields. Al acceder o utilizar este sitio web, confirmar tu asistencia o participar en nuestro registro de regalos y aportes de luna de miel, aceptas los presentes Términos y Condiciones.",
     sections: [
       {
@@ -92,7 +92,7 @@ const contentByLang = {
     subtitle: "Camila & Connor Wedding Memorial Website & Honeymoon Registry",
     updated: "Last updated: September 2026",
     backBtn: "Back to Wedding",
-    jurisdictionsBadge: "Canada • United States • El Salvador",
+    jurisdictionsBadge: "Canada • United States (Federal & State Laws) • El Salvador",
     intro: "Welcome to the official wedding website of Camila Urquilla and Connor Shields. By accessing or browsing this website, submitting your RSVP, or contributing to our honeymoon registry, you agree to these Terms and Conditions.",
     sections: [
       {
@@ -153,7 +153,7 @@ const contentByLang = {
     subtitle: "Site officiel de mariage et liste de lune de miel • Camila & Connor",
     updated: "Dernière mise à jour : Septembre 2026",
     backBtn: "Retour au Mariage",
-    jurisdictionsBadge: "Canada • États-Unis • El Salvador",
+    jurisdictionsBadge: "Canada • États-Unis (Lois Fédérales et d'États) • El Salvador",
     intro: "Bienvenue sur le site commémoratif du mariage de Camila Urquilla et Connor Shields. En accédant à ce site, en confirmant votre présence (RSVP) ou en participant à notre liste de lune de miel, vous acceptez les présentes conditions.",
     sections: [
       {

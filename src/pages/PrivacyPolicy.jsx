@@ -31,8 +31,8 @@ const contentByLang = {
     subtitle: "Sitio Conmemorativo de Boda Camila & Connor",
     updated: "Última actualización: Septiembre de 2026",
     backBtn: "Volver a la Boda",
-    jurisdictionsBadge: "Canadá (PIPEDA) • Estados Unidos (CalOPPA) • El Salvador",
-    intro: "En el marco de la celebración de la boda de Camila Urquilla y Connor Shields, valoramos profundamente tu confianza y privacidad. Esta Política de Privacidad describe de manera transparente qué datos personales se recopilan a través de este sitio web, con qué finalidad, cómo se protegen y cuáles son tus derechos, en estricto cumplimiento con las normativas aplicables en Canadá (Personal Information Protection and Electronic Documents Act - PIPEDA), los Estados Unidos de América (California Online Privacy Protection Act - CalOPPA) y la República de El Salvador.",
+    jurisdictionsBadge: "Canadá (PIPEDA) • Estados Unidos (Leyes Federales y Estatales) • El Salvador",
+    intro: "En el marco de la celebración de la boda de Camila Urquilla y Connor Shields, valoramos profundamente tu confianza y privacidad. Esta Política de Privacidad describe de manera transparente qué datos personales se recopilan a través de este sitio web, con qué finalidad, cómo se protegen y cuáles son tus derechos, en estricto cumplimiento con las normativas aplicables en Canadá (Personal Information Protection and Electronic Documents Act - PIPEDA), los Estados Unidos de América (directrices de la FTC y legislaciones de privacidad vigentes en todos los estados, tales como California, Nueva York, Florida, Texas, Virginia, entre otros) y la República de El Salvador.",
     sections: [
       {
         id: "datos-recopilados",
@@ -81,7 +81,7 @@ const contentByLang = {
         title: "6. Cumplimiento Internacional Específico",
         items: [
           "Canadá (PIPEDA): Se garantiza el principio de consentimiento informado y voluntario. Puedes consultar en cualquier momento la información suministrada o solicitar su modificación.",
-          "Estados Unidos (CalOPPA / Reglamentaciones Estatales): Este sitio respeta la privacidad de los usuarios de EE.UU. No rastreamos usuarios a través de sitios web de terceros ('Do Not Track').",
+          "Estados Unidos (Leyes Federales y Estatales de Privacidad): Este sitio respeta la privacidad de los invitados en todos los estados y territorios de EE. UU. (incluyendo California, Nueva York, Florida, Texas, Virginia, entre otros). No rastreamos usuarios entre sitios web de terceros ('Do Not Track'), no vendemos datos de consumidores ni realizamos perfilado comercial.",
           "El Salvador: En apego a las disposiciones de protección de datos personales y comercio electrónico, los datos se recaban con fines legítimos expresos y bajo estrictos deberes de confidencialidad."
         ]
       },
@@ -99,8 +99,8 @@ const contentByLang = {
     subtitle: "Camila & Connor Wedding Memorial Website",
     updated: "Last updated: September 2026",
     backBtn: "Back to Wedding",
-    jurisdictionsBadge: "Canada (PIPEDA) • United States (CalOPPA) • El Salvador",
-    intro: "In celebrating the wedding of Camila Urquilla and Connor Shields, your privacy and trust are of paramount importance to us. This Privacy Policy transparently outlines what personal data is collected through this website, how it is used and protected, and what rights you retain, in compliance with applicable standards in Canada (PIPEDA), the United States (CalOPPA), and the Republic of El Salvador.",
+    jurisdictionsBadge: "Canada (PIPEDA) • United States (Federal & State Laws) • El Salvador",
+    intro: "In celebrating the wedding of Camila Urquilla and Connor Shields, your privacy and trust are of paramount importance to us. This Privacy Policy transparently outlines what personal data is collected through this website, how it is used and protected, and what rights you retain, in compliance with applicable standards in Canada (PIPEDA), the United States of America (FTC consumer protection standards and comprehensive state privacy laws across California, New York, Florida, Texas, Virginia, and all US jurisdictions), and the Republic of El Salvador.",
     sections: [
       {
         id: "datos-recopilados",
@@ -149,7 +149,7 @@ const contentByLang = {
         title: "6. International Regulatory Compliance",
         items: [
           "Canada (PIPEDA): Informed, voluntary consent is respected. You may inspect or modify your submitted details at any time.",
-          "United States (CalOPPA / State Laws): We do not track visitors across third-party websites or sell consumer data.",
+          "United States (Federal & State Privacy Standards): We protect guest privacy across all 50 states and territories. We do not sell or monetize personal information, we honor browser 'Do Not Track' signals, and we afford all US guests the right to inspect, update, or remove their data.",
           "El Salvador: All personal and transactional details are collected with explicit consent and handled under confidentiality."
         ]
       },
@@ -167,8 +167,8 @@ const contentByLang = {
     subtitle: "Site commémoratif de mariage de Camila & Connor",
     updated: "Dernière mise à jour : Septembre 2026",
     backBtn: "Retour au Mariage",
-    jurisdictionsBadge: "Canada (LPRPDE / PIPEDA) • États-Unis (CalOPPA) • El Salvador",
-    intro: "Dans le cadre de la célébration du mariage de Camila Urquilla et Connor Shields, nous accordons une grande importance à votre vie privée. Cette politique de confidentialité explique en toute transparence quelles informations personnelles sont recueillies, comment elles sont protégées et vos droits en vertu des lois canadiennes, américaines et salvadoriennes.",
+    jurisdictionsBadge: "Canada (LPRPDE / PIPEDA) • États-Unis (Lois Fédérales et d'États) • El Salvador",
+    intro: "Dans le cadre de la célébration du mariage de Camila Urquilla et Connor Shields, nous accordons une grande importance à votre vie privée. Cette politique de confidentialité explique en toute transparence quelles informations personnelles sont recueillies, comment elles sont protégées et vos droits en vertu des lois canadiennes (LPRPDE/PIPEDA), américaines (normes fédérales FTC et législations de confidentialité de l'ensemble des États américains) et salvadoriennes.",
     sections: [
       {
         id: "datos-recopilados",
@@ -199,8 +199,14 @@ const contentByLang = {
         body: "Vos renseignements ne seront jamais vendus, loués ou partagés avec des tiers à des fins commerciales ou publicitaires."
       },
       {
+        id: "regulaciones",
+        title: "5. Conformité Internationale (Canada, États-Unis, El Salvador)",
+        body: "Nous garantissons le respect des normes fédérales et étatiques américaines (protection contre la vente de données et prise en compte des requêtes de suppression), canadiennes (consentement éclairé sous la LPRPDE) et salvadoriennes.",
+        items: []
+      },
+      {
         id: "derechos-contacto",
-        title: "5. Vos Droits et Contact",
+        title: "6. Vos Droits et Contact",
         body: "Vous pouvez à tout moment demander la modification ou suppression de vos données en écrivant à :",
         email: "rsvp@shieldsurquilla.com"
       }
