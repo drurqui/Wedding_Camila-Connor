@@ -24,13 +24,27 @@ stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 # --- 2. INICIALIZAR FIREBASE ---
+db = None
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase-key.json")
-    firebase_admin.initialize_app(cred, {
-        'projectId': 'boda-shields-urquilla',
-    })
+    try:
+        if os.path.exists("firebase-key.json"):
+            cred = credentials.Certificate("firebase-key.json")
+            firebase_admin.initialize_app(cred, {
+                'projectId': 'boda-shields-urquilla',
+            })
+        else:
+            firebase_admin.initialize_app(options={'projectId': 'boda-shields-urquilla'})
+    except Exception as e:
+        print(f"[Firebase Init Warning] {e}. Inicializando por defecto...")
+        try:
+            firebase_admin.initialize_app(options={'projectId': 'boda-shields-urquilla'})
+        except Exception as e2:
+            print(f"[Firebase Init Default Warning] {e2}")
 
-db = firestore.client()
+try:
+    db = firestore.client()
+except Exception as e:
+    print(f"[Firestore Client Warning] {e}")
 
 # --- 3. CONFIGURACIÓN CORS ---
 app.add_middleware(
@@ -122,7 +136,7 @@ async def crear_payment_intent(regalo: RegaloRequest):
         intent = stripe.PaymentIntent.create(
             amount=monto_total_centavos,
             currency=moneda_usada,
-            automatic_payment_methods={"enabled": True},
+            payment_method_types=['card'],
             receipt_email=regalo.email_invitado if (regalo.email_invitado and "@" in regalo.email_invitado) else None,
             description=f"Boda C&C • {regalo.nombre_regalo} ({nombre_display})",
             metadata={
@@ -185,12 +199,7 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
             "fecha": firestore.SERVER_TIMESTAMP
         }
 
-        if session_id:
-            db.collection("regalos_luna_miel").document(session_id).set(doc_data, merge=True)
-        else:
-            db.collection("regalos_luna_miel").add(doc_data)
-        print(f"[Checkout] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
-
+        # 1. Enviar email inmediatamente en segundo plano
         if email_invitado and "@" in email_invitado and email_invitado != "Sin email":
             req_agrad = AgradecimientoRegaloRequest(
                 email=email_invitado,
@@ -202,6 +211,17 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
                 es_anonimo=(metadata.get("es_anonimo") == "true")
             )
             background_tasks.add_task(enviar_email_agradecimiento_tarea, req_agrad, session_id)
+
+        # 2. Guardar en Firestore sin bloquear
+        if db is not None:
+            try:
+                if session_id:
+                    db.collection("regalos_luna_miel").document(session_id).set(doc_data, merge=True)
+                else:
+                    db.collection("regalos_luna_miel").add(doc_data)
+                print(f"[Checkout] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
+            except Exception as e_fs:
+                print(f"[Firestore Checkout Warning] {e_fs}")
 
     elif event_type == 'payment_intent.succeeded':
         intent = event['data']['object']
@@ -218,23 +238,7 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
         regalo_elegido = metadata.get("regalo", "Regalo General")
         pi_id = intent.get("id")
 
-        doc_data = {
-            "nombre": nombre_invitado,
-            "email": email_invitado,
-            "regalo": regalo_elegido,
-            "monto": monto_total,
-            "moneda": moneda,
-            "payment_intent_id": pi_id,
-            "origen": "stripe_elements",
-            "fecha": firestore.SERVER_TIMESTAMP
-        }
-
-        if pi_id:
-            db.collection("regalos_luna_miel").document(pi_id).set(doc_data, merge=True)
-        else:
-            db.collection("regalos_luna_miel").add(doc_data)
-        print(f"[Elements] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
-
+        # 1. Enviar email de agradecimiento inmediatamente en segundo plano (cero retraso)
         if email_invitado and "@" in email_invitado and email_invitado != "Sin email":
             req_agrad = AgradecimientoRegaloRequest(
                 email=email_invitado,
@@ -246,6 +250,28 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
                 es_anonimo=(metadata.get("es_anonimo") == "true")
             )
             background_tasks.add_task(enviar_email_agradecimiento_tarea, req_agrad, pi_id)
+
+        # 2. Guardar en Firestore protegido con try/except
+        doc_data = {
+            "nombre": nombre_invitado,
+            "email": email_invitado,
+            "regalo": regalo_elegido,
+            "monto": monto_total,
+            "moneda": moneda,
+            "payment_intent_id": pi_id,
+            "origen": "stripe_elements",
+            "fecha": firestore.SERVER_TIMESTAMP
+        }
+
+        if db is not None:
+            try:
+                if pi_id:
+                    db.collection("regalos_luna_miel").document(pi_id).set(doc_data, merge=True)
+                else:
+                    db.collection("regalos_luna_miel").add(doc_data)
+                print(f"[Elements] Regalo de {nombre_invitado} por {moneda} ${monto_total} guardado!")
+            except Exception as e_fs:
+                print(f"[Firestore Elements Warning] {e_fs}")
 
     return {"status": "success"}
 
@@ -694,20 +720,18 @@ def generar_html_email_agradecimiento_regalo(data: AgradecimientoRegaloRequest) 
 </html>"""
     return subject, html
 
+_cache_emails_regalos = set()
+
 def enviar_email_agradecimiento_tarea(data: AgradecimientoRegaloRequest, doc_id: Optional[str] = None):
     if not data.email or "@" not in data.email:
         return
 
-    # Evitar duplicados si ya se envió para esta transacción
-    if doc_id:
-        try:
-            doc_ref = db.collection("regalos_luna_miel").document(doc_id)
-            doc_snap = doc_ref.get()
-            if doc_snap.exists and doc_snap.to_dict().get("email_agradecimiento_enviado"):
-                print(f"[Gift Email] Ya enviado previamente para {doc_id}, omitiendo duplicado.")
-                return
-        except Exception as e:
-            print(f"[Gift Email Check Error] {e}")
+    # Evitar duplicados inmediatos sin bloquear con llamadas de red
+    dedup_key = f"{doc_id}_{data.email}" if doc_id else f"{data.email}_{data.monto}_{data.regalo}"
+    if dedup_key in _cache_emails_regalos:
+        print(f"[Gift Email] Ya enviado previamente para {dedup_key}, omitiendo duplicado.")
+        return
+    _cache_emails_regalos.add(dedup_key)
 
     smtp_host = os.getenv("SMTP_HOST", "mailout.easymail.ca")
     smtp_port = int(os.getenv("SMTP_PORT", 587))

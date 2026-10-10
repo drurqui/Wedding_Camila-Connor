@@ -77,7 +77,21 @@ export const StripePaymentForm = ({ onCancel, onSuccess, totalAmount, currency, 
           </Box>
         )}
         <Box sx={{ display: isReady ? 'block' : 'none' }}>
-          <PaymentElement onReady={() => setIsReady(true)} />
+          <PaymentElement 
+            options={{
+              layout: 'tabs',
+              wallets: {
+                link: 'never',
+              },
+              fields: {
+                billingDetails: {
+                  name: 'auto',
+                  email: 'never',
+                },
+              },
+            }}
+            onReady={() => setIsReady(true)} 
+          />
         </Box>
       </Box>
 
