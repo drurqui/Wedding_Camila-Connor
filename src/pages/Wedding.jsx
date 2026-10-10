@@ -164,7 +164,7 @@ const Wedding = () => {
   // Inicializar Stripe
   useEffect(() => {
     const initStripe = async () => {
-      let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51T6EVzCHnY5RPhVP8UR2Q1RTS0h6mFprokulBZwMg8uhRj4llncGk8vOIE2QSEq4dLBTd6ad4qkGQfHB18bdpDA600FuWwL74l';
+      let key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_live_51T6EVpFzg1sm0y2ZIeKNYolPAyKDajIXgbcdftt6Upaigbypz07SqUTL8mpsVOjzJQMTgGKDOVSeHSD4PSHmtMhN00P7a0sU9i';
       const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:8080'
         : 'https://api-boda-736009271165.us-central1.run.app';
