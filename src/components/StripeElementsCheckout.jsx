@@ -13,12 +13,13 @@ export const StripePaymentForm = ({ onCancel, onSuccess, totalAmount, currency, 
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !isReady) {
       return;
     }
 
@@ -66,8 +67,18 @@ export const StripePaymentForm = ({ onCancel, onSuccess, totalAmount, currency, 
         </Alert>
       )}
 
-      <Box sx={{ mb: 3, p: 2, bgcolor: colors?.sandLight || '#faf6ef', borderRadius: '0 12px 12px 0', border: `1px solid ${colors?.copperLight || '#d98d68'}` }}>
-        <PaymentElement />
+      <Box sx={{ mb: 3, p: 2, bgcolor: colors?.sandLight || '#faf6ef', borderRadius: '0 12px 12px 0', border: `1px solid ${colors?.copperLight || '#d98d68'}`, minHeight: '120px' }}>
+        {!isReady && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 3, gap: 1 }}>
+            <CircularProgress size={26} sx={{ color: colors?.terracotta || '#c7784f' }} />
+            <Typography variant="caption" sx={{ color: colors?.terracotta || '#c7784f', fontWeight: 500 }}>
+              {t('common.loading', 'Cargando formulario de pago seguro...')}
+            </Typography>
+          </Box>
+        )}
+        <Box sx={{ display: isReady ? 'block' : 'none' }}>
+          <PaymentElement onReady={() => setIsReady(true)} />
+        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
@@ -81,7 +92,7 @@ export const StripePaymentForm = ({ onCancel, onSuccess, totalAmount, currency, 
         <Button
           type="submit"
           variant="contained"
-          disabled={!stripe || loading}
+          disabled={!stripe || !isReady || loading}
           sx={{
             bgcolor: colors?.terracotta || '#c7784f',
             color: '#fff',
