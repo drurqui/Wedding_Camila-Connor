@@ -170,20 +170,24 @@ async def stripe_webhook(request: Request):
         customer_details = session.get("customer_details") or {}
         metadata = session.get("metadata") or {}
         
-        # Deduplicación persistente en memoria y metadatos
-        if metadata.get("email_agradecimiento_enviado") == "true" or session_id in _cache_emails_regalos:
-            print(f"[Checkout] Sesión {session_id} ya procesada previamente, omitiendo.")
+        # Deduplicación persistente en memoria y metadatos en vivo de Stripe
+        if session_id in _cache_emails_regalos:
+            print(f"[Checkout] Sesión {session_id} ya en memoria local, omitiendo.")
             return {"status": "already_processed"}
 
-        _cache_emails_regalos.add(session_id)
-
-        # Si tiene payment_intent asociado, marcarlo en Stripe
         pi_id = session.get("payment_intent")
         if pi_id:
             try:
+                live_intent = stripe.PaymentIntent.retrieve(pi_id)
+                if live_intent.metadata.get("email_agradecimiento_enviado") == "true":
+                    print(f"[Checkout] PaymentIntent {pi_id} ya tiene email_agradecimiento_enviado=true en Stripe, omitiendo.")
+                    _cache_emails_regalos.add(session_id)
+                    return {"status": "already_processed"}
                 stripe.PaymentIntent.modify(pi_id, metadata={"email_agradecimiento_enviado": "true"})
             except Exception as e_meta:
                 print(f"[Stripe Metadata Warning Checkout] {e_meta}")
+
+        _cache_emails_regalos.add(session_id)
 
         nombre_invitado = customer_details.get("name") or metadata.get("nombre_invitado", "Anónimo")
         email_invitado = customer_details.get("email") or metadata.get("email_invitado", "")
@@ -214,18 +218,25 @@ async def stripe_webhook(request: Request):
         if intent.get("invoice") or metadata.get("checkout_session_id"):
             return {"status": "ignored_duplicate_checkout"}
 
-        # Deduplicación persistente en Stripe + memoria local
-        if metadata.get("email_agradecimiento_enviado") == "true" or pi_id in _cache_emails_regalos:
-            print(f"[Elements] PaymentIntent {pi_id} ya procesado previamente, omitiendo duplicado.")
+        # Deduplicación persistente en memoria local
+        if pi_id in _cache_emails_regalos:
+            print(f"[Elements] PaymentIntent {pi_id} ya en memoria local, omitiendo.")
             return {"status": "already_processed"}
 
-        _cache_emails_regalos.add(pi_id)
-
-        # Marcar de inmediato en los metadatos de Stripe para persistencia global
+        # Consultar estado en vivo en Stripe (el evento de Stripe trae un snapshot congelado en el tiempo)
         try:
+            live_intent = stripe.PaymentIntent.retrieve(pi_id)
+            if live_intent.metadata.get("email_agradecimiento_enviado") == "true":
+                print(f"[Elements] PaymentIntent {pi_id} ya marcado como enviado en vivo en Stripe, omitiendo.")
+                _cache_emails_regalos.add(pi_id)
+                return {"status": "already_processed"}
+            
+            # Marcar de inmediato en Stripe antes de despachar
             stripe.PaymentIntent.modify(pi_id, metadata={"email_agradecimiento_enviado": "true"})
         except Exception as e_meta:
             print(f"[Stripe Metadata Warning PI] {e_meta}")
+
+        _cache_emails_regalos.add(pi_id)
 
         nombre_invitado = metadata.get("nombre_invitado") or "Anónimo"
         email_invitado = intent.get("receipt_email") or metadata.get("email_invitado", "")
