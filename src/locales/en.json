@@ -622,9 +622,10 @@
       "q3": "WHAT IS THE DRESS CODE?",
       "a3": "This event requires formal attire. For Women: Floor-length gowns or elegant ankle-grazing dresses. We encourage the use of colorful outfits that show your personality! Keep in mind that Forêt is located in the mountains, so the venue features uneven natural terrain, and evenings can get a bit breezy. Block heels, platforms, or flats are highly recommended, along with a small cover or light jacket. For Men: A well-tailored suit. Feel free to explore elegant colors such as tan, brown, or go with a classic charcoal, black, or gray suit paired with a crisp light dress shirt and a necktie or bow tie. A tuxedo is entirely appropriate but not strictly required. Dress shoes are a must.",
       "dressCodeNoteTitle": "Strict Color Restriction",
-      "dressCodeNoteText": "We prohibit the use of dresses or suits that are white or mostly white. Any person wearing inappropriate attire will be kindly asked to change.",
+      "dressCodeNoteText": "We kindly request avoiding dresses or suits that are white, mostly white, or pastel yellow. We ask that you please reserve these shades exclusively for the bride.",
       "reservedColors": {
-        "white": "White or Mostly White"
+        "white": "White or Mostly White",
+        "pastelYellow": "Pastel Yellow"
       }
     },
     "faqs": {

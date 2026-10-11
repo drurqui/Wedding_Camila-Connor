@@ -622,9 +622,10 @@
       "q3": "QUEL EST LE CODE VESTIMENTAIRE ?",
       "a3": "Cet événement exige une tenue formelle. Pour les dames : Robes longues jusqu'au sol ou élégantes descendant aux chevilles. Nous vous encourageons à porter des tenues colorées reflétant votre personnalité ! N'oubliez pas que Forêt est situé dans les montagnes, avec un terrain naturel et des soirées fraîches et venteuses. Les talons épais (block heels), plateformes ou chaussures plates sont vivement recommandés, ainsi qu'une petite veste ou étole. Pour les messieurs : Costume bien taillé. N'hésitez pas à opter pour des teintes élégantes (havane, marron, ou classique gris, anthracite ou noir) avec une chemise de soirée et cravate ou nœud papillon. Le smoking est tout à fait bienvenu mais pas obligatoire. Chaussures de ville indispensables.",
       "dressCodeNoteTitle": "Restriction Stricte de Couleur",
-      "dressCodeNoteText": "Il est strictement interdit de porter des robes ou costumes blancs ou majoritairement blancs. Toute personne vêtue de blanc sera aimablement invitée à se changer.",
+      "dressCodeNoteText": "Il est strictement interdit de porter des robes ou costumes blancs, majoritairement blancs ou jaune pastel. Nous vous remercions de réserver ces teintes exclusivement pour la mariée.",
       "reservedColors": {
-        "white": "Blanc ou Majoritairement Blanc"
+        "white": "Blanc ou Majoritairement Blanc",
+        "pastelYellow": "Jaune Pastel"
       }
     },
     "faqs": {

@@ -622,9 +622,10 @@
       "q3": "¿CUÁL ES EL CÓDIGO DE VESTIMENTA?",
       "a3": "Este evento requiere vestimenta formal. Damas: Vestidos largos hasta el suelo o elegantes vestidos al tobillo. ¡Las animamos a usar atuendos coloridos que reflejen su personalidad! Tengan en cuenta que Forêt está en la montaña, por lo que el lugar tiene terreno natural y las noches pueden ser frescas con brisa. Se recomiendan ampliamente tacones anchos (block heels), plataformas o zapatos planos, además de llevar un abrigo ligero o chal. Caballeros: Traje formal bien confeccionado. Siéntanse libres de elegir colores elegantes como tostado/tan, marrón, o un clásico traje gris, carbón o negro con camisa de vestir formal y corbata o corbatín. El esmoquin es bienvenido pero no obligatorio. Zapatos de vestir indispensables.",
       "dressCodeNoteTitle": "Restricción Estricta de Color",
-      "dressCodeNoteText": "Queda estrictamente prohibido el uso de vestidos o trajes blancos o mayoritariamente blancos. A cualquier persona que vista de blanco se le solicitará amablemente cambiarse.",
+      "dressCodeNoteText": "Queda estrictamente prohibido el uso de vestidos o trajes blancos, mayoritariamente blancos o en tono amarillo pastel. Agradecemos de corazón reservar estos tonos exclusivamente para la novia.",
       "reservedColors": {
-        "white": "Blanco o Mayoritariamente Blanco"
+        "white": "Blanco o Mayoritariamente Blanco",
+        "pastelYellow": "Amarillo Pastel"
       }
     },
     "faqs": {

@@ -1370,7 +1370,8 @@ const Wedding = () => {
                           {/* Chips visuales de colores reservados */}
                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.2 }}>
                             {[
-                              { label: t('wedding.details.reservedColors.white'), color: '#FFFFFF' },
+                              { label: t('wedding.details.reservedColors.white', 'Blanco o Mayoritariamente Blanco'), color: '#FFFFFF' },
+                              { label: t('wedding.details.reservedColors.pastelYellow', 'Amarillo Pastel'), color: '#FEF08A' },
                             ].map((swatch, sIdx) => (
                               <Box
                                 key={sIdx}
