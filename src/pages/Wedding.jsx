@@ -2168,25 +2168,7 @@ const Wedding = () => {
                     console.warn("Error guardando regalo en Firestore:", err);
                   }
 
-                  // Enviar correo de agradecimiento si proporcionó email
-                  if (formData.email.trim() && formData.email.includes('@')) {
-                    const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                      ? 'http://localhost:8080'
-                      : 'https://api-boda-736009271165.us-central1.run.app';
-                    fetch(`${backendBase}/enviar-agradecimiento-regalo`, {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        email: formData.email.trim(),
-                        nombre_donante: formData.esAnonimo ? (t('wedding.honeymoon.modal.anonymous', 'Anónimo')) : donorName,
-                        regalo: giftTitle,
-                        monto: totalPaid,
-                        moneda: chosenCurrency,
-                        idioma: i18n.language.substring(0, 2),
-                        es_anonimo: formData.esAnonimo,
-                      })
-                    }).catch(e => console.warn("Error enviando email agradecimiento:", e));
-                  }
+
 
                   setCheckoutModal(prev => ({ ...prev, open: false }));
                   setClientSecret('');
