@@ -149,7 +149,7 @@ async def crear_payment_intent(regalo: RegaloRequest):
 _cache_emails_regalos = set()
 
 @app.post("/webhook")
-async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
+async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
 
@@ -202,7 +202,8 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
                 es_anonimo=(metadata.get("es_anonimo") == "true"),
                 payment_intent_id=session_id
             )
-            background_tasks.add_task(enviar_email_agradecimiento_tarea, req_agrad, session_id)
+            # Enviar directamente mientras la petición está activa (CPU al 100%, toma ~1.2s)
+            enviar_email_agradecimiento_tarea(req_agrad, session_id)
 
     elif event_type == 'payment_intent.succeeded':
         intent = event['data']['object']
@@ -243,7 +244,8 @@ async def stripe_webhook(request: Request, background_tasks: BackgroundTasks):
                 es_anonimo=(metadata.get("es_anonimo") == "true"),
                 payment_intent_id=pi_id
             )
-            background_tasks.add_task(enviar_email_agradecimiento_tarea, req_agrad, pi_id)
+            # Enviar directamente mientras la petición está activa (CPU al 100%, toma ~1.2s)
+            enviar_email_agradecimiento_tarea(req_agrad, pi_id)
 
     return {"status": "success"}
 
@@ -500,12 +502,12 @@ def enviar_email_rsvp_tarea(data: RSVPEmailRequest):
         print(f"[RSVP Email Error] Fallo al enviar a {data.email}: {e}")
 
 @app.post("/enviar-confirmacion-rsvp")
-async def enviar_confirmacion_rsvp(request: RSVPEmailRequest, background_tasks: BackgroundTasks):
+async def enviar_confirmacion_rsvp(request: RSVPEmailRequest):
     if not request.email or "@" not in request.email:
         raise HTTPException(status_code=400, detail="Dirección de correo inválida")
     
-    background_tasks.add_task(enviar_email_rsvp_tarea, request)
-    return {"status": "queued", "message": "Confirmación enviada en segundo plano"}
+    enviar_email_rsvp_tarea(request)
+    return {"status": "success", "message": "Confirmación enviada con éxito"}
 
 
 # --- 6. ENVÍO DE EMAIL DE AGRADECIMIENTO POR REGALO ---
@@ -729,7 +731,7 @@ def enviar_email_agradecimiento_tarea(data: AgradecimientoRegaloRequest, doc_id:
         print(f"[Gift Email Error] Fallo al enviar a {data.email}: {e}")
 
 @app.post("/enviar-agradecimiento-regalo")
-async def enviar_agradecimiento_regalo(request: AgradecimientoRegaloRequest, background_tasks: BackgroundTasks):
+async def enviar_agradecimiento_regalo(request: AgradecimientoRegaloRequest):
     if not request.email or "@" not in request.email:
         return {"status": "skipped", "message": "Email no proporcionado o inválido"}
     
@@ -745,7 +747,7 @@ async def enviar_agradecimiento_regalo(request: AgradecimientoRegaloRequest, bac
         except Exception:
             pass
 
-    background_tasks.add_task(enviar_email_agradecimiento_tarea, request, request.payment_intent_id)
-    return {"status": "queued", "message": "Email de agradecimiento en cola"}
+    enviar_email_agradecimiento_tarea(request, request.payment_intent_id)
+    return {"status": "success", "message": "Email de agradecimiento enviado con éxito"}
 
 
