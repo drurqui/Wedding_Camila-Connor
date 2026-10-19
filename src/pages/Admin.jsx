@@ -899,7 +899,10 @@ const Admin = () => {
                                         <Typography variant="caption" display="block"><strong>{t('admin.table.entree')}</strong> {inv.entree || t('admin.table.notSelected')}</Typography>
                                         {inv.dieta && inv.dieta !== 'None' && (
                                           <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 'bold', mt: 0.5 }} display="block">
-                                            {t('admin.table.allergy')}{inv.dieta}
+                                            {t('admin.table.allergy')}
+                                            {inv.dieta === 'Otra'
+                                              ? (inv.dieta_otra ? `${inv.dieta_otra} (Otra)` : 'Otra')
+                                              : `${inv.dieta}${inv.dieta_otra ? ` (${inv.dieta_otra})` : ''}`}
                                           </Typography>
                                         )}
                                       </Box>
@@ -1015,7 +1018,11 @@ const Admin = () => {
                             {rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si' && i.dieta && i.dieta !== 'None').map((inv, idx) => (
                               <Box key={idx} sx={{ p: 1.5, mb: 1.5, borderLeft: '3px solid #d32f2f', bgcolor: '#fff5f5', borderRadius: '0 4px 4px 0' }}>
                                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{inv.nombre}</Typography>
-                                <Typography variant="caption" sx={{ color: '#d32f2f', display: 'block', mt: 0.5 }}>{inv.dieta}</Typography>
+                                <Typography variant="caption" sx={{ color: '#d32f2f', display: 'block', mt: 0.5 }}>
+                                  {inv.dieta === 'Otra'
+                                    ? (inv.dieta_otra ? `${inv.dieta_otra} (Otra)` : 'Otra / No listada')
+                                    : `${inv.dieta}${inv.dieta_otra ? ` (${inv.dieta_otra})` : ''}`}
+                                </Typography>
                               </Box>
                             ))}
                             {rsvps.flatMap(r => r.invitados || []).filter(i => i.asistencia === 'si' && i.dieta && i.dieta !== 'None').length === 0 && (
@@ -2452,13 +2459,87 @@ const Admin = () => {
                         <>
                           <Grid item xs={12} sm={4}><TextField fullWidth size="small" label={t('admin.editRsvp.starter')} value="Menú Infantil" disabled sx={{ bgcolor: '#ebebeb' }} /></Grid>
                           <Grid item xs={12} sm={4}><TextField fullWidth size="small" label={t('admin.editRsvp.entree')} value="Menú Infantil" disabled sx={{ bgcolor: '#ebebeb' }} /></Grid>
-                          <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>{t('admin.editRsvp.allergies')}</InputLabel><Select value={inv.dieta || 'None'} label={t('admin.editRsvp.allergies')} onChange={(e) => handleRsvpGuestChange(idx, 'dieta', e.target.value)}><MenuItem value="None">Ninguna</MenuItem><MenuItem value="Gluten free">Gluten free</MenuItem><MenuItem value="Vegetarian">Vegetariano</MenuItem><MenuItem value="Vegan">Vegano</MenuItem></Select></FormControl></Grid>
+                          <Grid item xs={12} sm={4}>
+                            <FormControl fullWidth size="small">
+                              <InputLabel>{t('admin.editRsvp.allergies')}</InputLabel>
+                              <Select
+                                value={inv.dieta || 'None'}
+                                label={t('admin.editRsvp.allergies')}
+                                onChange={(e) => {
+                                  handleRsvpGuestChange(idx, 'dieta', e.target.value);
+                                  if (e.target.value === 'None') handleRsvpGuestChange(idx, 'dieta_otra', '');
+                                }}
+                              >
+                                <MenuItem value="None">Ninguna</MenuItem>
+                                <MenuItem value="Vegetarian">Vegetariano</MenuItem>
+                                <MenuItem value="Vegan">Vegano</MenuItem>
+                                <MenuItem value="Gluten free">Gluten free</MenuItem>
+                                <MenuItem value="Dairy free">Sin lácteos</MenuItem>
+                                <MenuItem value="Nut allergy">Frutos secos / Nueces</MenuItem>
+                                <MenuItem value="Seafood allergy">Mariscos / Crustáceos</MenuItem>
+                                <MenuItem value="Fish allergy">Pescado</MenuItem>
+                                <MenuItem value="Egg allergy">Huevo</MenuItem>
+                                <MenuItem value="Soy allergy">Soya</MenuItem>
+                                <MenuItem value="Kosher">Kosher</MenuItem>
+                                <MenuItem value="Halal">Halal</MenuItem>
+                                <MenuItem value="Otra">Otra</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                          {inv.dieta && inv.dieta !== 'None' && (
+                            <Grid item xs={12}>
+                              <TextField
+                                fullWidth
+                                size="small"
+                                label={inv.dieta === 'Otra' ? "Especificar alergia / restricción" : "Detalles o notas de la alergia"}
+                                value={inv.dieta_otra || ''}
+                                onChange={(e) => handleRsvpGuestChange(idx, 'dieta_otra', e.target.value)}
+                              />
+                            </Grid>
+                          )}
                         </>
                       ) : (
                         <>
                           <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>{t('admin.editRsvp.starter')}</InputLabel><Select value={inv.starter || ''} label={t('admin.editRsvp.starter')} onChange={(e) => handleRsvpGuestChange(idx, 'starter', e.target.value)}><MenuItem value='Caesar Salad'>"Prince of Wales" Caesar Salad</MenuItem><MenuItem value='Tomato Soup'>Tomato Soup</MenuItem></Select></FormControl></Grid>
                           <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>{t('admin.editRsvp.entree')}</InputLabel><Select value={inv.entree || ''} label={t('admin.editRsvp.entree')} onChange={(e) => handleRsvpGuestChange(idx, 'entree', e.target.value)}><MenuItem value='Grilled Chicken Breast'>Grilled Chicken Breast</MenuItem><MenuItem value='Three Cheese Tortellini'>Three Cheese Tortellini</MenuItem></Select></FormControl></Grid>
-                          <Grid item xs={12} sm={4}><FormControl fullWidth size="small"><InputLabel>{t('admin.editRsvp.allergies')}</InputLabel><Select value={inv.dieta || 'None'} label={t('admin.editRsvp.allergies')} onChange={(e) => handleRsvpGuestChange(idx, 'dieta', e.target.value)}><MenuItem value="None">Ninguna</MenuItem><MenuItem value="Gluten free">Gluten free</MenuItem><MenuItem value="Vegetarian">Vegetariano</MenuItem><MenuItem value="Vegan">Vegano</MenuItem></Select></FormControl></Grid>
+                          <Grid item xs={12} sm={4}>
+                            <FormControl fullWidth size="small">
+                              <InputLabel>{t('admin.editRsvp.allergies')}</InputLabel>
+                              <Select
+                                value={inv.dieta || 'None'}
+                                label={t('admin.editRsvp.allergies')}
+                                onChange={(e) => {
+                                  handleRsvpGuestChange(idx, 'dieta', e.target.value);
+                                  if (e.target.value === 'None') handleRsvpGuestChange(idx, 'dieta_otra', '');
+                                }}
+                              >
+                                <MenuItem value="None">Ninguna</MenuItem>
+                                <MenuItem value="Vegetarian">Vegetariano</MenuItem>
+                                <MenuItem value="Vegan">Vegano</MenuItem>
+                                <MenuItem value="Gluten free">Gluten free</MenuItem>
+                                <MenuItem value="Dairy free">Sin lácteos</MenuItem>
+                                <MenuItem value="Nut allergy">Frutos secos / Nueces</MenuItem>
+                                <MenuItem value="Seafood allergy">Mariscos / Crustáceos</MenuItem>
+                                <MenuItem value="Fish allergy">Pescado</MenuItem>
+                                <MenuItem value="Egg allergy">Huevo</MenuItem>
+                                <MenuItem value="Soy allergy">Soya</MenuItem>
+                                <MenuItem value="Kosher">Kosher</MenuItem>
+                                <MenuItem value="Halal">Halal</MenuItem>
+                                <MenuItem value="Otra">Otra</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                          {inv.dieta && inv.dieta !== 'None' && (
+                            <Grid item xs={12}>
+                              <TextField
+                                fullWidth
+                                size="small"
+                                label={inv.dieta === 'Otra' ? "Especificar alergia / restricción" : "Detalles o notas de la alergia"}
+                                value={inv.dieta_otra || ''}
+                                onChange={(e) => handleRsvpGuestChange(idx, 'dieta_otra', e.target.value)}
+                              />
+                            </Grid>
+                          )}
                         </>
                       )
                     )}

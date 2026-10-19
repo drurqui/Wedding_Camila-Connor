@@ -64,9 +64,45 @@ const Home = () => {
         const mergedGuests = match.invitados.map(invMaster => {
           let respuestaPrevia = rsvpData?.invitados?.find(r => normalize(r.nombre) === normalize(invMaster.nombre));
           if (respuestaPrevia) {
-            if (respuestaPrevia.tipo !== invMaster.tipo) { return { ...invMaster, asistencia: respuestaPrevia.asistencia || 'si', dieta: respuestaPrevia.dieta || 'None', starter: invMaster.tipo === 'niño' ? 'Menú Infantil' : '', entree: invMaster.tipo === 'niño' ? 'Menú Infantil' : '' }; }
-            return { ...invMaster, ...respuestaPrevia };
-          } else { const isNino = invMaster.tipo === 'niño'; return { ...invMaster, asistencia: 'si', dieta: 'None', starter: isNino ? 'Menú Infantil' : '', entree: isNino ? 'Menú Infantil' : '' }; }
+            const knownDiets = [
+              'None', 'Vegetarian', 'Vegan', 'Gluten free', 'Dairy free',
+              'Nut allergy', 'Seafood allergy', 'Fish allergy', 'Egg allergy',
+              'Soy allergy', 'Kosher', 'Halal', 'Otra'
+            ];
+            let initialDieta = respuestaPrevia.dieta || 'None';
+            let initialDietaOtra = respuestaPrevia.dieta_otra || '';
+            if (initialDieta && !knownDiets.includes(initialDieta)) {
+              initialDietaOtra = initialDieta;
+              initialDieta = 'Otra';
+            }
+
+            if (respuestaPrevia.tipo !== invMaster.tipo) {
+              return {
+                ...invMaster,
+                asistencia: respuestaPrevia.asistencia || 'si',
+                dieta: initialDieta,
+                dieta_otra: initialDietaOtra,
+                starter: invMaster.tipo === 'niño' ? 'Menú Infantil' : '',
+                entree: invMaster.tipo === 'niño' ? 'Menú Infantil' : ''
+              };
+            }
+            return {
+              ...invMaster,
+              ...respuestaPrevia,
+              dieta: initialDieta,
+              dieta_otra: initialDietaOtra
+            };
+          } else {
+            const isNino = invMaster.tipo === 'niño';
+            return {
+              ...invMaster,
+              asistencia: 'si',
+              dieta: 'None',
+              dieta_otra: '',
+              starter: isNino ? 'Menú Infantil' : '',
+              entree: isNino ? 'Menú Infantil' : ''
+            };
+          }
         });
 
         setInvitacionMaster({ id: matchId, nombre_invitacion: match.nombre_invitacion, email: inputEmail });
@@ -81,8 +117,36 @@ const Home = () => {
   const submitRSVP = async () => {
     setLoading(true);
     let algunAsistente = false;
-    for (const g of guestList) { if (g.asistencia === 'si') { algunAsistente = true; if (!g.starter || !g.entree) { setAlertModal({ open: true, message: t('home.alerts.missingMenu', { name: g.nombre }) }); setLoading(false); window.scrollTo(0, 0); return; } } }
-    const finalGuests = guestList.map(g => g.asistencia === 'no' ? { ...g, dieta: 'None', starter: '', entree: '' } : g);
+    for (const g of guestList) {
+      if (g.asistencia === 'si') {
+        algunAsistente = true;
+        if (!g.starter || !g.entree) {
+          setAlertModal({ open: true, message: t('home.alerts.missingMenu', { name: g.nombre }) });
+          setLoading(false);
+          window.scrollTo(0, 0);
+          return;
+        }
+        if (g.dieta === 'Otra' && (!g.dieta_otra || !g.dieta_otra.trim())) {
+          setAlertModal({
+            open: true,
+            message: t('home.alerts.missingDietOther', { name: g.nombre })
+          });
+          setLoading(false);
+          window.scrollTo(0, 0);
+          return;
+        }
+      }
+    }
+    const finalGuests = guestList.map(g => {
+      if (g.asistencia === 'no') {
+        return { ...g, dieta: 'None', dieta_otra: '', starter: '', entree: '' };
+      }
+      return {
+        ...g,
+        dieta: g.dieta || 'None',
+        dieta_otra: g.dieta === 'None' ? '' : (g.dieta_otra ? g.dieta_otra.trim() : '')
+      };
+    });
     const asistenciaGeneral = algunAsistente ? 'si' : 'no';
     try {
       await setDoc(doc(db, "rsvps_compromiso", invitacionMaster.email), { nombre: invitacionMaster.nombre_invitacion, email: invitacionMaster.email, asistencia: asistenciaGeneral, invitados: finalGuests, fecha: serverTimestamp() }, { merge: true });
@@ -154,10 +218,71 @@ const Home = () => {
               {guestList.map((guest, index) => (
                 <Box key={index} sx={{ border: '1px dashed #711c2e', borderRadius: 2, p: { xs: 2, md: 3 }, mb: 3 }}>
                   <Typography sx={{ color: '#711c2e', fontWeight: 600, fontSize: '1.1rem', mb: 3 }}>{guest.nombre} {guest.tipo === 'niño' && <Chip label={t('home.step2.childBadge')} size="small" sx={{ ml: 1, height: 20, fontSize: '0.7rem' }} />}</Typography>
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: guest.asistencia === 'si' ? 3 : 0 }}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: guest.asistencia === 'si' ? 2 : 0 }}>
                     <FormControl fullWidth sx={{ width: '100%' }}><InputLabel>{t('home.step2.willAttendLabel')}</InputLabel><Select fullWidth value={guest.asistencia} label={t('home.step2.willAttendLabel')} onChange={(e) => handleGuestChange(index, 'asistencia', e.target.value)}><MenuItem value="si">{t('home.step2.willAttendYes')}</MenuItem><MenuItem value="no">{t('home.step2.willAttendNo')}</MenuItem></Select></FormControl>
-                    {guest.asistencia === 'si' && (<FormControl fullWidth sx={{ width: '100%' }}><InputLabel>{t('home.step2.dietLabel')}</InputLabel><Select fullWidth value={guest.dieta} label={t('home.step2.dietLabel')} onChange={(e) => handleGuestChange(index, 'dieta', e.target.value)}><MenuItem value="None">{t('home.step2.dietNone')}</MenuItem><MenuItem value="Gluten free">{t('home.step2.dietGluten')}</MenuItem><MenuItem value="Vegetarian">{t('home.step2.dietVegetarian')}</MenuItem><MenuItem value="Vegan">{t('home.step2.dietVegan')}</MenuItem></Select></FormControl>)}
+                    {guest.asistencia === 'si' && (
+                      <FormControl fullWidth sx={{ width: '100%' }}>
+                        <InputLabel>{t('home.step2.dietLabel')}</InputLabel>
+                        <Select
+                          fullWidth
+                          value={guest.dieta || 'None'}
+                          label={t('home.step2.dietLabel')}
+                          onChange={(e) => {
+                            handleGuestChange(index, 'dieta', e.target.value);
+                            if (e.target.value === 'None') {
+                              handleGuestChange(index, 'dieta_otra', '');
+                            }
+                          }}
+                        >
+                          <MenuItem value="None">{t('home.step2.dietNone')}</MenuItem>
+                          <MenuItem value="Vegetarian">{t('home.step2.dietVegetarian')}</MenuItem>
+                          <MenuItem value="Vegan">{t('home.step2.dietVegan')}</MenuItem>
+                          <MenuItem value="Gluten free">{t('home.step2.dietGluten')}</MenuItem>
+                          <MenuItem value="Dairy free">{t('home.step2.dietDairy')}</MenuItem>
+                          <MenuItem value="Nut allergy">{t('home.step2.dietNut')}</MenuItem>
+                          <MenuItem value="Seafood allergy">{t('home.step2.dietSeafood')}</MenuItem>
+                          <MenuItem value="Fish allergy">{t('home.step2.dietFish')}</MenuItem>
+                          <MenuItem value="Egg allergy">{t('home.step2.dietEgg')}</MenuItem>
+                          <MenuItem value="Soy allergy">{t('home.step2.dietSoy')}</MenuItem>
+                          <MenuItem value="Kosher">{t('home.step2.dietKosher')}</MenuItem>
+                          <MenuItem value="Halal">{t('home.step2.dietHalal')}</MenuItem>
+                          <MenuItem value="Otra" sx={{ fontWeight: 600, color: '#711c2e' }}>{t('home.step2.dietOther')}</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
                   </Box>
+
+                  {/* Campo para anotar la alergia o restricción si no aparece en el listado */}
+                  {guest.asistencia === 'si' && guest.dieta === 'Otra' && (
+                    <Box sx={{ mb: 2.5, mt: 0.5, p: 2, bgcolor: '#fdf9f9', borderRadius: 1.5, border: '1px dashed #711c2e' }}>
+                      <TextField
+                        fullWidth
+                        required
+                        size="small"
+                        label={t('home.step2.dietOtherLabel')}
+                        placeholder={t('home.step2.dietOtherPlaceholder')}
+                        helperText={t('home.step2.dietOtherHelp')}
+                        value={guest.dieta_otra || ''}
+                        onChange={(e) => handleGuestChange(index, 'dieta_otra', e.target.value)}
+                        sx={{ bgcolor: '#ffffff' }}
+                      />
+                    </Box>
+                  )}
+
+                  {/* Campo opcional de detalles adicionales para restricciones seleccionadas */}
+                  {guest.asistencia === 'si' && guest.dieta && guest.dieta !== 'None' && guest.dieta !== 'Otra' && (
+                    <Box sx={{ mb: 2, mt: 0.5 }}>
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label={t('home.step2.dietNotesLabel')}
+                        placeholder={t('home.step2.dietNotesPlaceholder')}
+                        value={guest.dieta_otra || ''}
+                        onChange={(e) => handleGuestChange(index, 'dieta_otra', e.target.value)}
+                        sx={{ bgcolor: '#ffffff' }}
+                      />
+                    </Box>
+                  )}
                   {guest.asistencia === 'si' && (
                     <Box>
                       {guest.tipo === 'niño' ? (
