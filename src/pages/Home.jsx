@@ -17,8 +17,8 @@ const Home = () => {
 
   const toggleLanguage = () => {
     // Obtenemos el idioma actual (tomamos solo las primeras 2 letras por si es 'es-ES' o 'en-US')
-    const currentLang = i18n.language.substring(0, 2); 
-    
+    const currentLang = i18n.language.substring(0, 2);
+
     // Hacemos un ciclo: es -> en -> fr -> es
     let nextLang = 'es';
     if (currentLang === 'es') nextLang = 'en';
@@ -48,10 +48,10 @@ const Home = () => {
 
       let match = null; let matchId = null;
 
-      if (matchByEmail) { match = matchByEmail; matchId = matchIdByEmail; } 
+      if (matchByEmail) { match = matchByEmail; matchId = matchIdByEmail; }
       else {
-        if (matchesByName.length === 0) { setAlertModal({ open: true, message: t('home.alerts.notFound') }); setLoading(false); return; } 
-        else if (matchesByName.length > 1) { setAlertModal({ open: true, message: t('home.alerts.multipleMatches') }); setLoading(false); return; } 
+        if (matchesByName.length === 0) { setAlertModal({ open: true, message: t('home.alerts.notFound') }); setLoading(false); return; }
+        else if (matchesByName.length > 1) { setAlertModal({ open: true, message: t('home.alerts.multipleMatches') }); setLoading(false); return; }
         else { match = matchesByName[0].data; matchId = matchesByName[0].id; }
       }
 
@@ -187,8 +187,8 @@ const Home = () => {
             <Typography variant="h2" color="secondary" sx={{ textAlign: 'center', fontSize: { xs: '4rem', md: '5.5rem' }, mb: 1, lineHeight: 1 }}>{t('home.step1.title')}</Typography>
             <Typography variant="body2" sx={{ textAlign: 'center', mb: 5, color: 'text.secondary', fontSize: '1rem' }}>{t('home.step1.subtitle')}</Typography>
             <Box sx={{ maxWidth: 450, margin: '0 auto' }}>
-              <TextField fullWidth label={t('home.step1.nameLabel')} variant="outlined" margin="normal" value={loginData.nombre} onChange={(e) => setLoginData({...loginData, nombre: e.target.value})} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
-              <TextField fullWidth label={t('home.step1.emailLabel')} variant="outlined" margin="normal" type="email" value={loginData.email} onChange={(e) => setLoginData({...loginData, email: e.target.value})} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
+              <TextField fullWidth label={t('home.step1.nameLabel')} variant="outlined" margin="normal" value={loginData.nombre} onChange={(e) => setLoginData({ ...loginData, nombre: e.target.value })} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
+              <TextField fullWidth label={t('home.step1.emailLabel')} variant="outlined" margin="normal" type="email" value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
               <Button fullWidth variant="contained" size="large" onClick={handleLogin} disabled={loading} sx={{ mt: 4, py: 1.5, bgcolor: '#dabc60', color: 'white', '&:hover': { bgcolor: '#c2a550' } }}>{loading ? <CircularProgress size={24} color="inherit" /> : t('home.step1.button')}</Button>
             </Box>
           </Card>
@@ -210,7 +210,7 @@ const Home = () => {
                 <Typography sx={{ color: '#999', fontStyle: 'italic', fontSize: '0.85rem' }}>{t('home.step2.dressCode')}</Typography>
               </Box>
             </Card>
-            
+
             <Card sx={cardStyle}>
               <Typography variant="h2" color="secondary" sx={{ textAlign: 'center', mb: 1, fontSize: { xs: '3.5rem', md: '4.5rem' } }}>{t('home.step2.rsvpTitle')}</Typography>
               <Typography sx={{ color: '#711c2e', textAlign: 'center', mb: 3, fontSize: '1rem' }}>{t('home.step2.rsvpDeadline')}</Typography>
@@ -309,19 +309,19 @@ const Home = () => {
                 <Typography variant="body1" sx={{ color: '#666', mb: 4, lineHeight: 1.6 }}>
                   {t('home.step2.registryText')}
                 </Typography>
-                <Button 
-                  variant="outlined" 
-                  href="https://www.amazon.ca/wedding/share/ShieldsUrquilla" 
-                  target="_blank" 
-                  sx={{ 
-                    color: '#711c2e', 
-                    borderColor: '#711c2e', 
-                    borderRadius: '30px', 
-                    padding: '10px 24px', 
-                    '&:hover': { 
-                      borderColor: '#5a1524', 
-                      backgroundColor: 'rgba(113, 28, 46, 0.04)' 
-                    } 
+                <Button
+                  variant="outlined"
+                  href="https://www.amazon.ca/wedding/guest-view/1T5E78FQNCYN1"
+                  target="_blank"
+                  sx={{
+                    color: '#711c2e',
+                    borderColor: '#711c2e',
+                    borderRadius: '30px',
+                    padding: '10px 24px',
+                    '&:hover': {
+                      borderColor: '#5a1524',
+                      backgroundColor: 'rgba(113, 28, 46, 0.04)'
+                    }
                   }}
                 >
                   {t('home.step2.registryButton')}
@@ -335,7 +335,7 @@ const Home = () => {
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, alignItems: 'center' }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body1" sx={{ color: '#666', mb: 2, lineHeight: 1.6 }}>{t('home.step2.lodgingText1')} <strong>Prince of Wales Hotel</strong> {t('home.step2.lodgingText2')}</Typography>
-                  <Typography variant="body1" sx={{ color: '#666', mb: 3, lineHeight: 1.6 }}>{t('home.step2.lodgingText3')} <strong style={{color: '#711c2e'}}>4088251</strong></Typography>
+                  <Typography variant="body1" sx={{ color: '#666', mb: 3, lineHeight: 1.6 }}>{t('home.step2.lodgingText3')} <strong style={{ color: '#711c2e' }}>4088251</strong></Typography>
                   <Divider sx={{ my: 2, borderColor: '#eee' }} />
                   <Typography variant="body2" sx={{ mb: 4, color: '#999', lineHeight: 1.5 }}>{t('home.step2.lodgingNote')}</Typography>
                   <Button variant="outlined" href="https://www.vintage-hotels.com/prince-of-wales/" target="_blank" sx={{ color: '#711c2e', borderColor: '#711c2e', borderRadius: '30px', padding: '10px 24px', '&:hover': { borderColor: '#5a1524', backgroundColor: 'rgba(113, 28, 46, 0.04)' } }}>{t('home.step2.lodgingButton')}</Button>
@@ -354,23 +354,23 @@ const Home = () => {
             CAMILA & CONNOR • NIAGARA-ON-THE-LAKE & EL SALVADOR
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-            <Button 
-              component="a" 
-              href="/privacidad" 
+            <Button
+              component="a"
+              href="/privacidad"
               target="_blank"
               rel="noopener noreferrer"
-              size="small" 
+              size="small"
               sx={{ color: '#711c2e', fontSize: '0.75rem', textTransform: 'none', '&:hover': { textDecoration: 'underline' } }}
             >
               {t('legal.privacy', 'Política de Privacidad')}
             </Button>
             <Typography variant="caption" sx={{ color: '#aaa' }}>•</Typography>
-            <Button 
-              component="a" 
-              href="/terminos" 
+            <Button
+              component="a"
+              href="/terminos"
               target="_blank"
               rel="noopener noreferrer"
-              size="small" 
+              size="small"
               sx={{ color: '#711c2e', fontSize: '0.75rem', textTransform: 'none', '&:hover': { textDecoration: 'underline' } }}
             >
               {t('legal.terms', 'Términos de Uso')}
